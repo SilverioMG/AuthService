@@ -1,0 +1,32 @@
+2021-03-29 13:05:54,645 INFO [restartedMain] org.springframework.boot.StartupInfoLogger : Starting AuthServiceApplication using Java 11.0.9 on OPTIMUS with PID 16016 (C:\Users\Silverio\Documents\workspace-spring-tool-suite-4-4.7.1.RELEASE\AuthService\target\classes started by Silverio in C:\Users\Silverio\Documents\workspace-spring-tool-suite-4-4.7.1.RELEASE\AuthService)
+2021-03-29 13:05:54,651 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger : Running with Spring Boot v2.4.2, Spring v5.3.3
+2021-03-29 13:05:54,652 INFO [restartedMain] org.springframework.boot.SpringApplication : No active profile set, falling back to default profiles: default
+2021-03-29 13:05:54,690 INFO [restartedMain] org.springframework.boot.logging.DeferredLog : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-03-29 13:05:54,690 INFO [restartedMain] org.springframework.boot.logging.DeferredLog : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-03-29 13:05:55,142 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-03-29 13:05:55,154 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 0 JPA repository interfaces.
+2021-03-29 13:05:55,575 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer : Tomcat initialized with port(s): 8080 (http)
+2021-03-29 13:05:55,583 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog : Initializing ProtocolHandler ["http-nio-8080"]
+2021-03-29 13:05:55,584 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog : Starting service [Tomcat]
+2021-03-29 13:05:55,584 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-03-29 13:05:55,653 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog : Initializing Spring embedded WebApplicationContext
+2021-03-29 13:05:55,653 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 962 ms
+2021-03-29 13:05:55,813 INFO [restartedMain] org.hibernate.jpa.internal.util.LogHelper : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-29 13:05:55,858 INFO [restartedMain] org.hibernate.Version : HHH000412: Hibernate ORM core version 5.4.27.Final
+2021-03-29 13:05:55,976 INFO [restartedMain] org.hibernate.annotations.common.reflection.java.JavaReflectionManager : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-29 13:05:56,070 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Starting...
+2021-03-29 13:05:56,279 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Start completed.
+2021-03-29 13:05:56,294 INFO [restartedMain] org.hibernate.dialect.Dialect : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL9Dialect
+2021-03-29 13:05:56,578 INFO [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-29 13:05:56,586 INFO [restartedMain] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-03-29 13:05:56,619 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer : LiveReload server is running on port 35729
+2021-03-29 13:05:56,668 WARN [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-29 13:05:56,759 INFO [restartedMain] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport : Initializing ExecutorService 'applicationTaskExecutor'
+2021-03-29 13:05:56,917 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog : Starting ProtocolHandler ["http-nio-8080"]
+2021-03-29 13:05:56,942 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer : Tomcat started on port(s): 8080 (http) with context path ''
+2021-03-29 13:05:56,950 INFO [restartedMain] org.springframework.boot.StartupInfoLogger : Started AuthServiceApplication in 2.65 seconds (JVM running for 3.337)
+2021-03-29 13:05:58,986 INFO [RMI TCP Connection(2)-127.0.0.1] org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2021-03-29 13:05:59,066 INFO [RMI TCP Connection(2)-127.0.0.1] org.springframework.scheduling.concurrent.ExecutorConfigurationSupport : Shutting down ExecutorService 'applicationTaskExecutor'
+2021-03-29 13:05:59,066 INFO [RMI TCP Connection(2)-127.0.0.1] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-03-29 13:05:59,069 INFO [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown initiated...
+2021-03-29 13:05:59,076 INFO [RMI TCP Connection(2)-127.0.0.1] com.zaxxer.hikari.HikariDataSource : HikariPool-1 - Shutdown completed.
