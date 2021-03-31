@@ -1,16 +1,22 @@
-package net.atopecode.authservice.dao.model;
+package net.atopecode.authservice.model.user;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
-import net.atopecode.authservice.dao.model.interfaces.INormalizable;
+import net.atopecode.authservice.model.interfaces.INormalizable;
+import net.atopecode.authservice.model.rel_user_role.RelUserRole;
 import net.atopecode.authservice.util.NormalizeString;
 
 @Entity
@@ -57,7 +63,11 @@ public class User implements INormalizable{
 	private String nm_email;
 	
 	@Column(length = 100) 
-	String nm_realName;
+	private String nm_realName;
+	
+	//Propiedades de navegación:
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<RelUserRole> relUserRole = new HashSet<RelUserRole>();
 	
 	public User() {
 
@@ -75,10 +85,6 @@ public class User implements INormalizable{
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -127,13 +133,17 @@ public class User implements INormalizable{
 	public String getNm_realName() {
 		return nm_realName;
 	}
-
+		
+	public Set<RelUserRole> getRelUserRole() {
+		return relUserRole;
+	}
+	
 	public void normalize() {
 		this.nm_name = NormalizeString.normalize(name);
 		this.nm_email = NormalizeString.normalize(email);
 		this.nm_realName = NormalizeString.normalize(realName);
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("id: %d, name: %s, email: %s, realName: %s", id, name, email, realName);

@@ -1,4 +1,4 @@
-package net.atopecode.authservice.dao.model.interfaces;
+package net.atopecode.authservice.model.interfaces;
 
 public interface INormalizable {
 
