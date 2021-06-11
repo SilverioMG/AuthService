@@ -1,5 +1,7 @@
 package net.atopecode.authservice.model.rel_user_role;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -25,8 +27,10 @@ import net.atopecode.authservice.model.user.User;
 				@Index(name = "reluserrole_idrole", columnList = "idRole")
 		}
 	)
-public class RelUserRole {
+public class RelUserRole implements Serializable {
 	
+	private static final long serialVersionUID = -1814471768732451144L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -1,5 +1,6 @@
 package net.atopecode.authservice.model.role;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +30,9 @@ import net.atopecode.authservice.util.NormalizeString;
 				@Index(name="role_nm_name", columnList="nm_name")
 			}
 		)
-public class Role implements INormalizable {
+public class Role implements INormalizable, Serializable {
+	
+	private static final long serialVersionUID = 6458591060376192585L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

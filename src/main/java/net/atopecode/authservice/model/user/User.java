@@ -1,5 +1,6 @@
 package net.atopecode.authservice.model.user;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,8 @@ import net.atopecode.authservice.util.NormalizeString;
 @Table(name = "users",
 	   uniqueConstraints = {
 			   @UniqueConstraint(name="users_unique_name", columnNames= {"name"}),
-			   @UniqueConstraint(name="users_unique_nm_name", columnNames= {"nm_name"})
+			   @UniqueConstraint(name="users_unique_nm_name", columnNames= {"nm_name"}),
+			   @UniqueConstraint(name="users_unique_email", columnNames= {"email"})
 			   },
 	   indexes = {
 			   @Index(name="users_name", columnList="name"),
@@ -34,8 +36,11 @@ import net.atopecode.authservice.util.NormalizeString;
 			   @Index(name="users_nm_real_name", columnList="nm_realName")
 	   }
 )
-public class User implements INormalizable{
+public class User implements INormalizable, Serializable {
 	
+
+	private static final long serialVersionUID = -5283345980003142562L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
