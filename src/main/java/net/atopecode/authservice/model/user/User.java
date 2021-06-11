@@ -41,12 +41,12 @@ public class User implements INormalizable, Serializable {
 
 	private static final long serialVersionUID = -5283345980003142562L;
 
+	@Version
+	private long version = 0L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Version
-	private long version = 0L;
 	
 	@Column(nullable = false, length = 30)
 	private String name;
