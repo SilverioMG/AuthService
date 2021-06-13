@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import net.atopecode.authservice.model.user.IUserRepository;
@@ -20,57 +21,84 @@ public class UserService implements IUserService {
 
 	@Override
 	public Optional<User> findById(Long id) {
-		Optional<User> result = Optional.empty();
+		Optional<User> user = Optional.empty();
 		if(id != null) {
-			result = userRepository.findById(id);
+			user = userRepository.findById(id);
 		}
 		
-		return result;
+		return user;
 	}
 
 	@Override
 	public Optional<User> findByIdWithRoles(Long id) {
-		Optional<User> result = Optional.empty();
+		Optional<User> user = Optional.empty();
 		if(id != null) {
-			result = userRepository.findByIdWithRoles(id);
+			user = userRepository.findByIdWithRoles(id);
 		}
 		
-		return result;
+		return user;
 	}
 
 	@Override
 	public Optional<User> findByName(String name) {
-		Optional<User> result = Optional.empty();
-		if(!StringUtils.hasLength(name)) {
+		Optional<User> user = Optional.empty();
+		if(StringUtils.hasText(name)) {
 			name = NormalizeString.normalize(name);
-			result = userRepository.findByNormalizeName(name);
+			user = userRepository.findByNormalizedName(name);
 		}
 		
-		return result;
+		return user;
 	}
 
 	@Override
 	public Optional<User> findByNameWithRoles(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = Optional.empty();
+		if(StringUtils.hasText(name)) {
+			name = NormalizeString.normalize(name);
+			user = userRepository.findByNormalizedNameWithRoles(name);
+		}
+		
+		return user;
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = Optional.empty();
+		if(StringUtils.hasText(email)) {
+			email = NormalizeString.normalize(email);
+			user = userRepository.findByNormalizedEmail(email);
+		}
+		
+		return user;
 	}
 
 	@Override
 	public Optional<User> findByEmailWithRoles(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = Optional.empty();
+		if(StringUtils.hasText(email)) {
+			email = NormalizeString.normalize(email);
+			user = userRepository.findByNormalizedEmailWithRoles(email);
+		}
+		
+		return user;
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public User save(UserDto user) {
-		// TODO Auto-generated method stub
-		return null;
+		User result = null;
+		if(user == null) {
+			return result;
+		}
+		
+		if(user.getId() == null) {
+			result = insert(user);
+		}
+		else {
+			result = update(user);
+		}
+		
+		return result;
 	}
 
 	private User insert(UserDto user) {
@@ -87,5 +115,8 @@ public class UserService implements IUserService {
 	//Hacer tests para esta clase utilizando otra B.D. de prueba.
 	//Usar Specifications para querys con filtro.
 	//Usar Validaciones para guardar registros en la B.D. en la capa de Servicio solo.
+	//Manejador de Exceptiones no controladas en los Controllers.
+	//JpaAuditing.
+	//Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
 	
 }

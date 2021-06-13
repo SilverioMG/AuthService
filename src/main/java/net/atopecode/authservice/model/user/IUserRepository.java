@@ -14,6 +14,17 @@ public interface IUserRepository extends JpaRepository<User, Long>{
 		   "WHERE user.id = :id")
 	public Optional<User> findByIdWithRoles(@Param("id") Long id);
 	
-	@Query("SELECT user from User user WHERE nm_name = :name")
-	public Optional<User> findByNormalizeName(@Param("name") String normalizeName);
+	@Query("SELECT user from User user WHERE user.nm_name = :name")
+	public Optional<User> findByNormalizedName(@Param("name") String normalizedName);
+	
+	@Query("SELECT user from User user LEFT JOIN FETCH user.relUserRole relUserRole INNER JOIN FETCH relUserRole.role role " +
+		   "WHERE nm_name = :name")
+	public Optional<User> findByNormalizedNameWithRoles(@Param("name") String normalizedName);
+	
+	@Query("SELECT user from User user where user.nm_email = :email")
+	public Optional<User> findByNormalizedEmail(@Param("email") String email);
+	
+	@Query("SELECT user from User user LEFT JOIN FETCH user.relUserRole relUserRole INNER JOIN FETCH relUserRole.role role " +
+		   "where user.nm_email = :email")
+	public Optional<User> findByNormalizedEmailWithRoles(@Param("email") String email);
 }
