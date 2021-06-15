@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Validator;
 
 import net.atopecode.authservice.model.user.IUserRepository;
 import net.atopecode.authservice.model.user.User;
@@ -16,9 +18,46 @@ import net.atopecode.authservice.util.NormalizeString;
 @Service
 public class UserService implements IUserService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
 	
 	private IUserRepository userRepository;
+	
+	@Autowired
+	public UserService(IUserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public User save(UserDto user) {
+		User result = null;
+		if(user == null) {
+			return result;
+		}
+		
+		if(user.getId() == null) {
+			result = insert(user);
+		}
+		else {
+			result = update(user);
+		}
+		
+		return result;
+	}
+
+	private User insert(UserDto user) {
+		
+		
+		
+		return null;
+	}
+
+	private User update(UserDto user) {
+		// TODO Auto-generated method stub
+		return null;
+	} 
+	
 	@Override
 	public Optional<User> findById(Long id) {
 		Optional<User> user = Optional.empty();
@@ -83,33 +122,6 @@ public class UserService implements IUserService {
 		return user;
 	}
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public User save(UserDto user) {
-		User result = null;
-		if(user == null) {
-			return result;
-		}
-		
-		if(user.getId() == null) {
-			result = insert(user);
-		}
-		else {
-			result = update(user);
-		}
-		
-		return result;
-	}
-
-	private User insert(UserDto user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private User update(UserDto user) {
-		// TODO Auto-generated method stub
-		return null;
-	} 
 	
 	//TODO...
 	//Hacer tests para esta clase utilizando otra B.D. de prueba.

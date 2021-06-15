@@ -23,7 +23,6 @@ import net.atopecode.authservice.util.NormalizeString;
 @Entity
 @Table(name = "users",
 	   uniqueConstraints = {
-			   @UniqueConstraint(name="users_unique_name", columnNames= {"name"}),
 			   @UniqueConstraint(name="users_unique_nm_name", columnNames= {"nm_name"}),
 			   @UniqueConstraint(name="users_unique_email", columnNames= {"email"})
 			   },
@@ -38,8 +37,12 @@ import net.atopecode.authservice.util.NormalizeString;
 )
 public class User implements INormalizable, Serializable {
 	
-
+	
 	private static final long serialVersionUID = -5283345980003142562L;
+	public final static int NAME_MAX_LENGHT = 30;
+	public final static int PASSWORD_MAX_LENGHT = 30;
+	public final static int EMAIL_MAX_LENGHT = 50;
+	public final static int REAL_NAME_MAX_LENGHT = 100;
 
 	@Version
 	private long version = 0L;
@@ -48,31 +51,31 @@ public class User implements INormalizable, Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = NAME_MAX_LENGHT)
 	private String name;
 	
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = PASSWORD_MAX_LENGHT)
 	private String password;
 	
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = EMAIL_MAX_LENGHT)
 	private String email;
 	
-	@Column(length = 100)
+	@Column(length = REAL_NAME_MAX_LENGHT)
 	private String realName;
 	
 	//Campos normalizados:
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = NAME_MAX_LENGHT)
 	private String nm_name;
 	
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = EMAIL_MAX_LENGHT)
 	private String nm_email;
 	
-	@Column(length = 100) 
+	@Column(length = REAL_NAME_MAX_LENGHT) 
 	private String nm_realName;
 	
 	//Propiedades de navegación:
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	private Set<RelUserRole> relUserRole = new HashSet<RelUserRole>();
+	private Set<RelUserRole> relUserRole = new HashSet<>();
 	
 	public User() {
 
