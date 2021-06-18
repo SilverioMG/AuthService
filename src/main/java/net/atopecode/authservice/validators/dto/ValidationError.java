@@ -12,7 +12,7 @@ public class ValidationError {
 		this(messageCode, new Object[0]);
 	}
 	
-	public ValidationError(String messageCode, Object[] messageParams) {
+	public ValidationError(String messageCode, Object... messageParams) {
 		this.messageCode = messageCode;
 		this.messageParams = messageParams;
 	}

@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.Validator;
 
 import net.atopecode.authservice.model.user.IUserRepository;
 import net.atopecode.authservice.model.user.User;
-import net.atopecode.authservice.model.user.UserDto;
-import net.atopecode.authservice.util.NormalizeString;
+import net.atopecode.authservice.model.user.dto.UserDto;
+import net.atopecode.authservice.service.user.query.IUserQueryService;
+import net.atopecode.authservice.service.user.validator.UserValidatorComponent;
 
 @Service
 public class UserService implements IUserService {
@@ -21,10 +20,16 @@ public class UserService implements IUserService {
 
 	
 	private IUserRepository userRepository;
+	private IUserQueryService userQueryService;
+	private UserValidatorComponent userValidator;
 	
 	@Autowired
-	public UserService(IUserRepository userRepository) {
+	public UserService(IUserRepository userRepository,
+			IUserQueryService userQueryService,
+			UserValidatorComponent userValidation) {
 		this.userRepository = userRepository;
+		this.userQueryService = userQueryService;
+		this.userValidator = userValidation;
 	}
 
 
@@ -46,89 +51,69 @@ public class UserService implements IUserService {
 		return result;
 	}
 
-	private User insert(UserDto user) {
-		
-		
-		
+	@Override
+	public User insert(UserDto user) {
+		// TODO Converter de UserDTO a User, validaciones y guardar en B.D.
 		return null;
 	}
 
-	private User update(UserDto user) {
+
+	@Override
+	public User update(UserDto user) {
 		// TODO Auto-generated method stub
 		return null;
-	} 
-	
+	}
+
+
+	@Override
+	public void delete(Long idUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	@Override
 	public Optional<User> findById(Long id) {
-		Optional<User> user = Optional.empty();
-		if(id != null) {
-			user = userRepository.findById(id);
-		}
-		
-		return user;
+		return userQueryService.findById(id);
 	}
+
 
 	@Override
 	public Optional<User> findByIdWithRoles(Long id) {
-		Optional<User> user = Optional.empty();
-		if(id != null) {
-			user = userRepository.findByIdWithRoles(id);
-		}
-		
-		return user;
+		return userQueryService.findByIdWithRoles(id);
 	}
+
 
 	@Override
 	public Optional<User> findByName(String name) {
-		Optional<User> user = Optional.empty();
-		if(StringUtils.hasText(name)) {
-			name = NormalizeString.normalize(name);
-			user = userRepository.findByNormalizedName(name);
-		}
-		
-		return user;
+		return userQueryService.findByName(name);
 	}
+
 
 	@Override
 	public Optional<User> findByNameWithRoles(String name) {
-		Optional<User> user = Optional.empty();
-		if(StringUtils.hasText(name)) {
-			name = NormalizeString.normalize(name);
-			user = userRepository.findByNormalizedNameWithRoles(name);
-		}
-		
-		return user;
+		return userQueryService.findByNameWithRoles(name);
 	}
+
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		Optional<User> user = Optional.empty();
-		if(StringUtils.hasText(email)) {
-			email = NormalizeString.normalize(email);
-			user = userRepository.findByNormalizedEmail(email);
-		}
-		
-		return user;
+		return userQueryService.findByEmail(email);
 	}
+
 
 	@Override
 	public Optional<User> findByEmailWithRoles(String email) {
-		Optional<User> user = Optional.empty();
-		if(StringUtils.hasText(email)) {
-			email = NormalizeString.normalize(email);
-			user = userRepository.findByNormalizedEmailWithRoles(email);
-		}
-		
-		return user;
+		return userQueryService.findByEmailWithRoles(email);
 	}
 
 	
 	//TODO...
-	//Hacer tests para esta clase utilizando otra B.D. de prueba.
-	//Usar Specifications para querys con filtro.
 	//Usar Validaciones para guardar registros en la B.D. en la capa de Servicio solo.
 	//Manejador de Exceptiones no controladas en los Controllers.
+	//Hacer tests para esta clase utilizando otra B.D. de prueba.
+	//Usar Specifications para querys con filtro.
 	//JpaAuditing.
 	//Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
-	
+	//Añadir Módulos de Java 11.
 }

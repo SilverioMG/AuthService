@@ -1,4 +1,4 @@
-package net.atopecode.authservice.model.user;
+package net.atopecode.authservice.model.user.dto;
 
 
 public class UserDto {
