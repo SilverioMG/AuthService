@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.atopecode.authservice.model.user.IUserRepository;
 import net.atopecode.authservice.model.user.User;
+import net.atopecode.authservice.model.user.converter.UserDtoToUserConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.service.user.query.IUserQueryService;
 import net.atopecode.authservice.service.user.validator.UserValidatorComponent;
+import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Service
 public class UserService implements IUserService {
@@ -22,46 +24,59 @@ public class UserService implements IUserService {
 	private IUserRepository userRepository;
 	private IUserQueryService userQueryService;
 	private UserValidatorComponent userValidator;
+	private UserDtoToUserConverter userDtoToUserConverter;
 	
 	@Autowired
 	public UserService(IUserRepository userRepository,
 			IUserQueryService userQueryService,
-			UserValidatorComponent userValidation) {
+			UserValidatorComponent userValidation,
+			UserDtoToUserConverter userDtoToUserConverter) {
 		this.userRepository = userRepository;
 		this.userQueryService = userQueryService;
 		this.userValidator = userValidation;
+		this.userDtoToUserConverter = userDtoToUserConverter;
 	}
 
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public User save(UserDto user) {
+	public User save(UserDto userDto) throws ValidationException {
 		User result = null;
-		if(user == null) {
+		if(userDto == null) {
 			return result;
 		}
 		
-		if(user.getId() == null) {
-			result = insert(user);
+		if(userDto.getId() == null) {
+			result = insert(userDto);
 		}
 		else {
-			result = update(user);
+			result = update(userDto);
 		}
 		
 		return result;
 	}
 
 	@Override
-	public User insert(UserDto user) {
-		// TODO Converter de UserDTO a User, validaciones y guardar en B.D.
-		return null;
+	@Transactional(rollbackFor = Exception.class)
+	public User insert(UserDto userDto) throws ValidationException {
+		userValidator.validateInsert(userDto);
+		
+		User user = userDtoToUserConverter.convert(userDto);
+		user = userRepository.save(user);
+		
+		return user;
 	}
 
 
 	@Override
-	public User update(UserDto user) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(rollbackFor = Exception.class)
+	public User update(UserDto userDto) throws ValidationException {
+		User user = userValidator.validateUpdate(userDto);
+		
+		userDtoToUserConverter.map(userDto, user);
+		user = userRepository.save(user);
+		
+		return user;
 	}
 
 

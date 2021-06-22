@@ -4,14 +4,15 @@ import java.util.Optional;
 
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.dto.UserDto;
+import net.atopecode.authservice.validators.exception.ValidationException;
 
 public interface IUserService {
 	
-	public User save(UserDto user);
+	public User save(UserDto user) throws ValidationException;
 	
-	public User insert(UserDto user);
+	public User insert(UserDto user) throws ValidationException;
 	
-	public User update(UserDto user);
+	public User update(UserDto user) throws ValidationException;
 	
 	public void delete(Long idUser);
 	
