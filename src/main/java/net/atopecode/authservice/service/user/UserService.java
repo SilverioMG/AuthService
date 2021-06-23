@@ -82,7 +82,14 @@ public class UserService implements IUserService {
 
 	@Override
 	public void delete(Long idUser) {
-		// TODO Auto-generated method stub
+		if(idUser == null) {
+			return;
+		}
+		
+		User userToDelete = findById(idUser).orElse(null);
+		if(userToDelete != null) {
+			userRepository.delete(userToDelete);
+		}
 		
 	}
 
@@ -124,8 +131,7 @@ public class UserService implements IUserService {
 
 	
 	//TODO...
-	//Usar Validaciones para guardar registros en la B.D. en la capa de Servicio solo.
-	//Manejador de Exceptiones no controladas en los Controllers.
+	//Manejador de Exceptiones no controladas en los Controllers. Y probar con peticiones Http el Controller a mano.
 	//Hacer tests para esta clase utilizando otra B.D. de prueba.
 	//Usar Specifications para querys con filtro.
 	//JpaAuditing.

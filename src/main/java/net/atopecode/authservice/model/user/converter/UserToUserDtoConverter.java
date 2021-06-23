@@ -9,11 +9,13 @@ import net.atopecode.authservice.model.user.converter.base.ConverterMappeableNor
 import net.atopecode.authservice.model.user.dto.UserDto;
 
 @Component
-public class UserDtoToUserConverter extends ConverterMappeableNormalizable<UserDto, User>{
-	
+public class UserToUserDtoConverter extends ConverterMappeableNormalizable<User, UserDto>{
+
 	@Autowired
-	public UserDtoToUserConverter(ModelMapper mapper) {
-		super(mapper, User.class);
+	protected UserToUserDtoConverter(ModelMapper mapper) {
+		super(mapper, UserDto.class);
 	}
+	
+	
 
 }
