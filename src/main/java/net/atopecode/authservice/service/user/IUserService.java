@@ -2,6 +2,9 @@ package net.atopecode.authservice.service.user;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.validators.exception.ValidationException;
@@ -28,4 +31,6 @@ public interface IUserService {
 	public Optional<User> findByEmail(String email);
 	
 	public Optional<User> findByEmailWithRoles(String email);
+	
+	public Page<User> findAll(PageRequest pageRequest);
 }

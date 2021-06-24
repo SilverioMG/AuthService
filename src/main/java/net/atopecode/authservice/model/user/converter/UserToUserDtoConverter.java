@@ -16,6 +16,13 @@ public class UserToUserDtoConverter extends ConverterMappeableNormalizable<User,
 		super(mapper, UserDto.class);
 	}
 	
-	
+	public UserDto convertWithoutPassword(User user) {
+		UserDto userDto = super.convert(user);
+		if(userDto != null) {
+			userDto.setPassword(null);
+		}
+		
+		return userDto;
+	}
 
 }

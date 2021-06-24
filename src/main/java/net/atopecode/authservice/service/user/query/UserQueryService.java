@@ -1,7 +1,11 @@
 package net.atopecode.authservice.service.user.query;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -80,6 +84,16 @@ public class UserQueryService implements IUserQueryService{
 		}
 		
 		return user;
+	}
+
+	@Override
+	public Page<User> findAll(PageRequest pageRequest) {
+		Page<User> result = Page.empty();
+		if(pageRequest!= null) {
+			result = userRepository.findAll(pageRequest);
+		}
+		
+		return result;
 	}
 
 }
