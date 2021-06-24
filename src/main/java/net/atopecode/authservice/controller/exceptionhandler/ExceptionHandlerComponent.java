@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import net.atopecode.authservice.controller.utils.EntityMessage;
+import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 /**
@@ -24,10 +24,10 @@ public class ExceptionHandlerComponent {
 	}
 	
 	@ExceptionHandler(ValidationException.class)
-	public ResponseEntity<EntityMessage<ValidationException>> validationException(ValidationException ex){
+	public ResponseEntity<ResultMessage<ValidationException>> validationException(ValidationException ex){
 		LOGGER.info(ex.getMessage());
 		String localizedMessage = ex.errorMessage.getMessageCode(); //TODO... Traducir el mensaje al Locale actual con los parámetros.
-		return new EntityMessage<ValidationException>(localizedMessage, false).toResponseEntity(HttpStatus.BAD_REQUEST);
+		return new ResultMessage<ValidationException>(localizedMessage, false).toResponseEntity(HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -36,8 +36,8 @@ public class ExceptionHandlerComponent {
 	 * @return
 	 */
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<EntityMessage<Exception>> exception(Exception ex){
+	public ResponseEntity<ResultMessage<Exception>> exception(Exception ex){
 		LOGGER.error("EXCEPTION NO CONTROLADA por el ServicioWeb: {}", ex.getMessage());
-		return new EntityMessage<Exception>(ex).toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResultMessage<Exception>(ex).toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

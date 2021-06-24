@@ -7,13 +7,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.atopecode.authservice.controller.utils.EntityMessage;
+import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
@@ -44,21 +45,21 @@ public class UserController {
 	 * @throws ValidationException
 	 */
 	@PostMapping("/save")
-	public ResponseEntity<EntityMessage<UserDto>> save(@RequestBody UserDto userDto) throws ValidationException{
+	public ResponseEntity<ResultMessage<UserDto>> save(@RequestBody UserDto userDto) throws ValidationException{
 		User user = userService.save(userDto);
 		userDto = userToUserDtoConverter.convert(user);
-		return new EntityMessage<UserDto>(userDto, "Usuario creado.").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<UserDto>(userDto, "Usuario creado.").toResponseEntity(HttpStatus.OK);
 	}
 	
 	// /api/findAll?page=0&pageSize=10
-	@PostMapping("/findAll")
-	public ResponseEntity<EntityMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+	@GetMapping("/findAll")
+	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
 		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(UserValidatorComponent.UserFieldNames.ID)));
 		Page<User> users = userService.findAll(pageRequest);
 		Page<UserDto> result = users.map((user) -> userToUserDtoConverter.convertWithoutPassword(user));
 		
-		return new EntityMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);
 	}
 	
 	//TODO... Crear un Servicio Spring para la localizacion de mensajes i18n. Inyectarlo en este controller y utilizarlo en vez de los mensajes puestos a mano como "Usuario creado".
