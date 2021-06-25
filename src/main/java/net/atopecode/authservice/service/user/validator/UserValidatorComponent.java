@@ -15,9 +15,9 @@ import net.atopecode.authservice.validators.exception.ValidationException;
 @Component
 public class UserValidatorComponent extends AbstractValidator {
 
-	public static final String USER_VALIDATION_NOTNULL_FIELD = "user.validation.insert.notnull.field";
-	public static final String USER_VALIDATION_NULL_FIELD = "user.validation.insert.null.field";
-	public static final String USER_VALIDATION_MAXLENGTH_FIELD = "user.validation.insert.maxlength.field";
+	public static final String USER_VALIDATION_NOTNULL_FIELD = "user.validation.notnull.field";
+	public static final String USER_VALIDATION_NULL_FIELD = "user.validation.null.field";
+	public static final String USER_VALIDATION_MAXLENGTH_FIELD = "user.validation.maxlength.field";
 	
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
 	public static final String USER_VALIDATION_INSERT_NOTNULL_ID = "user.validation.insert.notnull.id";
@@ -50,7 +50,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		
 		mustToBeNull(user.getId(),
 				new ValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.",
-					new MessageLocalized(USER_VALIDATION_INSERT_NOTNULL_ID, new Object[] {UserFieldNames.ID})));
+					new MessageLocalized(USER_VALIDATION_INSERT_NOTNULL_ID)));
 		
 		validateFields(user);
 		
@@ -74,7 +74,7 @@ public class UserValidatorComponent extends AbstractValidator {
 
 		notNull(user.getId(),
 				new ValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.",
-					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_ID, new Object[] {UserFieldNames.ID})));
+					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_ID)));
 		
 		validateFields(user);
 		
@@ -86,13 +86,13 @@ public class UserValidatorComponent extends AbstractValidator {
 		if(!StringUtils.equals(user.getName(), userBd.getName())){
 			ifTrueThrows(() -> userQueryService.findByName(user.getName()).isPresent(),
 					new ValidationException("No se puede modificar el campo 'name' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'name': " + user.getName(),
-							new MessageLocalized(USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS, user.getName())));
+							new MessageLocalized(USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS, user.getId(), user.getName())));
 		}
 		
 		if(!StringUtils.equals(user.getEmail(), userBd.getEmail())){
 			ifTrueThrows(() -> userQueryService.findByEmail(user.getEmail()).isPresent(),
 					new ValidationException("No se puede modificar el campo 'email' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'email': " + user.getEmail(),
-							new MessageLocalized(USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS, user.getEmail())));
+							new MessageLocalized(USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS, user.getId(), user.getEmail())));
 		}
 		
 		return userBd;
@@ -111,7 +111,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		
 		maxLength(user.getName(), User.NAME_MAX_LENGHT,
 				new ValidationException("No se puede guardar el 'User' porque el campo 'name' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, new Object[] {UserFieldNames.NAME, user.getName()})));
+						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD,UserFieldNames.NAME, user.getName(), User.NAME_MAX_LENGHT)));
 		
 		//Password:
 		notNull(user.getPassword(),
@@ -120,7 +120,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		
 		maxLength(user.getPassword(), User.PASSWORD_MAX_LENGHT,
 				new ValidationException("No se puede guardar el 'User' porque el campo 'password' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, new Object[] {UserFieldNames.PASSWORD})));
+						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, UserFieldNames.PASSWORD, User.PASSWORD_MAX_LENGHT)));
 
 		//Email:
 		notNull(user.getEmail(),
@@ -129,7 +129,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		
 		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT,
 				new ValidationException("No se puede guardar el 'User' porque el campo 'email' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, new Object[] {UserFieldNames.EMAIL, user.getEmail()})));
+						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD,UserFieldNames.EMAIL, user.getEmail(), User.EMAIL_MAX_LENGHT)));
 		
 		isEmail(user.getEmail(),
 				new ValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto",
@@ -138,7 +138,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		//RealName:
 		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT,
 				new ValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, new Object[] {UserFieldNames.REAL_NAME})));
+						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, UserFieldNames.REAL_NAME, User.REAL_NAME_MAX_LENGHT)));
 	}
 
 	public static class UserFieldNames {
