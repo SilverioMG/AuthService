@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.atopecode.authservice.controller.utils.ResultMessage;
+import net.atopecode.authservice.localization.ILocaleService;
+import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
@@ -25,15 +27,21 @@ import net.atopecode.authservice.validators.exception.ValidationException;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	
+	public static final String USER_INSERT_OK = "user.insert.ok";
+	public static final String USER_UPDATE_OK = "user.update.ok";
 
 	private UserService userService;
 	private UserToUserDtoConverter userToUserDtoConverter;
+	private ILocaleService localeService;
 	
 	@Autowired
 	public UserController(UserService userService,
-			UserToUserDtoConverter userToUserDtoConverter) {
+			UserToUserDtoConverter userToUserDtoConverter,
+			ILocaleService localeService) {
 		this.userService = userService;
 		this.userToUserDtoConverter = userToUserDtoConverter;
+		this.localeService = localeService;
 	}
 	
 	/**
@@ -46,12 +54,21 @@ public class UserController {
 	 */
 	@PostMapping("/save")
 	public ResponseEntity<ResultMessage<UserDto>> save(@RequestBody UserDto userDto) throws ValidationException{
+		MessageLocalized messageLocalized = (userDto.getId() == null) ? new MessageLocalized(USER_INSERT_OK) : new MessageLocalized(USER_UPDATE_OK);
 		User user = userService.save(userDto);
 		userDto = userToUserDtoConverter.convert(user);
-		return new ResultMessage<UserDto>(userDto, "Usuario creado.").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<UserDto>(userDto, localeService, messageLocalized, true)
+				.toResponseEntity(HttpStatus.OK);
 	}
 	
 	// /api/findAll?page=0&pageSize=10
+	/**
+	 * Consulta paginada que devuelve los Usuarios ordenados por 'id'.
+	 * Se devuelven los 'Users' sin el 'password' por seguridad.
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
@@ -61,8 +78,4 @@ public class UserController {
 		
 		return new ResultMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);
 	}
-	
-	//TODO... Crear un Servicio Spring para la localizacion de mensajes i18n. Inyectarlo en este controller y utilizarlo en vez de los mensajes puestos a mano como "Usuario creado".
-	//		  Otra opción es crear un @Component que utilice 'EntityMessage' y que utilizando el nuevo servicio de Localization creado traduzca directamente el mensaje sin tener que
-	//		  utilizarlo en todos los Controllers.
 }

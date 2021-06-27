@@ -2,6 +2,7 @@ package net.atopecode.authservice.controller.utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.MessageLocalized;
 
 /**
@@ -57,6 +58,12 @@ public class ResultMessage<T> {
         this.success = false;
     }
 
+    public ResultMessage(T result, ILocaleService localeService, MessageLocalized messageLocalized, boolean success) {
+    	this.result = result;
+    	this.message = localeService.getMessage(messageLocalized);
+    	this.success = success;
+    }
+    
     public ResponseEntity<ResultMessage<T>> toResponseEntity(HttpStatus httpStatus){
         return new ResponseEntity<ResultMessage<T>>(this, httpStatus);
     }

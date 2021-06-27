@@ -34,7 +34,7 @@ public class LocaleService implements ILocaleService {
 	@Override
 	public String getMessage(String messageCode, Locale locale, Object... messageParams) {
 		if(StringUtils.isEmpty(messageCode)) {
-			throw new RuntimeException("Se ha intentado traducir un mensaje en 'LocaleService' sin valor para 'messageCode'.");
+			throw new LocaleServiceRuntimeException("Se ha intentado traducir un mensaje en 'LocaleService' sin valor para 'messageCode'.");
 		}
 		
 		String result = messageCode;
@@ -59,6 +59,13 @@ public class LocaleService implements ILocaleService {
 	public Locale getLocale() {
 		return LocaleContextHolder.getLocale();
 	}
-}
+		
+	public static class LocaleServiceRuntimeException extends RuntimeException{
+	
+		private static final long serialVersionUID = -2999479942149788532L;
 
-//TODO... Revisar porque en 'ExceptionHandlerComponent' no se están reconociendo las 'RuntimeException'.
+		public LocaleServiceRuntimeException(String message) {
+			super(message);
+		}
+	}
+}

@@ -16,7 +16,7 @@ import net.atopecode.authservice.validators.exception.ValidationException;
  * @author Silverio
  *
  */
-@ControllerAdvice
+@ControllerAdvice()
 public class ExceptionHandlerComponent {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerComponent.class);
 	
@@ -25,7 +25,7 @@ public class ExceptionHandlerComponent {
 	public ExceptionHandlerComponent(ILocaleService localeService) {
 		this.localeService = localeService;
 	}
-	
+		
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<ResultMessage<ValidationException>> validationException(ValidationException ex){
 		LOGGER.info(ex.getMessage());

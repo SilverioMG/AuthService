@@ -18,6 +18,7 @@ public class UserValidatorComponent extends AbstractValidator {
 	public static final String USER_VALIDATION_NOTNULL_FIELD = "user.validation.notnull.field";
 	public static final String USER_VALIDATION_NULL_FIELD = "user.validation.null.field";
 	public static final String USER_VALIDATION_MAXLENGTH_FIELD = "user.validation.maxlength.field";
+	public static final String USER_VALIDATION_FORMAT_FIELD = "user.validation.format.field";
 	
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
 	public static final String USER_VALIDATION_INSERT_NOTNULL_ID = "user.validation.insert.notnull.id";
@@ -133,7 +134,7 @@ public class UserValidatorComponent extends AbstractValidator {
 		
 		isEmail(user.getEmail(),
 				new ValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, new Object[] {UserFieldNames.EMAIL, user.getEmail()})));
+						new MessageLocalized(USER_VALIDATION_FORMAT_FIELD, new Object[] {UserFieldNames.EMAIL, user.getEmail()})));
 		
 		//RealName:
 		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT,
