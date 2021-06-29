@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.model.user.User;
+import net.atopecode.authservice.model.user.UserFieldNames;
 import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.service.user.query.IUserQueryService;
 import net.atopecode.authservice.validators.base.AbstractValidator;
@@ -140,17 +141,5 @@ public class UserValidatorComponent extends AbstractValidator {
 		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT,
 				new ValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo",
 						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, UserFieldNames.REAL_NAME, User.REAL_NAME_MAX_LENGHT)));
-	}
-
-	public static class UserFieldNames {
-		private UserFieldNames () {
-			//Empty constructor.
-		}
-		
-		public static final String ID = "id";
-		public static final String NAME = "name";
-		public static final String PASSWORD = "password";
-		public static final String EMAIL = "email";
-		public static final String REAL_NAME = "realName";
 	}
 }

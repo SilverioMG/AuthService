@@ -18,10 +18,10 @@ import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.model.user.User;
+import net.atopecode.authservice.model.user.UserFieldNames;
 import net.atopecode.authservice.model.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.service.user.UserService;
-import net.atopecode.authservice.service.user.validator.UserValidatorComponent;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @RestController
@@ -72,7 +72,7 @@ public class UserController {
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
-		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(UserValidatorComponent.UserFieldNames.ID)));
+		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(UserFieldNames.ID)));
 		Page<User> users = userService.findAll(pageRequest);
 		Page<UserDto> result = users.map((user) -> userToUserDtoConverter.convertWithoutPassword(user));
 		
