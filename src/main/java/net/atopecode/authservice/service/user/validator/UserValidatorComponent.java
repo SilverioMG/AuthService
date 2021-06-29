@@ -14,29 +14,28 @@ import net.atopecode.authservice.validators.base.AbstractValidator;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class UserValidatorComponent extends AbstractValidator {
-
-	public static final String USER_VALIDATION_NOTNULL_FIELD = "user.validation.notnull.field";
-	public static final String USER_VALIDATION_NULL_FIELD = "user.validation.null.field";
-	public static final String USER_VALIDATION_MAXLENGTH_FIELD = "user.validation.maxlength.field";
-	public static final String USER_VALIDATION_FORMAT_FIELD = "user.validation.format.field";
+public class UserValidatorComponent extends AbstractValidator<User> {
 	
+	//Codes of Locale .properties files:
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
 	public static final String USER_VALIDATION_INSERT_NOTNULL_ID = "user.validation.insert.notnull.id";
 	public static final String USER_VALIDATION_INSERT_ID_ALREADY_EXISTS = "user.validation.insert.id.already.exists";
 	public static final String USER_VALIDATION_INSERT_NAME_ALREADY_EXISTS = "user.validation.insert.name.already.exists";
 	public static final String USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS = "user.validation.insert.email.already.exists";
-	
 	public static final String USER_VALIDATION_UPDATE_NULL_OBJECT_VALUE = "user.validation.update.null.object.value";
 	public static final String USER_VALIDATION_UPDATE_NULL_ID = "user.validation.update.null.id";
 	public static final String USER_VALIDATION_UPDATE_ID_NOT_EXISTS = "user.validation.update.id.not.exists";
 	public static final String USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS = "user.validation.update.name.already.exists";
 	public static final String USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS = "user.validation.update.email.already.exists";
+	
+	//Regex Format rules:
+	public static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
 	private IUserQueryService userQueryService;
 	
 	@Autowired
 	public UserValidatorComponent(IUserQueryService userQueryService) {
+		super(User.class);
 		this.userQueryService = userQueryService;
 	}
 	
@@ -107,39 +106,25 @@ public class UserValidatorComponent extends AbstractValidator {
 	 */
 	private void validateFields(UserDto user) throws ValidationException {		
 		//Name:
-		notNull(user.getName(),
-				new ValidationException("No se puede guardar el 'User' porque el campo 'name' vale 'null'",
-						new MessageLocalized(USER_VALIDATION_NULL_FIELD, new Object[] {UserFieldNames.NAME})));
+		notEmpty(user.getName(), "No se puede guardar el 'User' porque el campo 'name' no tiene valor", UserFieldNames.NAME);
 		
 		maxLength(user.getName(), User.NAME_MAX_LENGHT,
-				new ValidationException("No se puede guardar el 'User' porque el campo 'name' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD,UserFieldNames.NAME, user.getName(), User.NAME_MAX_LENGHT)));
+				"No se puede guardar el 'User' porque el campo 'name' es muy largo", UserFieldNames.NAME);
 		
 		//Password:
-		notNull(user.getPassword(),
-				new ValidationException("No se puede guardar el 'User' porque el campo 'password' vale 'null'",
-						new MessageLocalized(USER_VALIDATION_NULL_FIELD, new Object[] {UserFieldNames.PASSWORD})));
+		notEmpty(user.getPassword(), "No se puede guardar el 'User' porque el campo 'password' vale 'null'", UserFieldNames.PASSWORD);
 		
-		maxLength(user.getPassword(), User.PASSWORD_MAX_LENGHT,
-				new ValidationException("No se puede guardar el 'User' porque el campo 'password' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, UserFieldNames.PASSWORD, User.PASSWORD_MAX_LENGHT)));
+		maxLength(user.getPassword(), User.PASSWORD_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'password' es muy largo", UserFieldNames.PASSWORD);
 
 		//Email:
-		notNull(user.getEmail(),
-				new ValidationException("No se puede guardar el 'User' porque el campo 'email' vale 'null'",
-						new MessageLocalized(USER_VALIDATION_NULL_FIELD, new Object[] {UserFieldNames.EMAIL})));
+		notEmpty(user.getEmail(), "No se puede guardar el 'User' porque el campo 'email' vale 'null'", UserFieldNames.EMAIL);
 		
-		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT,
-				new ValidationException("No se puede guardar el 'User' porque el campo 'email' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD,UserFieldNames.EMAIL, user.getEmail(), User.EMAIL_MAX_LENGHT)));
+		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT, 
+				"No se puede guardar el 'User' porque el campo 'email' es muy largo", UserFieldNames.EMAIL);
 		
-		isEmail(user.getEmail(),
-				new ValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto",
-						new MessageLocalized(USER_VALIDATION_FORMAT_FIELD, new Object[] {UserFieldNames.EMAIL, user.getEmail()})));
+		hasFormat(user.getEmail(),EMAIL_REGEX, "No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto", UserFieldNames.EMAIL);
 		
 		//RealName:
-		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT,
-				new ValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo",
-						new MessageLocalized(USER_VALIDATION_MAXLENGTH_FIELD, UserFieldNames.REAL_NAME, User.REAL_NAME_MAX_LENGHT)));
+		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'realName' es muy largo",  UserFieldNames.REAL_NAME);
 	}
 }
