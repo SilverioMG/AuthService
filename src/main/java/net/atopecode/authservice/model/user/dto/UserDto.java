@@ -14,7 +14,7 @@ public class UserDto {
 	private String realName;
 	
 	public UserDto() {
-		
+		//Empty Constructor.
 	}
 
 	public UserDto(Long id, String name, String password, String email, String realName) {

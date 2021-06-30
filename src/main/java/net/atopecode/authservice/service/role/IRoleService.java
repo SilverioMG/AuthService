@@ -13,9 +13,9 @@ public interface IRoleService {
 
 	public Role save(RoleDto role) throws ValidationException;
 	
-	public Role insert(RoleDto user) throws ValidationException;
+	public Role insert(RoleDto role) throws ValidationException;
 	
-	public Role update(RoleDto user) throws ValidationException;
+	public Role update(RoleDto role) throws ValidationException;
 	
 	public void delete(Long idRole);
 	

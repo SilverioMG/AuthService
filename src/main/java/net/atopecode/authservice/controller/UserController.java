@@ -21,7 +21,7 @@ import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.UserFieldNames;
 import net.atopecode.authservice.model.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
-import net.atopecode.authservice.service.user.UserService;
+import net.atopecode.authservice.service.user.IUserService;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @RestController
@@ -31,12 +31,12 @@ public class UserController {
 	public static final String USER_INSERT_OK = "user.insert.ok";
 	public static final String USER_UPDATE_OK = "user.update.ok";
 
-	private UserService userService;
-	private UserToUserDtoConverter userToUserDtoConverter;
-	private ILocaleService localeService;
+	private final IUserService userService;
+	private final UserToUserDtoConverter userToUserDtoConverter;
+	private final ILocaleService localeService;
 	
 	@Autowired
-	public UserController(UserService userService,
+	public UserController(IUserService userService,
 			UserToUserDtoConverter userToUserDtoConverter,
 			ILocaleService localeService) {
 		this.userService = userService;

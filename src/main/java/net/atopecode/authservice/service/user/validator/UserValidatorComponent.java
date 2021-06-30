@@ -14,7 +14,7 @@ import net.atopecode.authservice.validators.base.AbstractValidator;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class UserValidatorComponent extends AbstractValidator<User> {
+public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 	
 	//Codes of Locale .properties files:
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
@@ -44,7 +44,8 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 	 * @param user
 	 * @throws ValidationException
 	 */
-	public void validateInsert(UserDto user) throws ValidationException {
+	@Override
+	public void validateInsertDto(UserDto user) throws ValidationException {
 		notNull(user, 
 				new ValidationException("No se puede insertar el 'User' porque vale 'null'",
 					new MessageLocalized(USER_VALIDATION_INSERT_NULL_OBJECT_VALUE)));
@@ -53,7 +54,7 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 				new ValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.",
 					new MessageLocalized(USER_VALIDATION_INSERT_NOTNULL_ID)));
 		
-		validateFields(user);
+		validateFieldsDto(user);
 		
 		ifTrueThrows(() -> userQueryService.findById(user.getId()).isPresent(),
 				new ValidationException("No se puede insertar al 'User' porque ya existe uno con el 'id': " + user.getId(),
@@ -68,7 +69,8 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 						new MessageLocalized(USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS, user.getEmail())));
 	}
 	
-	public User validateUpdate(UserDto user) throws ValidationException {
+	@Override
+	public User validateUpdateDto(UserDto user) throws ValidationException {
 		notNull(user,
 				new ValidationException("No se puede modificar el 'User' porque vale 'null'",
 					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_OBJECT_VALUE)));
@@ -77,7 +79,7 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 				new ValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.",
 					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_ID)));
 		
-		validateFields(user);
+		validateFieldsDto(user);
 		
 		final User userBd = userQueryService.findById(user.getId()).orElse(null);
 		ifTrueThrows(() -> userBd == null,
@@ -104,7 +106,8 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 	 * @param user
 	 * @throws ValidationException
 	 */
-	private void validateFields(UserDto user) throws ValidationException {		
+	@Override
+	public void validateFieldsDto(UserDto user) throws ValidationException {		
 		//Name:
 		notEmpty(user.getName(), "No se puede guardar el 'User' porque el campo 'name' no tiene valor", UserFieldNames.NAME);
 		
@@ -127,4 +130,22 @@ public class UserValidatorComponent extends AbstractValidator<User> {
 		//RealName:
 		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'realName' es muy largo",  UserFieldNames.REAL_NAME);
 	}
+
+	@Override
+	public void validateInsertEntity(User dtoEntity) throws ValidationException {
+		//No se utiliza.
+	}
+
+	@Override
+	public User validateUpdateEntity(User dtoEntity) throws ValidationException {
+		//No se utiliza.
+		return null;
+	}
+
+	@Override
+	public void validateFieldsEntity(User dtoEntity) throws ValidationException {
+		//No se utiliza.		
+	}
+	
+	
 }

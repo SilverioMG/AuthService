@@ -6,6 +6,10 @@ public class RoleDto {
 	
 	private String name;
 
+	public RoleDto() {
+		//Empty Constructor.
+	}
+	
 	public RoleDto(Long id, String name) {
 		this.id = id;
 		this.name = name;

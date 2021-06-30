@@ -22,7 +22,6 @@ import net.atopecode.authservice.util.NormalizeString;
 @Entity
 @Table(
 		uniqueConstraints = {
-				@UniqueConstraint(name="role_unique_name", columnNames= {"name"}),
 				@UniqueConstraint(name="role_unique_nm_name", columnNames= {"nm_name"})
 				},
 		indexes = {
@@ -33,15 +32,17 @@ import net.atopecode.authservice.util.NormalizeString;
 public class Role implements INormalizable, Serializable {
 	
 	private static final long serialVersionUID = 6458591060376192585L;
+	
+	public static final int NAME_MAX_LENGTH = 30;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = NAME_MAX_LENGTH)
 	private String name;
 	
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = NAME_MAX_LENGTH)
 	private String nm_name;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")

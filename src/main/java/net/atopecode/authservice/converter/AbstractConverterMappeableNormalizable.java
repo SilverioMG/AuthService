@@ -1,4 +1,4 @@
-package net.atopecode.authservice.model.user.converter.base;
+package net.atopecode.authservice.converter;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;
@@ -7,12 +7,12 @@ import net.atopecode.authservice.model.interfaces.INormalizable;
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.dto.UserDto;
 
-public abstract class ConverterMappeableNormalizable<S, T> implements Converter<S, T> {
+public abstract class AbstractConverterMappeableNormalizable<S, T> implements Converter<S, T> {
 
 	protected ModelMapper mapper;
 	protected Class<T> classTarget;
 	
-	protected ConverterMappeableNormalizable(ModelMapper mapper, Class<T> classTarget) {
+	protected AbstractConverterMappeableNormalizable(ModelMapper mapper, Class<T> classTarget) {
 		this.mapper = mapper;
 		this.classTarget = classTarget;
 	}

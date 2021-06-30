@@ -9,9 +9,11 @@ import java.util.regex.Pattern;
 import org.springframework.util.StringUtils;
 
 import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.model.user.User;
+import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
-public abstract class AbstractValidator<TEntity> {
+public abstract class AbstractValidator<TEntity, TDtoEntity> {
 	
 	private Class<TEntity> classEntity;
 	
@@ -267,4 +269,13 @@ public abstract class AbstractValidator<TEntity> {
 			throw ex;
 		}
 	}
+	
+	//Abstract Methods to implement in derived classes:
+	
+	public abstract void validateInsertDto(TDtoEntity dtoEntity) throws ValidationException;
+	public abstract TEntity validateUpdateDto(TDtoEntity dtoEntity) throws ValidationException;
+	public abstract void validateFieldsDto(TDtoEntity dtoEntity) throws ValidationException;
+	public abstract void validateInsertEntity(TEntity dtoEntity) throws ValidationException;
+	public abstract TEntity validateUpdateEntity(TEntity dtoEntity) throws ValidationException;
+	public abstract void validateFieldsEntity(TEntity dtoEntity) throws ValidationException;
 }
