@@ -1,6 +1,9 @@
 package net.atopecode.authservice.service.user;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.atopecode.authservice.model.rel_user_role.IRelUserRoleRepository;
+import net.atopecode.authservice.model.rel_user_role.RelUserRole;
+import net.atopecode.authservice.model.role.Role;
+import net.atopecode.authservice.model.role.dto.RoleDto;
 import net.atopecode.authservice.model.user.IUserRepository;
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.converter.UserDtoToUserConverter;
 import net.atopecode.authservice.model.user.dto.UserDto;
+import net.atopecode.authservice.service.role.IRoleService;
 import net.atopecode.authservice.service.user.query.IUserQueryService;
 import net.atopecode.authservice.service.user.validator.UserValidatorComponent;
 import net.atopecode.authservice.validators.exception.ValidationException;
@@ -27,16 +35,22 @@ public class UserService implements IUserService {
 	private IUserQueryService userQueryService;
 	private UserValidatorComponent userValidator;
 	private UserDtoToUserConverter userDtoToUserConverter;
+	private IRoleService roleService;
+	private IRelUserRoleRepository relUserRoleRepository;
 	
 	@Autowired
 	public UserService(IUserRepository userRepository,
 			IUserQueryService userQueryService,
 			UserValidatorComponent userValidation,
-			UserDtoToUserConverter userDtoToUserConverter) {
+			UserDtoToUserConverter userDtoToUserConverter,
+			IRoleService roleService,
+			IRelUserRoleRepository relUserRoleRepository) {
 		this.userRepository = userRepository;
 		this.userQueryService = userQueryService;
 		this.userValidator = userValidation;
 		this.userDtoToUserConverter = userDtoToUserConverter;
+		this.roleService = roleService;
+		this.relUserRoleRepository = relUserRoleRepository;
 	}
 
 
@@ -64,11 +78,13 @@ public class UserService implements IUserService {
 		userValidator.validateInsertDto(userDto);
 		
 		User user = userDtoToUserConverter.convert(userDto);
+		user.normalize();	
 		user = userRepository.save(user);
+		
+		setRolesToUser(userDto.getId(), userDto.getRoles());
 		
 		return user;
 	}
-
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -76,12 +92,55 @@ public class UserService implements IUserService {
 		User user = userValidator.validateUpdateDto(userDto);
 		
 		userDtoToUserConverter.map(userDto, user);
+		user.normalize();
 		user = userRepository.save(user);
+		
+		setRolesToUser(userDto.getId(), userDto.getRoles());
 		
 		return user;
 	}
 
-
+	@Override
+    @Transactional(rollbackFor = Exception.class)
+	public User setRolesToUser(Long idUser, Set<RoleDto> rolesDto) throws ValidationException {
+		if((idUser == null) || (rolesDto == null)) {
+			return null;
+		}
+		
+		User user = userValidator.checkExistsUser(idUser);
+		List<Role> roles = userValidator.checkExistsRoles(rolesDto);
+		List<Role> userRoles = roleService.findRolesByUser(user);
+		List<Role> rolesToInsert = new ArrayList<>();
+		List<Role> rolesToDelete = new ArrayList<>();
+		
+		for(Role role: roles) {
+			if(!userRoles.contains(role)) {
+				rolesToInsert.add(role);
+			}
+		}
+		
+		for(Role role: userRoles) {
+			if(!roles.contains(role)) {
+				rolesToDelete.add(role);
+			}
+		}
+		
+		rolesToInsert.forEach(role -> {
+			RelUserRole relUserRole = new RelUserRole(user, role);
+			relUserRoleRepository.save(relUserRole);
+		});
+		
+		rolesToDelete.forEach(role -> {
+			RelUserRole relUserRole = relUserRoleRepository.findByUserAndRole(user, role).orElse(null);
+			if(relUserRole != null) {
+				relUserRoleRepository.delete(relUserRole);
+			}
+		});
+		
+		return user;
+	}
+	
+	
 	@Override
 	public void delete(Long idUser) {
 		if(idUser == null) {

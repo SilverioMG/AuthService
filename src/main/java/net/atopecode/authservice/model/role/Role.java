@@ -99,6 +99,8 @@ public class Role implements INormalizable, Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("name: %s, nm_name: %s", name, nm_name);
+		return "Role [id=" + id + ", name=" + name + ", nm_name=" + nm_name + "]";
 	}
+
+
 }

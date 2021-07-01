@@ -76,7 +76,7 @@ public class User implements INormalizable, Serializable {
 	private String nm_realName;
 	
 	//Propiedades de navegación:
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<RelUserRole> relUserRole = new HashSet<>();
 	
 	public User() {

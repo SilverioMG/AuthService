@@ -1,16 +1,13 @@
 package net.atopecode.authservice.validators.base;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.util.StringUtils;
 
 import net.atopecode.authservice.localization.MessageLocalized;
-import net.atopecode.authservice.model.user.User;
-import net.atopecode.authservice.model.user.dto.UserDto;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 public abstract class AbstractValidator<TEntity, TDtoEntity> {
@@ -31,8 +28,10 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 	public static final String VALIDATION_NOT_EQUALS_VALUE = "validation.not.equals.value";
 	public static final String VALIDATION_VALUE_IN = "validation.value.in";
 	public static final String VALIDATION_VALUE_NOT_IN = "validation.value.not.in";
-	public static final String VALIDATION_MUST_TO_BE_TRUE ="validation.must.to.be.true";
-	public static final String VALIDATION_MUST_TO_BE_FALSE ="validation.must.to.be.false";
+	public static final String VALIDATION_MUST_TO_BE_TRUE = "validation.must.to.be.true";
+	public static final String VALIDATION_MUST_TO_BE_FALSE = "validation.must.to.be.false";
+	public static final String VALIDATION_NOT_EMPTY_COLLECTION = "validation.not.empty.colletion";
+	public static final String VALIDATION_MUST_TO_BE_EMPTY_COLLECTION = "validation.must.to.be.empty.colletion";
 	
 	protected AbstractValidator(Class<TEntity> classEntity) {
 		this.classEntity = classEntity;
@@ -76,7 +75,6 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 				new ValidationException(messageLog, new MessageLocalized(VALIDATION_NOT_EMPTY_FIELD, fieldName, getEntityName())));
 	}
 	
-	
 	public void mustToBeEmpty(String value, ValidationException ex) throws ValidationException {
 		if(StringUtils.hasText(value)) {
 			throw ex;
@@ -88,6 +86,31 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 				new ValidationException(messageLog, new MessageLocalized(VALIDATION_MUST_TO_BE_EMPTY_FIELD, fieldName, getEntityName())));
 	}
 	
+	private <T> boolean isEmptyCollection(Collection<T> collection){
+		return (collection == null) || (collection.isEmpty()); 
+	}
+	
+	public <T> void notEmptyCollection(Collection<T> collection, ValidationException ex) throws ValidationException {
+		if(isEmptyCollection(collection)) {
+			throw ex;
+		}
+	}
+	
+	public <T> void notEmptyCollection(Collection<T> collection, String messageLog, String fieldName) throws ValidationException {
+		notEmptyCollection(collection,
+				new ValidationException(messageLog, new MessageLocalized(VALIDATION_NOT_EMPTY_COLLECTION, fieldName, getEntityName())));
+	}
+	
+	public <T> void mustToBeEmptyCollection(Collection<T> collection, ValidationException ex) throws ValidationException {
+		if(!isEmptyCollection(collection)) {
+			throw ex;
+		}
+	}
+	
+	public <T> void mustToBeEmptyCollection(Collection<T> collection, String messageLog, String fieldName) throws ValidationException {
+		mustToBeEmptyCollection(collection,
+				new ValidationException(messageLog, new MessageLocalized(VALIDATION_MUST_TO_BE_EMPTY_COLLECTION, fieldName, getEntityName())));
+	}
 	
 	
 	public void maxLength(String value, int maxLength, ValidationException ex) throws ValidationException {
@@ -183,7 +206,7 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 				new ValidationException(messageLog, new MessageLocalized(VALIDATION_NOT_EQUALS_VALUE, fieldName, getEntityName(), value, equalsValue)));
 	}
 	
-	private <T> boolean checkValueIn(T value, List<T> values) {
+	private <T> boolean checkValueIn(T value, Collection<T> values) {
 		if((value == null) || (values == null) || (values.isEmpty())) {
 			return false;
 			
@@ -192,24 +215,24 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 		return values.contains(value);
 	}
 	
-	public <T> void valueIn(T value, List<T> values, ValidationException ex) throws ValidationException {
+	public <T> void valueIn(T value, Collection<T> values, ValidationException ex) throws ValidationException {
 		if(!checkValueIn(value, values)) {
 			throw ex;
 		}
 	}
 	
-	public <T> void valueIn(T value, List<T> values, String messageLog, String fieldName) throws ValidationException {
+	public <T> void valueIn(T value, Collection<T> values, String messageLog, String fieldName) throws ValidationException {
 		valueIn(value, values,
 				new ValidationException(messageLog, new MessageLocalized(VALIDATION_VALUE_IN, fieldName, getEntityName(), value, values)));
 	}
 	
-	public <T> void valueNotIn(T value, List<T> values, ValidationException ex) throws ValidationException {
+	public <T> void valueNotIn(T value, Collection<T> values, ValidationException ex) throws ValidationException {
 		if(checkValueIn(value, values)) {
 			throw ex;
 		}
 	}
 	
-	public <T> void valueNotIn(T value, List<T> values, String messageLog, String fieldName) throws ValidationException {
+	public <T> void valueNotIn(T value, Collection<T> values, String messageLog, String fieldName) throws ValidationException {
 		valueNotIn(value, values,
 				new ValidationException(messageLog, new MessageLocalized(VALIDATION_VALUE_NOT_IN, fieldName, getEntityName(), value, values)));
 	}
@@ -269,13 +292,4 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 			throw ex;
 		}
 	}
-	
-	//Abstract Methods to implement in derived classes:
-	
-	public abstract void validateInsertDto(TDtoEntity dtoEntity) throws ValidationException;
-	public abstract TEntity validateUpdateDto(TDtoEntity dtoEntity) throws ValidationException;
-	public abstract void validateFieldsDto(TDtoEntity dtoEntity) throws ValidationException;
-	public abstract void validateInsertEntity(TEntity dtoEntity) throws ValidationException;
-	public abstract TEntity validateUpdateEntity(TEntity dtoEntity) throws ValidationException;
-	public abstract void validateFieldsEntity(TEntity dtoEntity) throws ValidationException;
 }

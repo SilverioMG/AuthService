@@ -1,14 +1,21 @@
 package net.atopecode.authservice.service.user.validator;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.model.role.Role;
+import net.atopecode.authservice.model.role.dto.RoleDto;
 import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.model.user.UserFieldNames;
 import net.atopecode.authservice.model.user.dto.UserDto;
+import net.atopecode.authservice.service.role.query.IRoleQueryService;
 import net.atopecode.authservice.service.user.query.IUserQueryService;
 import net.atopecode.authservice.validators.base.AbstractValidator;
 import net.atopecode.authservice.validators.exception.ValidationException;
@@ -27,16 +34,21 @@ public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 	public static final String USER_VALIDATION_UPDATE_ID_NOT_EXISTS = "user.validation.update.id.not.exists";
 	public static final String USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS = "user.validation.update.name.already.exists";
 	public static final String USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS = "user.validation.update.email.already.exists";
+	public static final String USER_VALIDATION_NOT_EXISTS_ROLE = "user.validation.not.exists.role";
+	public static final String USER_VALIDATION_ID_NOT_EXISTS = "user.validation.id.not.exists";
 	
 	//Regex Format rules:
 	public static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
-	private IUserQueryService userQueryService;
+	private final IUserQueryService userQueryService;
+	private final IRoleQueryService roleQueryService;
 	
 	@Autowired
-	public UserValidatorComponent(IUserQueryService userQueryService) {
+	public UserValidatorComponent(IUserQueryService userQueryService,
+			IRoleQueryService roleQueryService) {
 		super(User.class);
 		this.userQueryService = userQueryService;
+		this.roleQueryService = roleQueryService;
 	}
 	
 	/**
@@ -44,7 +56,6 @@ public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 	 * @param user
 	 * @throws ValidationException
 	 */
-	@Override
 	public void validateInsertDto(UserDto user) throws ValidationException {
 		notNull(user, 
 				new ValidationException("No se puede insertar el 'User' porque vale 'null'",
@@ -66,10 +77,9 @@ public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 		
 		ifTrueThrows(() -> userQueryService.findByEmail(user.getEmail()).isPresent(),
 				new ValidationException("No se puede insertar al 'User' porque ya existe uno con el 'email': " + user.getEmail(),
-						new MessageLocalized(USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS, user.getEmail())));
+						new MessageLocalized(USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS, user.getEmail())));		
 	}
 	
-	@Override
 	public User validateUpdateDto(UserDto user) throws ValidationException {
 		notNull(user,
 				new ValidationException("No se puede modificar el 'User' porque vale 'null'",
@@ -101,12 +111,42 @@ public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 		return userBd;
 	}
 	
+	public User checkExistsUser(Long idUser) throws ValidationException {
+		if(idUser == null) {
+			return null;
+		}
+		
+		final User userBd = userQueryService.findById(idUser).orElse(null);
+		ifTrueThrows(() -> userBd == null,
+				new ValidationException("No existe el 'User' con id:" + idUser + " en la B.D.",
+						new MessageLocalized(USER_VALIDATION_ID_NOT_EXISTS, idUser)));
+		
+		return userBd;
+	}
+	
+	public List<Role> checkExistsRoles(Set<RoleDto> roles) throws ValidationException {
+		List<Role> result = new ArrayList<>();
+		if(roles == null) {
+			return result;
+		}
+		
+		for(RoleDto role: roles) {
+			Role roleBd = roleQueryService.findById(role.getId()).orElse(null);
+			ifTrueThrows(() -> roleBd == null, 
+					new ValidationException("No se puede guardar el 'User' porque no existe el 'Role' con id: " + role.getId(),
+							new MessageLocalized(USER_VALIDATION_NOT_EXISTS_ROLE, role.getId())));
+			
+			result.add(roleBd);
+		}
+		
+		return result;
+	}
+	
 	/**
 	 * Validaciones de los campos del Usuario.
 	 * @param user
 	 * @throws ValidationException
 	 */
-	@Override
 	public void validateFieldsDto(UserDto user) throws ValidationException {		
 		//Name:
 		notEmpty(user.getName(), "No se puede guardar el 'User' porque el campo 'name' no tiene valor", UserFieldNames.NAME);
@@ -122,30 +162,15 @@ public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 		//Email:
 		notEmpty(user.getEmail(), "No se puede guardar el 'User' porque el campo 'email' vale 'null'", UserFieldNames.EMAIL);
 		
-		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT, 
-				"No se puede guardar el 'User' porque el campo 'email' es muy largo", UserFieldNames.EMAIL);
+		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'email' es muy largo", UserFieldNames.EMAIL);
 		
 		hasFormat(user.getEmail(),EMAIL_REGEX, "No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto", UserFieldNames.EMAIL);
 		
 		//RealName:
 		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'realName' es muy largo",  UserFieldNames.REAL_NAME);
+		
+		//Roles:
+		notEmptyCollection(user.getRoles(), "No se puede guardar el 'User' porque el campo 'roles' es una lista vacía", UserFieldNames.Dto.ROLES);
 	}
-
-	@Override
-	public void validateInsertEntity(User dtoEntity) throws ValidationException {
-		//No se utiliza.
-	}
-
-	@Override
-	public User validateUpdateEntity(User dtoEntity) throws ValidationException {
-		//No se utiliza.
-		return null;
-	}
-
-	@Override
-	public void validateFieldsEntity(User dtoEntity) throws ValidationException {
-		//No se utiliza.		
-	}
-	
-	
+		
 }

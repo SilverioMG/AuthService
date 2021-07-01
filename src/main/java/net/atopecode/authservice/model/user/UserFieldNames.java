@@ -6,6 +6,7 @@ public class UserFieldNames {
 		//Empty constructor.
 	}
 	
+	//User and Dto fields:
 	public static final String ID = "id";
 	public static final String NAME = "name";
 	public static final String PASSWORD = "password";
@@ -17,4 +18,13 @@ public class UserFieldNames {
 	public static final String NM_EMAIL = "nm_email";
 	public static final String NM_REAL_NAME = "nm_realName";
 	
+	
+	//User Dto only fields:
+	public static class Dto{
+		private Dto() {
+			//Empty Constructor.
+		}
+		
+		public static final String ROLES = "roles";
+	}
 }

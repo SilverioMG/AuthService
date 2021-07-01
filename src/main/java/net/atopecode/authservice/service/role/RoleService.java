@@ -1,5 +1,6 @@
 package net.atopecode.authservice.service.role;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import net.atopecode.authservice.model.role.IRoleRepository;
 import net.atopecode.authservice.model.role.Role;
 import net.atopecode.authservice.model.role.converter.RoleDtoToRoleConverter;
 import net.atopecode.authservice.model.role.dto.RoleDto;
+import net.atopecode.authservice.model.user.User;
 import net.atopecode.authservice.service.role.query.IRoleQueryService;
 import net.atopecode.authservice.service.role.validator.RoleValidatorComponent;
 import net.atopecode.authservice.validators.exception.ValidationException;
@@ -103,4 +105,8 @@ public class RoleService implements IRoleService {
 		return roleQueryService.findAll(pageRequest);
 	}
 
+	@Override
+	public List<Role> findRolesByUser(User user){
+		return roleQueryService.findRolesByUser(user);
+	}
 }

@@ -1,5 +1,9 @@
 package net.atopecode.authservice.model.user.dto;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import net.atopecode.authservice.model.role.dto.RoleDto;
 
 public class UserDto {
 
@@ -13,16 +17,20 @@ public class UserDto {
 	
 	private String realName;
 	
+	private Set<RoleDto> roles;
+	
 	public UserDto() {
 		//Empty Constructor.
 	}
 
-	public UserDto(Long id, String name, String password, String email, String realName) {
+	public UserDto(Long id, String name, String password, String email, String realName,
+			Set<RoleDto> roles) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.realName = realName;
+		this.roles = (roles != null) ? roles : new HashSet<>();
 	}
 
 	public Long getId() {
@@ -69,11 +77,19 @@ public class UserDto {
 		this.realName = realName;
 		return this;
 	}
+	
+	public void setRoles(Set<RoleDto> roles) {
+		this.roles = (roles != null) ? roles : new HashSet<RoleDto>();
+	}
+	
+	public Set<RoleDto> getRoles(){
+		return roles;
+	}
 
 	@Override
 	public String toString() {
 		return "UserDto [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", realName="
-				+ realName + "]";
+				+ realName + ", roles=" + roles + "]";
 	}
 	
 }
