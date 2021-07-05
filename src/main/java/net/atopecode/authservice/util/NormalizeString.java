@@ -1,7 +1,6 @@
 package net.atopecode.authservice.util;
 
 import java.text.Normalizer;
-import java.util.HashMap;
 import java.util.Map;
 
 //Esta clase provee métodos para devolver el valor normalizado de Strings (quitando tildes y caracteres especiales).

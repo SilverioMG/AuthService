@@ -81,7 +81,7 @@ public class UserService implements IUserService {
 		user.normalize();	
 		user = userRepository.save(user);
 		
-		setRolesToUser(userDto.getId(), userDto.getRoles());
+		setRolesToUser(user.getId(), userDto.getRoles());
 		
 		return user;
 	}
@@ -95,7 +95,7 @@ public class UserService implements IUserService {
 		user.normalize();
 		user = userRepository.save(user);
 		
-		setRolesToUser(userDto.getId(), userDto.getRoles());
+		setRolesToUser(user.getId(), userDto.getRoles());
 		
 		return user;
 	}
@@ -103,9 +103,13 @@ public class UserService implements IUserService {
 	@Override
     @Transactional(rollbackFor = Exception.class)
 	public User setRolesToUser(Long idUser, Set<RoleDto> rolesDto) throws ValidationException {
-		if((idUser == null) || (rolesDto == null)) {
-			return null;
+		if(idUser == null) {
+			throw new UserServiceRuntimeException("No se pueden asignar 'Roles' al 'User' porque no se ha recibido valor para el parámetro 'idUser'");
 		}
+			
+		if(rolesDto == null) {
+			throw new UserServiceRuntimeException("No se pueden asignar 'Roles' al 'User' porque no se ha recibido valor para el parámetro 'rolesDto'");
+		}		
 		
 		User user = userValidator.checkExistsUser(idUser);
 		List<Role> roles = userValidator.checkExistsRoles(rolesDto);
@@ -196,13 +200,16 @@ public class UserService implements IUserService {
 
 	
 	//TODO...
-	//-Tener en cuenta los 'Roles' tanto al insertar como al modificar el 'User'. Se recibirán en una lista del 'UserDto.roles'.
-	//Ver que pasa si se guardan los roles directamente añadiéndolos a la lista LazyLoading del User y se elimina uno en el proceso.
-	//Pero para evitar la carga de todos los roles al final guardarlo directamente en la tabla correspondiente después de hacer las 
-	//comprobaciones necesarias.
+	//-Probar a insertar y modificar Usuarios con Roles. Añadir en el Dto de UserDtoToUser la asignación de los Roles para devolver al cliente web.
 	//-Hacer tests para esta clase utilizando otra B.D. de prueba.
 	//-Usar Specifications para querys con filtro.
 	//-JpaAuditing.
 	//-Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
 	//-Añadir Módulos de Java 11.
+	
+	public static class UserServiceRuntimeException extends RuntimeException {
+		public UserServiceRuntimeException(String message) {
+			super(message);
+		}
+	}
 }

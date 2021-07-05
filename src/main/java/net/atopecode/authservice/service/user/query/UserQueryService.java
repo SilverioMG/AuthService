@@ -1,7 +1,5 @@
 package net.atopecode.authservice.service.user.query;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;

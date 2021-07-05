@@ -4,8 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;
 
 import net.atopecode.authservice.model.interfaces.INormalizable;
-import net.atopecode.authservice.model.user.User;
-import net.atopecode.authservice.model.user.dto.UserDto;
 
 public abstract class AbstractConverterMappeableNormalizable<S, T> implements Converter<S, T> {
 
