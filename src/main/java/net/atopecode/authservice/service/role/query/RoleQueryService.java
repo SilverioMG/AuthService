@@ -63,10 +63,8 @@ public class RoleQueryService implements IRoleQueryService {
 	
 	@Override
 	public List<Role> findRolesByUser(User user){
-		List<Role> roles = new ArrayList<>();
-		
 		List<RelUserRole> relUserRoles = relUserRoleRepository.findByUser(user);
-		relUserRoles.stream()
+		List<Role> roles = relUserRoles.stream()
 			.map(RelUserRole::getRole)
 			.collect(Collectors.toList());
 		

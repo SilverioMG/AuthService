@@ -73,7 +73,7 @@ public class RoleController {
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
 		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(RoleFieldNames.ID)));
 		Page<Role> roles = roleService.findAll(pageRequest);
-		Page<RoleDto> result = roles.map((role) -> roleToRoleDtoConverter.convert(role));
+		Page<RoleDto> result = roles.map(role -> roleToRoleDtoConverter.convert(role));
 		
 		return new ResultMessage<Page<RoleDto>>(result, "").toResponseEntity(HttpStatus.OK);
 	}

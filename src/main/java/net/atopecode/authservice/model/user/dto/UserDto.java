@@ -20,7 +20,7 @@ public class UserDto {
 	private Set<RoleDto> roles;
 	
 	public UserDto() {
-		//Empty Constructor.
+		this.roles = new HashSet<>();
 	}
 
 	public UserDto(Long id, String name, String password, String email, String realName,

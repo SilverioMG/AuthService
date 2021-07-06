@@ -200,14 +200,18 @@ public class UserService implements IUserService {
 
 	
 	//TODO...
-	//-Probar a insertar y modificar Usuarios con Roles. Añadir en el Dto de UserDtoToUser la asignación de los Roles para devolver al cliente web.
-	//-Hacer tests para esta clase utilizando otra B.D. de prueba.
+	//-Añadir plugin eclipse para editar los archivos .properties y que escape los acentos automáticamente en los mensajes de locale.
+	//-Añadir Swagger.
+	//-Modificar empaquetado de las clases para cuando se configure por módulos. Todo lo del User dentro del package 'user' y así sucesivamente.
+	//-Hacer tests utilizando otra B.D. de prueba.
 	//-Usar Specifications para querys con filtro.
 	//-JpaAuditing.
 	//-Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
 	//-Añadir Módulos de Java 11.
 	
 	public static class UserServiceRuntimeException extends RuntimeException {
+		private static final long serialVersionUID = -1509839006573338505L;
+
 		public UserServiceRuntimeException(String message) {
 			super(message);
 		}

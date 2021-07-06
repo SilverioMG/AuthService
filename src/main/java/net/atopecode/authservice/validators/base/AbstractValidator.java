@@ -38,7 +38,7 @@ public abstract class AbstractValidator<TEntity, TDtoEntity> {
 	}
 	
 	public String getEntityName() {
-		return classEntity.getName();
+		return classEntity.getSimpleName();
 	}
 	
 	//Fields Validations:
