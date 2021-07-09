@@ -1,6 +1,6 @@
 package net.atopecode.authservice;
 
-import java.util.Arrays;
+//import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
