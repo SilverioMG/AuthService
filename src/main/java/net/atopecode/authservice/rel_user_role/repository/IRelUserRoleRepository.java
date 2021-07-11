@@ -15,7 +15,7 @@ import net.atopecode.authservice.user.model.User;
 @Repository
 public interface IRelUserRoleRepository extends JpaRepository<RelUserRole, Long> {
 
-	//Nota.- Las propiedades de navegación 'User' y 'Role' estás anotadas con 'FetchType.EAGER' por eso, sino se hace un fetch en la query, Hibernate hará
+	//IMPORTANTE.- Las propiedades de navegación 'User' y 'Role' estás anotadas con 'FetchType.EAGER' por eso, sino se hace un fetch en la query, Hibernate hará
 	//       una query adicional por cada propierdad para recuperarlas por separado después de obtener el registro de 'RelUserRole' correspondiente.
 	
 	@Query("SELECT rel from RelUserRole rel INNER JOIN FETCH rel.user u INNER JOIN FETCH rel.role WHERE (rel.user = :userParam) AND (rel.role = :roleParam)")

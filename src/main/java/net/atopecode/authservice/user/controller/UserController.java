@@ -73,7 +73,7 @@ public class UserController {
 	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
 		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(UserFieldNames.ID)));
-		Page<User> users = userService.findAllWithRoles(pageRequest);
+		Page<User> users = userService.findAll(pageRequest);
 		Page<UserDto> result = users.map(user -> userToUserDtoConverter.convertWithoutPassword(user));
 		
 		return new ResultMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);

@@ -32,6 +32,12 @@ public interface IUserRepository extends JpaRepository<User, Long>{
 		   "WHERE user.nm_email = :email")
 	public Optional<User> findByNormalizedEmailWithRoles(@Param("email") String email);
 	
+	/*IMPORTANTE: En esta query, al ser paginada y utilizar FETCH (se trae campos de otras tablas en el SELECT) Hibernate no tiene manera
+	 * de hacer la paginación en una sola consulta y entonces trae todo el resultado de la query a memoria y luego hace la paginación teniendo
+	 * en cuenta cual es la tabla/entidad root sobre la que se hace el SELECT.
+	 * Puede ocasionar problemas de memoria si las tablas tienen muchos registros (la consulta si paginar es muy grande).
+	 * No usar FETCH en consultas paginadas. Recuperar los registros de las propiedades de navegación que son 'LazyLoad' posteriormente desde código con otra consulta.
+	 */
 	@Query(value = "SELECT user from User user LEFT JOIN FETCH user.relUserRole relUserRole INNER JOIN FETCH relUserRole.role role",
 		   countQuery = "SELECT COUNT(user) from User user LEFT JOIN user.relUserRole relUserRole INNER JOIN relUserRole.role role")
 	public Page<User> findAllWithRoles(PageRequest pageRequest);
