@@ -1,5 +1,8 @@
 package net.atopecode.authservice.role.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +11,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +23,12 @@ import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.role.converter.RoleToRoleDtoConverter;
 import net.atopecode.authservice.role.dto.RoleDto;
+import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.IRoleService;
+import net.atopecode.authservice.user.dto.UserDto;
+import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @RestController
@@ -46,7 +53,7 @@ public class RoleController {
 	
 	/**
 	 * Se crea un nuevo 'Role' en la B.D. y se devuelve su info como respuesta.
-	 * Si el valor del campo 'id' vale 'null' se intetará insertar un nuevo 'Role'.
+	 * Si el valor del campo 'id' vale 'null' se intentará insertar un nuevo 'Role'.
 	 * Si el campo 'id' tiene valor, se intentará modificar a dicho 'Role'.
 	 * @param roleDto
 	 * @return
@@ -59,6 +66,23 @@ public class RoleController {
 		roleDto = roleToRoleDtoConverter.convert(role);
 		return new ResultMessage<RoleDto>(roleDto, localeService, messageLocalized, true)
 				.toResponseEntity(HttpStatus.OK);
+	}
+	
+	/**
+	 * Se recupera un 'Role' por su 'id'.
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/{id}")
+	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id){
+		Role role = roleService.findById(id).orElse(null);
+		if(role != null) {
+			RoleDto roleDto = roleToRoleDtoConverter.convert(role);
+			return new ResultMessage<RoleDto>(roleDto, "").toResponseEntity(HttpStatus.OK);
+		}
+		else {
+			return new ResultMessage<RoleDto>(null, false).toResponseEntity(HttpStatus.NOT_FOUND);
+		}		
 	}
 	
 	// /api/findAll?page=0&pageSize=10
@@ -76,5 +100,11 @@ public class RoleController {
 		Page<RoleDto> result = roles.map(role -> roleToRoleDtoConverter.convert(role));
 		
 		return new ResultMessage<Page<RoleDto>>(result, "").toResponseEntity(HttpStatus.OK);
+	}
+	
+	@PostMapping("/query")
+	public ResponseEntity<ResultMessage<List<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
+		//TODO... Hacer método en la capa de servicio que utilicel el 'roleFilter' con JPA Specifications para realizar la query.
+		return new ResultMessage<List<RoleDto>>(new ArrayList<>(), "").toResponseEntity(HttpStatus.OK);
 	}
 }

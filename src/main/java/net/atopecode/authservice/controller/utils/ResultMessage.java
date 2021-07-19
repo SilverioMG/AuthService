@@ -17,11 +17,11 @@ public class ResultMessage<T> {
     public final boolean success;
 
     public ResultMessage(){
-    	result = null;
-        message = "";
-        success = true;
+    	this.result = null;
+        this.message = "";
+        this.success = true;
     }
-
+    
     public ResultMessage(T result, String message){
         this.result = result;
         this.message = message;
@@ -37,12 +37,6 @@ public class ResultMessage<T> {
     public ResultMessage(String message, boolean success){
         this.result = null;
         this.message = message;
-        this.success = success;
-    }
-
-    public ResultMessage(HttpStatus httpStatus, boolean success){
-        this.result = null;
-        this.message = httpStatus.toString();
         this.success = success;
     }
 

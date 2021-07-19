@@ -159,7 +159,6 @@ public class UserService implements IUserService {
 		else {
 			user.getRelUserRole()
 				.forEach(relUserRole -> result.add(relUserRole.getRole()));
-			
 		}
 		
 		return result;
@@ -228,7 +227,6 @@ public class UserService implements IUserService {
 	}
 	
 	//TODO...
-	//-Solucionar problema de las consultas paginadas con fetch join que Hibernate hace la paginación en memoria. Se trae toda la consulta y pagina en memoria!
 	//-Usar Specifications para querys con filtro.
 	//-Añadir Swagger.
 	//-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.

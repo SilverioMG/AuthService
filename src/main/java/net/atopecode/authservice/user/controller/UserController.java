@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,18 @@ public class UserController {
 		userDto = userToUserDtoConverter.convert(user);
 		return new ResultMessage<UserDto>(userDto, localeService, messageLocalized, true)
 				.toResponseEntity(HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id){
+		User user = userService.findById(id).orElse(null);
+		if(user != null) {
+			UserDto userDto = userToUserDtoConverter.convert(user);
+			return new ResultMessage<UserDto>(userDto, "").toResponseEntity(HttpStatus.OK);
+		}
+		else {
+			return new ResultMessage<UserDto>(null, false).toResponseEntity(HttpStatus.NOT_FOUND);
+		}		
 	}
 	
 	// /api/findAll?page=0&pageSize=10
