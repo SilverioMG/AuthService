@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.user.model.User;
 
@@ -16,6 +17,8 @@ public interface IRoleQueryService {
 	public Optional<Role> findByName(String name);
 	
 	public Page<Role> findAll(PageRequest pageRequest);
+	
+	public List<Role> query(RoleFilter filter);
 	
 	public List<Role> findRolesByUser(User user);
 }

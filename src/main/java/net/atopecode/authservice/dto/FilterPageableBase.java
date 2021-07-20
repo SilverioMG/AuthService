@@ -13,6 +13,13 @@ public abstract class FilterPageableBase {
 	protected FilterPageableBase(PageRequestDto pageRequest) {
 		this.pageRequest = pageRequest;
 	}
+	
+	
+
+	public PageRequestDto getPageRequest() {
+		return pageRequest;
+	}
+
 
 	@Override
 	public String toString() {

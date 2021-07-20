@@ -24,6 +24,30 @@ public class PageRequestDto {
 		this.orderSort = orderSort;
 	}
 
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+
+
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+
+
+	public String getSortFieldName() {
+		return sortFieldName;
+	}
+
+
+
+	public OrderSortValue getOrderSort() {
+		return orderSort;
+	}
+
+
 	@Override
 	public String toString() {
 		return "PageRequestDto [pageSize=" + pageSize + ", pageNumber=" + pageNumber + ", sortFieldName="

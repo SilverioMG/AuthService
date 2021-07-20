@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.atopecode.authservice.role.converter.RoleDtoToRoleConverter;
 import net.atopecode.authservice.role.dto.RoleDto;
+import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.repository.IRoleRepository;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
@@ -103,6 +104,11 @@ public class RoleService implements IRoleService {
 	@Override
 	public Page<Role> findAll(PageRequest pageRequest) {
 		return roleQueryService.findAll(pageRequest);
+	}
+	
+	@Override
+	public List<Role> query(RoleFilter filter) {
+		return roleQueryService.query(filter);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package net.atopecode.authservice.role.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -104,7 +105,11 @@ public class RoleController {
 	
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<List<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
-		//TODO... Hacer método en la capa de servicio que utilicel el 'roleFilter' con JPA Specifications para realizar la query.
-		return new ResultMessage<List<RoleDto>>(new ArrayList<>(), "").toResponseEntity(HttpStatus.OK);
+		List<Role> result = roleService.query(roleFilter);
+		List<RoleDto> resultDto = result.stream()
+				.map(role -> roleToRoleDtoConverter.convert(role))
+				.collect(Collectors.toList());
+		
+		return new ResultMessage<List<RoleDto>>(resultDto, "").toResponseEntity(HttpStatus.OK);
 	}
 }
