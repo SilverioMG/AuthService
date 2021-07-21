@@ -227,8 +227,9 @@ public class UserService implements IUserService {
 	}
 	
 	//TODO...
+	//-Implementar para 'UserController' la entrada para 'query' igual que se hizo para 'RoleController' pero utilizando la nueva clase base 'AbstractQueryService'. Dejar la de 'RoleQueryService'
+	// como está para ver la evolución de uno a otro y mantener el código original en 'RoleQueryService'.
 	//-Probar en 'RoleController' la query con filtro y specifications.
-	//-Usar Specifications para querys con filtro.
 	//-Añadir Swagger.
 	//-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
 	//-JpaAuditing.

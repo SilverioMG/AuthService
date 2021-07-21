@@ -74,13 +74,15 @@ public class RoleQueryService implements IRoleQueryService {
 	@Override
 	public List<Role> query(RoleFilter filter) {
 		List<Role> result = new ArrayList<>();
-		Specification<Role> specification = getSpecification(filter);
-		PageRequest pageRequest = getPageRequest(filter);
+		Specification<Role> specification = getFilterSpecification(filter);
+		PageRequest pageRequest = getFilterPageRequest(filter);
 		
 		if(pageRequest == null) {
+			//Si 'specification' vale 'null' se hará la query sin cláusula 'where'.
 			result = roleRepository.findAll(specification);
 		}
 		else {
+			//Si 'specification' vale 'null' se hará la query sin cláusula 'where'.
 			Page<Role> pageResult = roleRepository.findAll(specification, pageRequest);
 			result = pageResult.getContent();
 		}
@@ -88,7 +90,7 @@ public class RoleQueryService implements IRoleQueryService {
 		return result;
 	}
 	
-	public static Specification<Role>  getSpecification(RoleFilter filter) {
+	protected Specification<Role>  getFilterSpecification(RoleFilter filter) {
 		return (Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
 			Predicate predicate = null;
 			Predicate predicateId = null;
@@ -107,7 +109,7 @@ public class RoleQueryService implements IRoleQueryService {
 				predicateName = builder.equal(root.get(RoleFieldNames.NM_NAME), normalizedName);
 			}
 			
-			//Se concatenan los predicados que no valgan 'null'.
+			//Se concatenan los predicados que no valgan 'null' con una condición de tipo 'and':
 			Predicate[] predicates = new Predicate[] {predicateId, predicateName };
 			for(Predicate p: predicates) {
 				if(p != null) {
@@ -119,7 +121,7 @@ public class RoleQueryService implements IRoleQueryService {
 		};
 	}
 	
-	public static PageRequest getPageRequest(RoleFilter filter) {
+	protected PageRequest getFilterPageRequest(RoleFilter filter) {
 		PageRequest pageRequest = null;
 		PageRequestDto pageRequestDto = filter.getPageRequest();
 		if(pageRequestDto != null) {
