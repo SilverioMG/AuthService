@@ -1,6 +1,5 @@
 package net.atopecode.authservice.role.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +27,6 @@ import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.IRoleService;
-import net.atopecode.authservice.user.dto.UserDto;
-import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @RestController

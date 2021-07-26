@@ -15,18 +15,18 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import net.atopecode.authservice.dto.FilterPageableBase;
 import net.atopecode.authservice.dto.PageRequestDto;
 
-public abstract class AbstractQueryService<TEntity> {
+public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageableBase> {
 	
-	protected enum PredicateLogicComparation { AND, OR };
+	protected enum PredicateLogicComparation { AND, OR }
 
 	private JpaSpecificationExecutor<TEntity> repository;
 	
-	public AbstractQueryService(JpaSpecificationExecutor<TEntity> repository) {
+	protected AbstractQueryService(JpaSpecificationExecutor<TEntity> repository) {
 		this.repository = repository;
 	}
 	
 	
-	public <TFilter extends FilterPageableBase> List<TEntity> query(TFilter filter) {
+	public List<TEntity> query(TFilter filter) {
 		List<TEntity> result = new ArrayList<>();
 		Specification<TEntity> specification = getFilterSpecification(filter);
 		PageRequest pageRequest = getFilterPageRequest(filter);
@@ -42,7 +42,7 @@ public abstract class AbstractQueryService<TEntity> {
 		return result;
 	}
 	
-	protected abstract <TFilter extends FilterPageableBase> Specification<TEntity> getFilterSpecification(TFilter filter);
+	protected abstract Specification<TEntity> getFilterSpecification(TFilter filter);
 	
 	protected Predicate composeNullablePredicates(CriteriaBuilder builder, PredicateLogicComparation logicComparation, Predicate[] predicates) {
 		Predicate predicate = null;
@@ -79,7 +79,7 @@ public abstract class AbstractQueryService<TEntity> {
 		return (predicateResult == null) ? predicateToConcat : builder.or(predicateResult, predicateToConcat);
 	}
 	
-	protected <TFilter extends FilterPageableBase> PageRequest getFilterPageRequest(TFilter filter) {
+	protected PageRequest getFilterPageRequest(TFilter filter) {
 		PageRequest pageRequest = null;
 		PageRequestDto pageRequestDto = filter.getPageRequest();
 		if(pageRequestDto != null) {	
