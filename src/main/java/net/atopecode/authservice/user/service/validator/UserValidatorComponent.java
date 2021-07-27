@@ -23,7 +23,7 @@ import net.atopecode.authservice.validators.exception.ValidationException;
 @Component
 public class UserValidatorComponent extends AbstractValidator<User, UserDto> {
 	
-	//Codes of Locale .properties files:
+	//Codes of Locale '.properties' files:
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
 	public static final String USER_VALIDATION_INSERT_NOTNULL_ID = "user.validation.insert.notnull.id";
 	public static final String USER_VALIDATION_INSERT_ID_ALREADY_EXISTS = "user.validation.insert.id.already.exists";

@@ -52,6 +52,25 @@ public class NormalizeString {
         return value;
     }
 
+    /**
+     * Este método normaliza el 'Array de Strings' recibido como parámetro convirtiendo sus caracteres en minúsculas, quitando espacios en blanco,
+     * quitando acentos/tildes y caracteres especiales.
+     * @param values
+     * @return
+     */
+    public static String[] normalize(String[] values) {
+    	if(values == null) {
+    		return new String[0];
+    	}
+    	
+    	String[] result = new String[values.length];
+    	for(int ind=0; ind<result.length; ind++) {
+    		result[ind] = normalize(values[ind]);
+    	}
+    	
+    	return result;
+    }
+    
     public static String replace(String value, Map<Character, Character> mapReplaceTo){
         if(mapReplaceTo == null){
             return value;

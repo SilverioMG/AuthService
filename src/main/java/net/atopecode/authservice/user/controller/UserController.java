@@ -1,5 +1,7 @@
 package net.atopecode.authservice.user.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.user.dto.UserDto;
+import net.atopecode.authservice.user.dto.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.IUserService;
@@ -66,7 +69,7 @@ public class UserController {
 	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id){
 		User user = userService.findById(id).orElse(null);
 		if(user != null) {
-			UserDto userDto = userToUserDtoConverter.convert(user);
+			UserDto userDto = userToUserDtoConverter.convertWithoutPassword(user);
 			return new ResultMessage<UserDto>(userDto, "").toResponseEntity(HttpStatus.OK);
 		}
 		else {
@@ -90,5 +93,13 @@ public class UserController {
 		Page<UserDto> result = users.map(user -> userToUserDtoConverter.convertWithoutPassword(user));
 		
 		return new ResultMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);
+	}
+	
+	@PostMapping("/query")
+	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter){
+		Page<User> result = userService.query(filter);
+		Page<UserDto> resultDto = result.map(userToUserDtoConverter::convertWithoutPassword);
+		
+		return new ResultMessage<Page<UserDto>>(resultDto, "").toResponseEntity(HttpStatus.OK);
 	}
 }

@@ -1,9 +1,12 @@
 package net.atopecode.authservice.localization;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class MessageLocalized {
+public class MessageLocalized implements Serializable {
 	
+	private static final long serialVersionUID = 8225920375041121608L;
+
 	private final String messageCode;
 	
 	private final Object[] messageParams;

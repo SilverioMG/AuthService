@@ -9,6 +9,12 @@ public class RoleFilter extends FilterPageableBase {
 	
 	private String name;
 	
+	/*Si existe este constructor, Spring lo utiliza por defecto para mapear el Json recibido desde los Controllers que utilicen este Dto. Sino se utiliza el constructor que mejor
+	 *se adapte según los nombres de los campos del Json recibido en el Controller.
+	public RoleFilter() {
+		super(null);
+	}
+	*/
 	
 	public RoleFilter(PageRequestDto pageRequest) {
 		super(pageRequest);

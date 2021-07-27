@@ -1,5 +1,6 @@
 package net.atopecode.authservice.user.service.query;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import net.atopecode.authservice.rel_user_role.model.RelUserRole;
 import net.atopecode.authservice.rel_user_role.model.RelUserRoleFieldNames;
 import net.atopecode.authservice.role.model.Role;
+import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.service.query.AbstractQueryService;
 import net.atopecode.authservice.user.dto.UserFilter;
 import net.atopecode.authservice.user.model.User;
@@ -59,7 +61,7 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 	@Override
 	public Optional<User> findByName(String name) {
 		Optional<User> user = Optional.empty();
-		if(StringUtils.hasText(name)) {
+		if(StringUtils.isNotBlank(name)) {
 			name = NormalizeString.normalize(name);
 			user = userRepository.findByNormalizedName(name);
 		}
@@ -121,7 +123,7 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 	}
 	
 	@Override
-	public List<User> query(UserFilter filter){
+	public Page<User> query(UserFilter filter){
 		return super.query(filter);
 	}
 
@@ -134,6 +136,8 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 			Predicate predicateEmail = null;
 			Predicate predicateRealName = null;
 			Predicate predicateRoles = null;
+			
+			query.distinct(true);
 			
 			if(filter == null) {
 				return predicate;
@@ -160,7 +164,7 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 			
 			String[] roles = filter.getRoles();
 			if(ArrayUtils.isNotEmpty(roles)) {
-				predicateRoles = joinRolesPredicate(root, query, builder, roles);
+				predicateRoles = joinRolesPredicate(root, roles);
 			}
 			
 			Predicate[] predicates = new Predicate[] { predicateId, predicateName, predicateEmail, predicateRealName, predicateRoles };
@@ -170,18 +174,19 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 		};
 	}
 	
-	private Predicate joinRolesPredicate(Root<User> userRoot, CriteriaQuery<?> query, CriteriaBuilder builder, String[] roles) {
+	private Predicate joinRolesPredicate(Root<User> userRoot, String[] roles) {
 		Predicate predicateRoles = null;
-		if(roles == null) {
+		if(ArrayUtils.isEmpty(roles)) {
 			return predicateRoles;
 		}
 		
 		Join<User, RelUserRole> joinRelUserRoles = userRoot.join(UserFieldNames.REL_USER_ROLE);
 		Join<RelUserRole, Role> joinRoles = joinRelUserRoles.join(RelUserRoleFieldNames.ROLE);
 		
-		//TODO...
-		
-		
+		List<String> normalizedRolesLilst = Arrays.asList(NormalizeString.normalize(roles));
+		predicateRoles = joinRoles.get(RoleFieldNames.NM_NAME).in(normalizedRolesLilst);
+				
+		return predicateRoles;
 	}
 
 }

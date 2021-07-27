@@ -7,7 +7,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -26,19 +28,22 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	}
 	
 	
-	public List<TEntity> query(TFilter filter) {
-		List<TEntity> result = new ArrayList<>();
+	public Page<TEntity> query(TFilter filter) {
+		Page<TEntity> result = Page.empty();
 		Specification<TEntity> specification = getFilterSpecification(filter);
 		PageRequest pageRequest = getFilterPageRequest(filter);
 		
 		if(pageRequest == null) {
-			result = repository.findAll(specification);
+			//Consulta sin paginación:
+			List<TEntity> entities = repository.findAll(specification);
+			result = new PageImpl<TEntity>(entities, Pageable.unpaged(), entities.size());
 		}
 		else {
+			//Consulta paginada:
 			Page<TEntity> pageResult = repository.findAll(specification, pageRequest);
-			result = pageResult.getContent();
+			result = pageResult;
 		}
-		
+
 		return result;
 	}
 	
@@ -82,7 +87,8 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	protected PageRequest getFilterPageRequest(TFilter filter) {
 		PageRequest pageRequest = null;
 		PageRequestDto pageRequestDto = filter.getPageRequest();
-		if(pageRequestDto != null) {	
+		if(pageRequestDto != null) {
+			//TODO... Validar que todos los campos de 'pageRequestDto' tengan valor, en caso contrario lanzar una 'ValidationException'.
 			pageRequest = PageRequest.of(pageRequestDto.getPageNumber(), pageRequestDto.getPageSize(), 
 					Sort.Direction.fromOptionalString(pageRequestDto.getOrderSort().toString()).orElse(Sort.Direction.ASC), 
 					pageRequestDto.getSortFieldName());

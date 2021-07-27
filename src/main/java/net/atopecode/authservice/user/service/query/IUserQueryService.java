@@ -26,7 +26,7 @@ public interface IUserQueryService {
 	
 	public Page<User> findAll(PageRequest pageRequest);
 	
-	public List<User> query(UserFilter filter);
+	public Page<User> query(UserFilter filter);
 	
 	public Page<User> findAllWithRoles(PageRequest pageRequest);
 }
