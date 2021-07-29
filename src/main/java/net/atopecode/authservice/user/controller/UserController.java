@@ -1,7 +1,5 @@
 package net.atopecode.authservice.user.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +20,7 @@ import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.user.dto.UserDto;
-import net.atopecode.authservice.user.dto.UserFilter;
+import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.IUserService;

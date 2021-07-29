@@ -1,12 +1,11 @@
 package net.atopecode.authservice.user.service.query;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import net.atopecode.authservice.user.dto.UserFilter;
+import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 
 

@@ -22,7 +22,7 @@ import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.service.IRoleService;
 import net.atopecode.authservice.user.converter.UserDtoToUserConverter;
 import net.atopecode.authservice.user.dto.UserDto;
-import net.atopecode.authservice.user.dto.UserFilter;
+import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.repository.IUserRepository;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
@@ -233,12 +233,11 @@ public class UserService implements IUserService {
 	}
 	
 	//TODO...
-	//-Probar Query paginada de User. En el filter para los Roles se está utilizando la lógica 'OR', ver como se prodría hacer para usar lógica 'AND' y buscar usuarios que tengan todos los Roles indicados en vez
-	// de solo alguno de los indicados en el filtro (usar groupby idUser con having para los nombres de roles).
+	//-Probar Query paginada de 'User'. Usar Lógica AND y OR para los nombres de 'Roles'.
 	//-Validar que todos los campos de 'pageRequestDto' tengan valor, en caso contrario lanzar una 'ValidationException' en 'AbstractQueryService.getFilterPageRequest()'.
 	//-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
 	// Ver donde se están utilizando estos métodos e intercambiarlos para que por defecto no se mapee el password.
-	//-Refactorizar 'RoleQueryService' para que utilice la clase 'AbstractQueryService' igual que con 'UserQueryService'.
+	//-Refactorizar 'RoleQueryService' para que utilice la clase 'AbstractQueryService' igual que con 'UserQueryService'. O se puede dejar así para ver la evolución hacia la clase Abstracta.
 	//-Eliminar los métodos 'find*()' de 'UserQueryService' y 'RoleQueryService' y añadirlos en 'IUserservice' e 'IRoleService' directamente. Los 'QueryService' son para las querys con Specifications o Criteria Api.
 	//-Añadir Swagger.
 	//-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.

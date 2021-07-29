@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.user.dto.UserDto;
-import net.atopecode.authservice.user.dto.UserFilter;
+import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
