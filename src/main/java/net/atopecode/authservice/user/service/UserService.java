@@ -231,20 +231,7 @@ public class UserService implements IUserService {
 	public Page<User> query(UserFilter filter){
 		return userQueryService.query(filter);
 	}
-	
-	//TODO...
-	//-Probar Query paginada de 'User'. Usar Lógica AND y OR para los nombres de 'Roles'.
-	//-Validar que todos los campos de 'pageRequestDto' tengan valor, en caso contrario lanzar una 'ValidationException' en 'AbstractQueryService.getFilterPageRequest()'.
-	//-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
-	// Ver donde se están utilizando estos métodos e intercambiarlos para que por defecto no se mapee el password.
-	//-Refactorizar 'RoleQueryService' para que utilice la clase 'AbstractQueryService' igual que con 'UserQueryService'. O se puede dejar así para ver la evolución hacia la clase Abstracta.
-	//-Eliminar los métodos 'find*()' de 'UserQueryService' y 'RoleQueryService' y añadirlos en 'IUserservice' e 'IRoleService' directamente. Los 'QueryService' son para las querys con Specifications o Criteria Api.
-	//-Añadir Swagger.
-	//-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
-	//-JpaAuditing.
-	//-Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
-	//-Añadir Módulos de Java 11.
-	
+		
 	public static class UserServiceRuntimeException extends RuntimeException {
 		private static final long serialVersionUID = -1509839006573338505L;
 

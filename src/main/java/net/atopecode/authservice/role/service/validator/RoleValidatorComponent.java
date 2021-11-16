@@ -12,7 +12,7 @@ import net.atopecode.authservice.validators.base.AbstractValidator;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class RoleValidatorComponent extends AbstractValidator<Role, RoleDto> {
+public class RoleValidatorComponent extends AbstractValidator<Role> {
 	
 	//Codes of Locale .properties files:
 	public static final String ROLE_VALIDATION_INSERT_NULL_OBJECT_VALUE = "role.validation.insert.null.object.value";

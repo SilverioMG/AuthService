@@ -78,11 +78,11 @@ public class RoleQueryService implements IRoleQueryService {
 		PageRequest pageRequest = getFilterPageRequest(filter);
 		
 		if(pageRequest == null) {
-			//Si 'specification' vale 'null' se hará la query sin cláusula 'where'.
+			//Nota.- Si 'specification' vale 'null' SpringData hará la query sin cláusula 'where'.
 			result = roleRepository.findAll(specification);
 		}
 		else {
-			//Si 'specification' vale 'null' se hará la query sin cláusula 'where'.
+			//Nota.- Si 'specification' vale 'null' SpringData hará la query sin cláusula 'where'.
 			Page<Role> pageResult = roleRepository.findAll(specification, pageRequest);
 			result = pageResult.getContent();
 		}
@@ -110,7 +110,7 @@ public class RoleQueryService implements IRoleQueryService {
 			}
 			
 			//Se concatenan los predicados que no valgan 'null' con una condición de tipo 'and':
-			Predicate[] predicates = new Predicate[] {predicateId, predicateName };
+			Predicate[] predicates = new Predicate[] {predicateId, predicateName};
 			for(Predicate p: predicates) {
 				if(p != null) {
 					predicate = (predicate == null) ? p : builder.and(predicate, p);
@@ -124,8 +124,8 @@ public class RoleQueryService implements IRoleQueryService {
 	protected PageRequest getFilterPageRequest(RoleFilter filter) {
 		PageRequest pageRequest = null;
 		PageRequestDto pageRequestDto = filter.getPageRequest();
-		if(pageRequestDto != null) {
-			
+		
+		if(pageRequestDto != null) {	
 			pageRequest = PageRequest.of(pageRequestDto.getPageNumber(), pageRequestDto.getPageSize(), 
 					Sort.Direction.fromOptionalString(pageRequestDto.getOrderSort().toString()).orElse(Sort.Direction.ASC), 
 					pageRequestDto.getSortFieldName());

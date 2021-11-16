@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
-public abstract class AbstractValidator<TEntity, TDtoEntity> {
+public abstract class AbstractValidator<TEntity> {
 	
 	private Class<TEntity> classEntity;
 	
