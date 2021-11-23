@@ -147,6 +147,7 @@ public class User implements INormalizable, Serializable {
 		return relUserRole;
 	}
 	
+	@Override
 	public void normalize() {
 		this.nm_name = NormalizeString.normalize(name);
 		this.nm_email = NormalizeString.normalize(email);

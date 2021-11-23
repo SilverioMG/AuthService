@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
-public abstract class AbstractValidator<TEntity> {
+public class ValidatorEntity<TEntity> {
 	
 	private Class<TEntity> classEntity;
 	
@@ -33,7 +33,7 @@ public abstract class AbstractValidator<TEntity> {
 	public static final String VALIDATION_NOT_EMPTY_COLLECTION = "validation.not.empty.colletion";
 	public static final String VALIDATION_MUST_TO_BE_EMPTY_COLLECTION = "validation.must.to.be.empty.colletion";
 	
-	protected AbstractValidator(Class<TEntity> classEntity) {
+	public ValidatorEntity(Class<TEntity> classEntity) {
 		this.classEntity = classEntity;
 	}
 	

@@ -228,7 +228,7 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public Page<User> query(UserFilter filter){
+	public Page<User> query(UserFilter filter) throws ValidationException {
 		return userQueryService.query(filter);
 	}
 		

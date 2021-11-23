@@ -59,7 +59,7 @@ public interface IUserService {
 	
 	public Page<User> findAll(PageRequest pageRequest);
 	
-	public Page<User> query(UserFilter filter);
+	public Page<User> query(UserFilter filter) throws ValidationException;
 	
 	public Page<User> findAllWithRoles(PageRequest pageRequest);
 }

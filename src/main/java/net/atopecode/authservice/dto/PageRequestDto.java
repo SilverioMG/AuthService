@@ -1,5 +1,6 @@
 package net.atopecode.authservice.dto;
 
+
 /**
  * Dto con parámetros para búsquedas paginadas.
  * @author Silverio
@@ -47,6 +48,9 @@ public class PageRequestDto {
 		return orderSort;
 	}
 
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
 	@Override
 	public String toString() {

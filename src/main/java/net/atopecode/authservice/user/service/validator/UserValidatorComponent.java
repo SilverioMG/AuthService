@@ -17,11 +17,11 @@ import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
-import net.atopecode.authservice.validators.base.AbstractValidator;
+import net.atopecode.authservice.validators.base.ValidatorEntity;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class UserValidatorComponent extends AbstractValidator<User> {
+public class UserValidatorComponent extends ValidatorEntity<User> {
 	
 	//Codes of Locale '.properties' files:
 	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";

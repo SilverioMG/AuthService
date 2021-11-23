@@ -8,11 +8,11 @@ import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
-import net.atopecode.authservice.validators.base.AbstractValidator;
+import net.atopecode.authservice.validators.base.ValidatorEntity;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class RoleValidatorComponent extends AbstractValidator<Role> {
+public class RoleValidatorComponent extends ValidatorEntity<Role> {
 	
 	//Codes of Locale .properties files:
 	public static final String ROLE_VALIDATION_INSERT_NULL_OBJECT_VALUE = "role.validation.insert.null.object.value";

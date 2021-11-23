@@ -29,6 +29,7 @@ import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.repository.IUserRepository;
 import net.atopecode.authservice.util.NormalizeString;
+import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Service
 public class UserQueryService extends AbstractQueryService<User, UserFilter> implements IUserQueryService{
@@ -125,7 +126,7 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 	}
 	
 	@Override
-	public Page<User> query(UserFilter filter){
+	public Page<User> query(UserFilter filter) throws ValidationException{
 		return super.query(filter);
 	}
 

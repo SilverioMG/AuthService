@@ -68,6 +68,7 @@ public class Role implements INormalizable, Serializable {
 		return relUserRole;
 	}
 
+	@Override
 	public void normalize() {
 		nm_name = NormalizeString.normalize(name);
 	}

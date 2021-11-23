@@ -94,7 +94,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/query")
-	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter){
+	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter) throws ValidationException{
 		Page<User> result = userService.query(filter);
 		Page<UserDto> resultDto = result.map(userToUserDtoConverter::convertWithoutPassword);
 		

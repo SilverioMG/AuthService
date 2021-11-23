@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
  * se utilizará automáticamente el archivo '/resources/locale/messages.properties' que
  * es el que tiene los mensajes traducidos al idioma por defecto.
  * En '/resources/locale/' están el resto de archivos .properties para la traducción a cada idioma correspondiente.
+ * Ver también en el archivo 'application.properties' la configuración para 'spring.messages' que pueden modificar el funcionamiento de 'MessageResource'.
  */
 @Service
 public class LocaleService implements ILocaleService {
