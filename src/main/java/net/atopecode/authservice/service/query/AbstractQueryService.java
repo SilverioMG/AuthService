@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import net.atopecode.authservice.dto.FilterPageableBase;
 import net.atopecode.authservice.dto.PageRequestDto;
 import net.atopecode.authservice.dto.PageRequestDtoFieldNames;
+import net.atopecode.authservice.util.functionalinterfaces.TriFunction;
 import net.atopecode.authservice.dto.PageRequestDto.OrderSortValue;
 import net.atopecode.authservice.validators.base.ValidatorEntity;
 import net.atopecode.authservice.validators.exception.ValidationException;
@@ -65,22 +66,24 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 			return predicate;
 		}
 		
-		//TODO... Cambiar el 'switch case' para que en devuelva una expresión lambda y se llame en cada iteración del bucle 'for' en vez de hacer el 'switch case' por cada iteración.
+		TriFunction<CriteriaBuilder, Predicate, Predicate, Predicate> concatNullablePredicateFunc = null; 
+		switch (logicComparation) {
+			case AND:
+				concatNullablePredicateFunc = this::concatNullablePredicateAnd;
+				break;
+
+			case OR:
+				concatNullablePredicateFunc = this::concatNullablePredicateOr;
+				break;
+
+			default:
+				concatNullablePredicateFunc = this::concatNullablePredicateAnd;
+				break;
+		}
+		
 		for(Predicate p: predicates) {
 			if(p != null) {
-				switch(logicComparation) {
-					case AND:
-						predicate = concatNullablePredicateAnd(builder, predicate, p);
-					break;
-					
-					case OR:
-						predicate = concatNullablePredicateOr(builder, predicate, p);
-					break;
-					
-					default:
-						predicate = concatNullablePredicateAnd(builder, predicate, p);
-					break;
-				}
+				predicate = concatNullablePredicateFunc.apply(builder, predicate, p);
 			}
 		}
 		
