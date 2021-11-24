@@ -13,6 +13,10 @@ import net.atopecode.authservice.validators.exception.ValidationException;
 
 /**
  * En este Component se envía una respuesta  personalizada para todas las Exceptions no controladas que se lanzan más halla de un 'Controller' de Spring.
+ * 
+ * Nota.- Para los '@ExceptionHandler' de excepciones no controladas en el servidor ('RuntimeException' y 'Exception'), hay que hacer un log a mano de la Excepción para que se muestre su traza.
+ * Por defecto cuando se produce una Exception y sale fuera del Controller sin que exista ningún 'ExceptionHandler' para procesarla, Spring hace un log de la traza de la Exception, pero si hay un
+ * 'ExceptionHandler' tenemos que loguear nosotros la traza porque Spring deja de hacerlo. 
  * @author Silverio
  *
  */
@@ -41,6 +45,7 @@ public class ExceptionHandlerComponent {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ResultMessage<Exception>> runtimeException(RuntimeException ex){
 		LOGGER.error("RUNTIMEEXCEPTION NO CONTROLADA por el ServicioWeb: {}", ex.getMessage());
+		LOGGER.error("{0}", ex);
 		return new ResultMessage<Exception>(ex).toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -52,6 +57,7 @@ public class ExceptionHandlerComponent {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ResultMessage<Exception>> exception(Exception ex){
 		LOGGER.error("EXCEPTION NO CONTROLADA por el ServicioWeb: {}", ex.getMessage());
+		LOGGER.error("{0}", ex);
 		return new ResultMessage<Exception>(ex).toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

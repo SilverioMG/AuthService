@@ -10,15 +10,15 @@ public class PageRequestDto {
 
 	public enum OrderSortValue { ASC, DESC }
 	
-	private int pageSize;
+	private Integer pageSize;
 	
-	private int pageNumber;
+	private Integer pageNumber;
 	
 	private String sortFieldName;
 	
 	private OrderSortValue orderSort;
 
-	public PageRequestDto(int pageSize, int pageNumber, String sortFieldName, OrderSortValue orderSort) {
+	public PageRequestDto(Integer pageSize, Integer pageNumber, String sortFieldName, OrderSortValue orderSort) {
 		this.pageSize = pageSize;
 		this.pageNumber = pageNumber;
 		this.sortFieldName = sortFieldName;
@@ -26,13 +26,13 @@ public class PageRequestDto {
 	}
 
 
-	public int getPageSize() {
+	public Integer getPageSize() {
 		return pageSize;
 	}
 
 
 
-	public int getPageNumber() {
+	public Integer getPageNumber() {
 		return pageNumber;
 	}
 

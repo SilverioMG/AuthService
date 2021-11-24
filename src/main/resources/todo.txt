@@ -1,5 +1,4 @@
 	//TODO...
-	//Probar: Validar que todos los campos de 'pageRequestDto' tengan valor, en caso contrario lanzar una 'ValidationException' en 'AbstractQueryService.getFilterPageRequest()'.
 	//Que en la clase 'ValidatorEntity' se pueda lanzar una 'ValidationException' personalizada, es decir, para cada entidad (User, Role...) se debe declarar una Exception que herede de 'ValidationException'
 	//y que se declare la nueva Exception en el 'Component' que hereda de 'ValidationException' (UserValidationComponent).
 	
