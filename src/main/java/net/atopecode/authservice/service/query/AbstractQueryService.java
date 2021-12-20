@@ -1,5 +1,6 @@
 package net.atopecode.authservice.service.query;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,7 +19,7 @@ import net.atopecode.authservice.dto.PageRequestDto;
 import net.atopecode.authservice.dto.PageRequestDtoFieldNames;
 import net.atopecode.authservice.util.functionalinterfaces.TriFunction;
 import net.atopecode.authservice.dto.PageRequestDto.OrderSortValue;
-import net.atopecode.authservice.validators.base.ValidatorEntity;
+import net.atopecode.authservice.validators.base.Validator;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageableBase> {
@@ -31,11 +32,11 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	private static final String PAGE_REQUEST_INVALID_FIELD_VALUE_LOG_MESSAGE = "Valor incorrecto para el campo '%s' en consulta paginada.";
 	
 	private JpaSpecificationExecutor<TEntity> repository;
-	private ValidatorEntity<PageRequestDto> validatorPageRequest;
+	private Validator validatorPageRequest;
 	
 	protected AbstractQueryService(JpaSpecificationExecutor<TEntity> repository) {
 		this.repository = repository;
-		this.validatorPageRequest = new ValidatorEntity<>(PageRequestDto.class);
+		this.validatorPageRequest = new Validator();
 	}
 	
 	
@@ -112,27 +113,29 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	}
 	
 	protected void validatePageRequest(PageRequestDto pageRequest) throws ValidationException {
-		validatorPageRequest.notNull(pageRequest.getPageNumber(), 
-				String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_NUMBER), 
-				PageRequestDtoFieldNames.PAGE_NUMBER);
+		validatorPageRequest.notNull(pageRequest.getPageNumber(),
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_NUMBER))
+					.forNotNull(PageRequestDtoFieldNames.PAGE_NUMBER));
 		
 		validatorPageRequest.notNull(pageRequest.getPageSize(), 
-				String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_SIZE), 
-				PageRequestDtoFieldNames.PAGE_SIZE);
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_SIZE))
+					.forNotNull(PageRequestDtoFieldNames.PAGE_SIZE));
+				
 		if(pageRequest.getPageSize() > MAX_PAGE_SIZE) {
 			pageRequest.setPageSize(MAX_PAGE_SIZE);
 		}
 		
 		validatorPageRequest.notNull(pageRequest.getOrderSort(), 
-				String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT), 
-				PageRequestDtoFieldNames.ORDER_SORT);
-		validatorPageRequest.valueIn(pageRequest.getOrderSort(), 
-				List.of(OrderSortValue.values()), 
-				String.format(PAGE_REQUEST_INVALID_FIELD_VALUE_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT), 
-				PageRequestDtoFieldNames.ORDER_SORT);
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT))
+					.forNotNull(PageRequestDtoFieldNames.ORDER_SORT));
+
+		OrderSortValue orderSortValue = pageRequest.getOrderSort();
+		validatorPageRequest.valueIn(orderSortValue, List.of(OrderSortValue.values()), 
+				new ValidationException(String.format(PAGE_REQUEST_INVALID_FIELD_VALUE_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT))
+					.forValueIn(PageRequestDtoFieldNames.ORDER_SORT, orderSortValue.toString(), Arrays.toString(OrderSortValue.values()))); 	
 		
-		validatorPageRequest.notNull(pageRequest.getSortFieldName(), 
-				String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.SORT_FIELD_NAME), 
-				PageRequestDtoFieldNames.SORT_FIELD_NAME);
+		validatorPageRequest.notNull(pageRequest.getSortFieldName(),
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.SORT_FIELD_NAME))
+					.forNotNull(PageRequestDtoFieldNames.SORT_FIELD_NAME));
 	}
 }

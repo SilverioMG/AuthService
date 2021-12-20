@@ -1,5 +1,7 @@
 package net.atopecode.authservice.controller.exceptionhandler;
 
+import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.localization.ILocaleService;
+import net.atopecode.authservice.localization.MessageLocalized;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 /**
@@ -24,6 +27,8 @@ import net.atopecode.authservice.validators.exception.ValidationException;
 public class ExceptionHandlerComponent {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerComponent.class);
 	
+	public static final String SPANISH_LANG = "es-ES";
+	
 	private ILocaleService localeService;
 	
 	public ExceptionHandlerComponent(ILocaleService localeService) {
@@ -32,8 +37,10 @@ public class ExceptionHandlerComponent {
 		
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<ResultMessage<ValidationException>> validationException(ValidationException ex){
-		LOGGER.info(ex.getMessage());
-		String localizedMessage = localeService.getMessage(ex.errorMessage);
+		MessageLocalized errorMessage = ex.getErrorMessage();
+		String logMessage = String.format("%s - %s", ex.getMessage(), localeService.getMessage(errorMessage, Locale.forLanguageTag(SPANISH_LANG))); 
+		LOGGER.info(logMessage); 
+		String localizedMessage = localeService.getMessage(errorMessage);
 		return new ResultMessage<ValidationException>(localizedMessage, false).toResponseEntity(HttpStatus.BAD_REQUEST);
 	}
 	

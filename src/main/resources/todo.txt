@@ -2,6 +2,7 @@
 	//Probar el método 'AbstractQueryService.composeNullablePredicates()' que modifiqué el switch para utilizar una expresión lambda.
 	//Que en la clase 'ValidatorEntity' se pueda lanzar una 'ValidationException' personalizada, es decir, para cada entidad (User, Role...) se debe declarar una Exception que herede de 'ValidationException'
 	//y que se declare la nueva Exception en el 'Component' que hereda de 'ValidationException' (UserValidationComponent).
+	//Que las validaciones se puedan hacer sin que se lance una Exception, que se puedan almacenar en una lista de errores y devolver varios errores.
 	
 	//-Añadir configuración para CORS.
 	//-Añadir archivo 'roadmap' para ver todos los pasos que fui siguiendo para implementar este servicio web. Así luego puedo hacer un curso o tutorial siguiendo los pasos.

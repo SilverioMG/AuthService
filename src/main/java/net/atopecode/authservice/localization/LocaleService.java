@@ -57,6 +57,11 @@ public class LocaleService implements ILocaleService {
 	}
 	
 	@Override
+	public String getMessage(MessageLocalized messageLocalized, Locale locale) {
+		return getMessage(messageLocalized.getMessageCode(), locale, messageLocalized.getMessageParams());
+	}
+	
+	@Override
 	public Locale getLocale() {
 		return LocaleContextHolder.getLocale();
 	}

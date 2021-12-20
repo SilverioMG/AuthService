@@ -17,20 +17,16 @@ import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
-import net.atopecode.authservice.validators.base.ValidatorEntity;
+import net.atopecode.authservice.validators.base.Validator;
 import net.atopecode.authservice.validators.exception.ValidationException;
 
 @Component
-public class UserValidatorComponent extends ValidatorEntity<User> {
+public class UserValidatorComponent extends Validator {
 	
-	//Codes of Locale '.properties' files:
-	public static final String USER_VALIDATION_INSERT_NULL_OBJECT_VALUE = "user.validation.insert.null.object.value";
-	public static final String USER_VALIDATION_INSERT_NOTNULL_ID = "user.validation.insert.notnull.id";
+	//Códigos de archivos locale 'messages.properties' para traducción de los mensajes de error en las validaciones del 'Usuario'.
 	public static final String USER_VALIDATION_INSERT_ID_ALREADY_EXISTS = "user.validation.insert.id.already.exists";
 	public static final String USER_VALIDATION_INSERT_NAME_ALREADY_EXISTS = "user.validation.insert.name.already.exists";
 	public static final String USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS = "user.validation.insert.email.already.exists";
-	public static final String USER_VALIDATION_UPDATE_NULL_OBJECT_VALUE = "user.validation.update.null.object.value";
-	public static final String USER_VALIDATION_UPDATE_NULL_ID = "user.validation.update.null.id";
 	public static final String USER_VALIDATION_UPDATE_ID_NOT_EXISTS = "user.validation.update.id.not.exists";
 	public static final String USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS = "user.validation.update.name.already.exists";
 	public static final String USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS = "user.validation.update.email.already.exists";
@@ -46,7 +42,7 @@ public class UserValidatorComponent extends ValidatorEntity<User> {
 	@Autowired
 	public UserValidatorComponent(IUserQueryService userQueryService,
 			IRoleQueryService roleQueryService) {
-		super(User.class);
+		super();
 		this.userQueryService = userQueryService;
 		this.roleQueryService = roleQueryService;
 	}
@@ -58,53 +54,53 @@ public class UserValidatorComponent extends ValidatorEntity<User> {
 	 */
 	public void validateInsertDto(UserDto user) throws ValidationException {
 		notNull(user, 
-				new ValidationException("No se puede insertar el 'User' porque vale 'null'",
-					new MessageLocalized(USER_VALIDATION_INSERT_NULL_OBJECT_VALUE)));
+				new UserValidationException("No se puede insertar el 'User' porque vale 'null'")
+					.forNotNullValue(UserFieldNames.ENTITY));
 		
 		mustToBeNull(user.getId(),
-				new ValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.",
-					new MessageLocalized(USER_VALIDATION_INSERT_NOTNULL_ID)));
+				new UserValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.")
+					.forMustToBeNull(UserFieldNames.ID));
 		
 		validateFieldsDto(user);
 		
 		ifTrueThrows(() -> userQueryService.findById(user.getId()).isPresent(),
-				new ValidationException("No se puede insertar al 'User' porque ya existe uno con el 'id': " + user.getId(),
+				new UserValidationException("No se puede insertar al 'User' porque ya existe uno con el 'id': " + user.getId(),
 						new MessageLocalized(USER_VALIDATION_INSERT_ID_ALREADY_EXISTS, user.getId())));
 		
 		ifTrueThrows(() -> userQueryService.findByName(user.getName()).isPresent(),
-				new ValidationException("No se puede insertar al 'User' porque ya existe uno con el 'name': " + user.getName(),
+				new UserValidationException("No se puede insertar al 'User' porque ya existe uno con el 'name': " + user.getName(),
 						new MessageLocalized(USER_VALIDATION_INSERT_NAME_ALREADY_EXISTS, user.getName())));
 		
 		ifTrueThrows(() -> userQueryService.findByEmail(user.getEmail()).isPresent(),
-				new ValidationException("No se puede insertar al 'User' porque ya existe uno con el 'email': " + user.getEmail(),
+				new UserValidationException("No se puede insertar al 'User' porque ya existe uno con el 'email': " + user.getEmail(),
 						new MessageLocalized(USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS, user.getEmail())));		
 	}
 	
 	public User validateUpdateDto(UserDto user) throws ValidationException {
 		notNull(user,
-				new ValidationException("No se puede modificar el 'User' porque vale 'null'",
-					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_OBJECT_VALUE)));
+				new UserValidationException("No se puede modificar el 'User' porque vale 'null'")
+						.forNotNullValue(UserFieldNames.ENTITY));
 
 		notNull(user.getId(),
-				new ValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.",
-					new MessageLocalized(USER_VALIDATION_UPDATE_NULL_ID)));
+				new UserValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.")
+					.forNotNull(UserFieldNames.ID));
 		
 		validateFieldsDto(user);
 		
 		final User userBd = userQueryService.findById(user.getId()).orElse(null);
 		ifTrueThrows(() -> userBd == null,
-				new ValidationException("No se puede modificar el 'User' porque no existe ninguno con id:" + user.getId() + " en la B.D.",
+				new UserValidationException("No se puede modificar el 'User' porque no existe ninguno con id:" + user.getId() + " en la B.D.",
 						new MessageLocalized(USER_VALIDATION_UPDATE_ID_NOT_EXISTS, user.getId())));
 		
 		if(!StringUtils.equals(user.getName(), userBd.getName())){
 			ifTrueThrows(() -> userQueryService.findByName(user.getName()).isPresent(),
-					new ValidationException("No se puede modificar el campo 'name' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'name': " + user.getName(),
+					new UserValidationException("No se puede modificar el campo 'name' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'name': " + user.getName(),
 							new MessageLocalized(USER_VALIDATION_UPDATE_NAME_ALREADY_EXISTS, user.getId(), user.getName())));
 		}
 		
 		if(!StringUtils.equals(user.getEmail(), userBd.getEmail())){
 			ifTrueThrows(() -> userQueryService.findByEmail(user.getEmail()).isPresent(),
-					new ValidationException("No se puede modificar el campo 'email' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'email': " + user.getEmail(),
+					new UserValidationException("No se puede modificar el campo 'email' del 'User' con 'id': " + user.getId() + " porque ya existe en la .B.D. uno con el 'email': " + user.getEmail(),
 							new MessageLocalized(USER_VALIDATION_UPDATE_EMAIL_ALREADY_EXISTS, user.getId(), user.getEmail())));
 		}
 		
@@ -117,8 +113,8 @@ public class UserValidatorComponent extends ValidatorEntity<User> {
 		}
 		
 		final User userBd = userQueryService.findById(idUser).orElse(null);
-		ifTrueThrows(() -> userBd == null,
-				new ValidationException("No existe el 'User' con id:" + idUser + " en la B.D.",
+		ifTrueThrows(() -> (userBd == null),
+				new UserValidationException("No existe el 'User' con id:" + idUser + " en la B.D.",
 						new MessageLocalized(USER_VALIDATION_ID_NOT_EXISTS, idUser)));
 		
 		return userBd;
@@ -132,8 +128,8 @@ public class UserValidatorComponent extends ValidatorEntity<User> {
 		
 		for(RoleDto role: roles) {
 			Role roleBd = roleQueryService.findById(role.getId()).orElse(null);
-			ifTrueThrows(() -> roleBd == null, 
-					new ValidationException("No se puede guardar el 'User' porque no existe el 'Role' con id: " + role.getId(),
+			ifTrueThrows(() -> (roleBd == null), 
+					new UserValidationException("No existe el 'Role' con id: " + role.getId(),
 							new MessageLocalized(USER_VALIDATION_NOT_EXISTS_ROLE, role.getId())));
 			
 			result.add(roleBd);
@@ -149,28 +145,61 @@ public class UserValidatorComponent extends ValidatorEntity<User> {
 	 */
 	public void validateFieldsDto(UserDto user) throws ValidationException {		
 		//Name:
-		notEmpty(user.getName(), "No se puede guardar el 'User' porque el campo 'name' no tiene valor", UserFieldNames.NAME);
+		String userName = user.getName();
+		notEmpty(userName,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' no tiene valor")
+					.forNotEmpty(UserFieldNames.NAME));
 		
-		maxLength(user.getName(), User.NAME_MAX_LENGHT,
-				"No se puede guardar el 'User' porque el campo 'name' es muy largo", UserFieldNames.NAME);
+		maxLength(userName, User.NAME_MAX_LENGHT,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' es muy largo")
+					.forMaxLength(UserFieldNames.NAME, userName, User.NAME_MAX_LENGHT));
 		
 		//Password:
-		notEmpty(user.getPassword(), "No se puede guardar el 'User' porque el campo 'password' vale 'null'", UserFieldNames.PASSWORD);
+		String userPassword = user.getPassword();
+		notEmpty(userPassword,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' vale 'null'")
+					.forNotEmpty(UserFieldNames.PASSWORD));
 		
-		maxLength(user.getPassword(), User.PASSWORD_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'password' es muy largo", UserFieldNames.PASSWORD);
+		maxLength(userPassword, User.PASSWORD_MAX_LENGHT,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' es muy largo")
+					.forMaxLength(UserFieldNames.PASSWORD, userPassword, User.PASSWORD_MAX_LENGHT));
 
 		//Email:
-		notEmpty(user.getEmail(), "No se puede guardar el 'User' porque el campo 'email' vale 'null'", UserFieldNames.EMAIL);
+		String userEmail = user.getEmail();
+		notEmpty(userEmail,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' vale 'null'")
+					.forNotEmpty(UserFieldNames.EMAIL));
 		
-		maxLength(user.getEmail(), User.EMAIL_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'email' es muy largo", UserFieldNames.EMAIL);
+		maxLength(userEmail, User.EMAIL_MAX_LENGHT,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' es muy largo")
+					.forMaxLength(UserFieldNames.EMAIL, userEmail, User.EMAIL_MAX_LENGHT));
 		
-		hasFormat(user.getEmail(),EMAIL_REGEX, "No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto", UserFieldNames.EMAIL);
+		hasFormat(userEmail, EMAIL_REGEX,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto")
+					.forHasFormat(UserFieldNames.EMAIL, userEmail));
 		
 		//RealName:
-		maxLength(user.getRealName(), User.REAL_NAME_MAX_LENGHT, "No se puede guardar el 'User' porque el campo 'realName' es muy largo",  UserFieldNames.REAL_NAME);
+		String userRealName = user.getRealName();
+		maxLength(userRealName, User.REAL_NAME_MAX_LENGHT,
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo")
+					.forMaxLength(UserFieldNames.REAL_NAME, userRealName, User.REAL_NAME_MAX_LENGHT));
 		
 		//Roles:
-		notEmptyCollection(user.getRoles(), "No se puede guardar el 'User' porque el campo 'roles' es una lista vacía", UserFieldNames.Dto.ROLES);
+		notEmptyCollection(user.getRoles(), 
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'roles' es una lista vacía")
+					.forNotEmptyCollection(UserFieldNames.Dto.ROLES));
+	}
+	
+	
+	public static class UserValidationException extends ValidationException {
+
+		public UserValidationException(String logMessage) {
+			super(logMessage);
+		}
+		
+		public UserValidationException(String logMessage, MessageLocalized errorMessage) {
+			super(logMessage, errorMessage);
+		}
 	}
 		
 }

@@ -8,5 +8,7 @@ public interface ILocaleService {
 	
 	public String getMessage(MessageLocalized messageLocalized);
 	
+	public String getMessage(MessageLocalized messageLocalized, Locale locale);
+	
 	public Locale getLocale();
 }
