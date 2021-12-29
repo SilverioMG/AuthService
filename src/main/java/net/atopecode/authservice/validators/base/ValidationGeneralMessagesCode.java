@@ -24,7 +24,7 @@ public class ValidationGeneralMessagesCode {
 	public static final String VALUE_NOT_IN = "validation.value.not.in";
 	public static final String MUST_TO_BE_TRUE = "validation.must.to.be.true";
 	public static final String MUST_TO_BE_FALSE = "validation.must.to.be.false";
-	public static final String HAS_FORMAT = "valiation.has.format";
+	public static final String HAS_FORMAT = "validation.has.format";
 	public static final String NOT_NULL_VALUE = "validation.not.null.value";
 	public static final String MUST_TO_BE_NULL_VALUE = "validation.must.to.be.null.value";
 
