@@ -1,23 +1,31 @@
 	//TODO...
-	//Probar el método 'AbstractQueryService.composeNullablePredicates()' que modifiqué el switch para utilizar una expresión lambda.
-	//Que en la clase 'ValidatorEntity' se pueda lanzar una 'ValidationException' personalizada, es decir, para cada entidad (User, Role...) se debe declarar una Exception que herede de 'ValidationException'
-	//y que se declare la nueva Exception en el 'Component' que hereda de 'ValidationException' (UserValidationComponent).
-	//Que las validaciones se puedan hacer sin que se lance una Exception, que se puedan almacenar en una lista de errores y devolver varios errores.
-	
-	//-Añadir configuración para CORS.
-	//-Añadir archivo 'roadmap' para ver todos los pasos que fui siguiendo para implementar este servicio web. Así luego puedo hacer un curso o tutorial siguiendo los pasos.
-	//-Probar Query paginada de 'User'. Usar Lógica AND y OR para los nombres de 'Roles'.
-	//-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
-	// Ver donde se están utilizando estos métodos e intercambiarlos para que por defecto no se mapee el password (más seguridad).
-	//-Refactorizar 'RoleQueryService' para que utilice la clase 'AbstractQueryService' igual que con 'UserQueryService'. O se puede dejar así para ver la evolución hacia la clase Abstracta.
-	//-Eliminar los métodos 'find*()' de 'UserQueryService' y 'RoleQueryService' y añadirlos en 'IUserservice' e 'IRoleService' directamente. Los 'QueryService' son para las querys con Specifications o Criteria Api.
-	//-Añadir Swagger y Actuator.
-	//-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
-	//-Añadir funcionalidad para enviar email al usuario una vez que se registra y active su cuenta (usar una tabla de tokens para los enlaces de activación que se envían en el email).
-	// Los usuarios que no estén activados no pueden loguearse ni obtener JWT Tokens. Ver que servidor utilizo para envíar los emails (mailchimp utilizando la capa gratuita o JavaMail con una cuenta de google).
-	//-JpaAuditing.
-	//-Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
-	//-Añadir Módulos de Java 11.
-	//-Hacer una libreria .jar con los paquetes que son reutilizables para otros Servicios Web. Sino quiero utilizar un nexus puedo compilarlos en local y que se guarden en la carpete .m2 con mvn install.
-	//-Añadir entornos de ejecutación (dev y prod).
-	//-Para los proyectos que quiera frontend utilizar JavalinVue (ver si hace falta se untiliza apache o nginx con balacenador de carga por session).
+	-Probar el método 'AbstractQueryService.validatePageRequest()'.
+	-Probar el método 'AbstractQueryService.composeNullablePredicates()' que modifiqué el switch para utilizar una expresión lambda.
+	-Que en la clase 'ValidatorEntity' se pueda lanzar una 'ValidationException' personalizada, es decir, para cada entidad (User, Role...) se debe declarar una Exception que herede de 'ValidationException'
+	 y que se declare la nueva Exception en el 'Component' que hereda de 'ValidationException' (UserValidationComponent).
+	-Que las validaciones se puedan hacer sin que se lance una Exception, que se puedan almacenar en una lista de errores y devolver varios errores.
+	-Modificar la clase 'ResultMessage' igual que está en Javalicho y el 'ExceptionHandler'.
+	-Actualizar versión de SpringBoot para utilizar la última versión de 'LogBack'.
+	-Añadir configuración para CORS.
+	-Probar Query paginada de 'User'. Usar Lógica AND y OR para los nombres de 'Roles'.
+	-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
+	 Ver donde se están utilizando estos métodos e intercambiarlos para que por defecto no se mapee el password (más seguridad).
+	-Refactorizar 'RoleQueryService' para que utilice la clase 'AbstractQueryService' igual que con 'UserQueryService'. O se puede dejar así para ver la evolución hacia la clase Abstracta.
+	-Eliminar los métodos 'find*()' de 'UserQueryService' y 'RoleQueryService' y añadirlos en 'IUserservice' e 'IRoleService' directamente. Los 'QueryService' son para las querys con Specifications o Criteria Api.
+	-Añadir Swagger y Actuator.
+	-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
+	-Añadir funcionalidad para enviar email al usuario una vez que se registra y active su cuenta (usar una tabla de tokens para los enlaces de activación que se envían en el email).
+	 Los usuarios que no estén activados no pueden loguearse ni obtener JWT Tokens. Ver que servidor utilizo para envíar los emails (mailchimp utilizando la capa gratuita o JavaMail con una cuenta de google).
+	-JpaAuditing.
+	-Spring Security con User creado por defecto que sea Admin y al que posteriormente se le cambie el password.
+	-Añadir Módulos de Java 11.
+	-Hacer una libreria .jar con los paquetes que son reutilizables para otros Servicios Web. Sino quiero utilizar un nexus puedo compilarlos en local y que se guarden en la carpete .m2 con mvn install.
+	 O se puede utilizar el servicio que ofrece GitHub como repositorio de artefactos (paquetes).
+	-Añadir entornos de ejecutación (dev y prod).
+	De este proyecto hacer 2 librerías. La primera que sea 'net.atopecode.backend-utils' con todo el código que se puede reutilizar en cualquier proyecto SpringBoot como las validaciones,
+	la normalización, AbstractQueryService... Y otra librería que a su vez utilice 'net.atopecode.backend-utils' con todo el código de gestión de Usuarios, tanto la parte de B.D. como la Autenticación y
+	la Autorización. Así esta última librería se puede importar en cualquier proyecto con acceso a una B.D. y tener gestión de Usuarios con token JWT automáticamente.
+	Acordarse de seperar de los archivos .properties del 'locale' las propiedades que son de la librería 'atopecode.backend-utils' y las que son propias del proyecto en un properties dentro de 'resources' del proyecto.
+	Y comprobar que se leen los mensajes de la librería desde el proyecto principal. Si en la librería el archivo de mensajes es 'messages.properties' y en el proyecto se llama igual ver si coge el mensaje
+	de la librería cuando no existe en el proyecto principal. Sino igual hay que cambiar el nombre de los archivos .properties de la librería y hacer un wrapper del 'LocaleService' en el que se indique el nombre
+	de todos los archivos donde buscar mensajes y sino encuentra el mensaje en un archivo que pase al siguiente (esa lógica está implementada en el proyecto 'Javalicho' y 'JavalichoTest').

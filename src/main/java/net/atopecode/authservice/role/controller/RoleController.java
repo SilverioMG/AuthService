@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.localization.ILocaleService;
-import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.role.converter.RoleToRoleDtoConverter;
 import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.IRoleService;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
+
 
 @RestController
 @RequestMapping("/role")

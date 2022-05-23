@@ -1,13 +1,15 @@
-package net.atopecode.authservice.validators.base;
+package net.atopecode.authservice.validation;
 
 import java.util.Collection;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
-import org.springframework.util.StringUtils;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
-import net.atopecode.authservice.validators.exception.ValidationException;
+import static java.util.Objects.requireNonNull;
 
 public class Validator {
 	
@@ -74,7 +76,7 @@ public class Validator {
 	 * @return
 	 */
 	public boolean isEmpty(String value) {
-		return (!StringUtils.hasText(value));
+		return StringUtils.isBlank(value);
 	}
 	
 	/**
@@ -84,7 +86,7 @@ public class Validator {
 	 * @return
 	 */
 	public boolean notEmpty(String value) {
-		return StringUtils.hasText(value);
+		return !StringUtils.isBlank(value);
 	}
 	
 	/**
@@ -196,7 +198,7 @@ public class Validator {
 	 * Lanza una 'ValidationException' si el valor recibido tiene una longitud menor a la indicada.
 	 * No hace nada si el valor recibido tiene una longitud mayor o igual a la indicada.
 	 * @param value
-	 * @param maxLength
+	 * @param minLength
 	 * @return
 	 */
 	public void minLength(String value, int minLength, ValidationException ex) throws ValidationException {		
@@ -231,7 +233,6 @@ public class Validator {
 	 * @param ex
 	 * @throws ValidationException
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> void maxValue(Comparable<T> value, Comparable<T> maxValue, ValidationException ex) throws ValidationException {
 		if(!maxValue(value, maxValue)) {
 			throw ex;
@@ -264,7 +265,6 @@ public class Validator {
 	 * @param ex
 	 * @throws ValidationException
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> void minValue(Comparable<T> value, Comparable<T> minValue, ValidationException ex) throws ValidationException {		
 		if(!minValue(value, minValue)) {
 			throw ex;
@@ -426,7 +426,8 @@ public class Validator {
 			throw ex;
 		}
 	}
-	
+
+
 	//LOGIC VALIDATIONS:
 	
 	/**
@@ -462,4 +463,5 @@ public class Validator {
 			throw ex;
 		}
 	}
+
 }

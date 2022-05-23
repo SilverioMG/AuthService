@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.localization.ILocaleService;
-import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.IUserService;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 @RestController
 @RequestMapping("/user")

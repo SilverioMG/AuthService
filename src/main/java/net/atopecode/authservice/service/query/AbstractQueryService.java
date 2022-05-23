@@ -18,9 +18,11 @@ import net.atopecode.authservice.dto.FilterPageableBase;
 import net.atopecode.authservice.dto.PageRequestDto;
 import net.atopecode.authservice.dto.PageRequestDtoFieldNames;
 import net.atopecode.authservice.util.functionalinterfaces.TriFunction;
+import net.atopecode.authservice.validation.ValidationMessageLocalized;
+import net.atopecode.authservice.validation.Validator;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 import net.atopecode.authservice.dto.PageRequestDto.OrderSortValue;
-import net.atopecode.authservice.validators.base.Validator;
-import net.atopecode.authservice.validators.exception.ValidationException;
+
 
 public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageableBase> {
 	
@@ -114,28 +116,28 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	
 	protected void validatePageRequest(PageRequestDto pageRequest) throws ValidationException {
 		validatorPageRequest.notNull(pageRequest.getPageNumber(),
-				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_NUMBER))
-					.forNotNull(PageRequestDtoFieldNames.PAGE_NUMBER));
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_NUMBER),
+						ValidationMessageLocalized.forNotNullValue(PageRequestDtoFieldNames.PAGE_NUMBER)));
 		
 		validatorPageRequest.notNull(pageRequest.getPageSize(), 
-				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_SIZE))
-					.forNotNull(PageRequestDtoFieldNames.PAGE_SIZE));
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.PAGE_SIZE),
+						ValidationMessageLocalized.forNotNullValue(PageRequestDtoFieldNames.PAGE_SIZE)));
 				
 		if(pageRequest.getPageSize() > MAX_PAGE_SIZE) {
 			pageRequest.setPageSize(MAX_PAGE_SIZE);
 		}
 		
 		validatorPageRequest.notNull(pageRequest.getOrderSort(), 
-				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT))
-					.forNotNull(PageRequestDtoFieldNames.ORDER_SORT));
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT),
+						ValidationMessageLocalized.forNotNullValue(PageRequestDtoFieldNames.ORDER_SORT)));
 
 		OrderSortValue orderSortValue = pageRequest.getOrderSort();
-		validatorPageRequest.valueIn(orderSortValue, List.of(OrderSortValue.values()), 
-				new ValidationException(String.format(PAGE_REQUEST_INVALID_FIELD_VALUE_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT))
-					.forValueIn(PageRequestDtoFieldNames.ORDER_SORT, orderSortValue.toString(), Arrays.toString(OrderSortValue.values()))); 	
+		validatorPageRequest.valueIn(orderSortValue, PageRequestDto.getOrderSortValues(), 
+				new ValidationException(String.format(PAGE_REQUEST_INVALID_FIELD_VALUE_LOG_MESSAGE, PageRequestDtoFieldNames.ORDER_SORT),
+						ValidationMessageLocalized.forValueIn(PageRequestDtoFieldNames.ORDER_SORT, orderSortValue.toString(), PageRequestDto.getOrderSortValuesString()))); 	
 		
 		validatorPageRequest.notNull(pageRequest.getSortFieldName(),
-				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.SORT_FIELD_NAME))
-					.forNotNull(PageRequestDtoFieldNames.SORT_FIELD_NAME));
+				new ValidationException(String.format(PAGE_REQUEST_NULL_FIELD_LOG_MESSAGE, PageRequestDtoFieldNames.SORT_FIELD_NAME),
+						ValidationMessageLocalized.forNotNullValue(PageRequestDtoFieldNames.SORT_FIELD_NAME)));
 	}
 }

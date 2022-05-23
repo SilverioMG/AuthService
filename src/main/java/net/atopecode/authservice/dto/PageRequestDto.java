@@ -1,5 +1,9 @@
 package net.atopecode.authservice.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.atopecode.authservice.dto.PageRequestDto.OrderSortValue;
 
 /**
  * Dto con parámetros para búsquedas paginadas.
@@ -52,6 +56,16 @@ public class PageRequestDto {
 		this.pageSize = pageSize;
 	}
 
+	public static List<OrderSortValue> getOrderSortValues(){
+		return List.of(OrderSortValue.values());
+	}
+	
+	public static List<String> getOrderSortValuesString(){
+		return getOrderSortValues().stream()
+				.map(Enum::toString)
+				.collect(Collectors.toList());
+	}
+	
 	@Override
 	public String toString() {
 		return "PageRequestDto [pageSize=" + pageSize + ", pageNumber=" + pageNumber + ", sortFieldName="

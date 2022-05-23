@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import net.atopecode.authservice.controller.utils.ResultMessage;
 import net.atopecode.authservice.localization.ILocaleService;
-import net.atopecode.authservice.localization.MessageLocalized;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
+
 
 /**
  * En este Component se envía una respuesta  personalizada para todas las Exceptions no controladas que se lanzan más halla de un 'Controller' de Spring.
@@ -37,7 +38,7 @@ public class ExceptionHandlerComponent {
 		
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<ResultMessage<ValidationException>> validationException(ValidationException ex){
-		MessageLocalized errorMessage = ex.getErrorMessage();
+		MessageLocalized errorMessage = ex.getMessageLocalized();
 		String logMessage = String.format("%s - %s", ex.getMessage(), localeService.getMessage(errorMessage, Locale.forLanguageTag(SPANISH_LANG))); 
 		LOGGER.info(logMessage); 
 		String localizedMessage = localeService.getMessage(errorMessage);

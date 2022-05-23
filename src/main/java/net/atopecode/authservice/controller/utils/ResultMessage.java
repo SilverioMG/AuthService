@@ -3,7 +3,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import net.atopecode.authservice.localization.ILocaleService;
-import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
+
 
 /**
  * Este clase se utiliza para devolver un 'ResponseEntity<ResultMessage<T>>' en los 'Controllers' para además de devolver

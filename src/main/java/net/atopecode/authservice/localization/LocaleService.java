@@ -11,6 +11,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
+
 /**
  * Este Servicio se utiliza para traducir en diferentes idiomas los mensajes del servicio web que se devuelven al cliente que lo consume.
  * El Locale lo asigna SpringBoot automáticamente a partir del header 'Accept-Language' en cada petición Http al Servicio Web.

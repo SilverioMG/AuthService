@@ -2,6 +2,8 @@ package net.atopecode.authservice.localization;
 
 import java.util.Locale;
 
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
+
 public interface ILocaleService {
 
 	public String getMessage(String messageCode, Locale locale, Object... messageParams);
