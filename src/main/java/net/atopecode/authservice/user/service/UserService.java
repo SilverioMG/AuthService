@@ -27,7 +27,8 @@ import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.repository.IUserRepository;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
 import net.atopecode.authservice.user.service.validator.UserValidatorComponent;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
+
 
 @Service
 public class UserService implements IUserService {

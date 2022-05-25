@@ -19,7 +19,8 @@ import net.atopecode.authservice.role.repository.IRoleRepository;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
 import net.atopecode.authservice.role.service.validator.RoleValidatorComponent;
 import net.atopecode.authservice.user.model.User;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
+
 
 @Service
 public class RoleService implements IRoleService {

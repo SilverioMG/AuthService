@@ -10,7 +10,7 @@ import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.user.model.User;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 public interface IRoleService {
 

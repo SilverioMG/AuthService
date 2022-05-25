@@ -3,13 +3,14 @@ package net.atopecode.authservice.role.service.validator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
-import net.atopecode.authservice.validators.base.Validator;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.ValidationMessageLocalized;
+import net.atopecode.authservice.validation.Validator;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 @Component
 public class RoleValidatorComponent extends Validator {
@@ -29,12 +30,12 @@ public class RoleValidatorComponent extends Validator {
 
 	public void validateInsertDto(RoleDto role) throws ValidationException {
 		notNull(role,
-				new RoleValidationException("No se puede insertar el 'Role' porque vale 'null'")
-					.forNotNullValue(RoleFieldNames.ENTITY));
+				new RoleValidationException("No se puede insertar el 'Role' porque vale 'null'", 
+						ValidationMessageLocalized.forNotNull(RoleFieldNames.ENTITY)));
 		
 		mustToBeNull(role.getId(),
-				new RoleValidationException("No se puede insertar el 'Role' porque su campo '" + RoleFieldNames.ID + "' no vale 'null'")
-					.forMustToBeNull(RoleFieldNames.ID));
+				new RoleValidationException("No se puede insertar el 'Role' porque su campo '" + RoleFieldNames.ID + "' no vale 'null'",
+						ValidationMessageLocalized.forMustToBeNull(RoleFieldNames.ID)));
 		
 		validateFieldsDto(role);
 		
@@ -49,12 +50,12 @@ public class RoleValidatorComponent extends Validator {
 
 	public Role validateUpdateDto(RoleDto role) throws ValidationException {
 		notNull(role,
-				new ValidationException("No se puede modificar el 'Role' porque vale 'null'")
-					.forNotNullValue(RoleFieldNames.ENTITY));
+				new ValidationException("No se puede modificar el 'Role' porque vale 'null'",
+						ValidationMessageLocalized.forNotNullValue(RoleFieldNames.ENTITY)));
 
 		notNull(role.getId(),
-				new ValidationException("No se puede modificar el 'Role' porque su '" + RoleFieldNames.ID + "' vale 'null'.")
-					.forNotNull(RoleFieldNames.ID));
+				new ValidationException("No se puede modificar el 'Role' porque su '" + RoleFieldNames.ID + "' vale 'null'.",
+						ValidationMessageLocalized.forNotNull(RoleFieldNames.ID)));
 		
 		validateFieldsDto(role);
 		
@@ -75,21 +76,17 @@ public class RoleValidatorComponent extends Validator {
 	public void validateFieldsDto(RoleDto role) throws ValidationException {
 		//Name:
 		notEmpty(role.getName(),
-				new RoleValidationException("No se puede guardar el 'Role' porque el campo '" + RoleFieldNames.NAME + "' no tiene valor.")
-					.forNotEmpty(RoleFieldNames.NAME));
+				new RoleValidationException("No se puede guardar el 'Role' porque el campo '" + RoleFieldNames.NAME + "' no tiene valor.",
+						ValidationMessageLocalized.forNotEmpty(RoleFieldNames.NAME)));
 		
 		String roleName = role.getName();
 		maxLength(roleName, Role.NAME_MAX_LENGTH,
-				new RoleValidationException("No se puede guardar el 'Role' porque el campo '" + RoleFieldNames.NAME + "' es muy largo")
-					.forMaxLength(RoleFieldNames.NAME, roleName, Role.NAME_MAX_LENGTH));
+				new RoleValidationException("No se puede guardar el 'Role' porque el campo '" + RoleFieldNames.NAME + "' es muy largo",
+						ValidationMessageLocalized.forMaxLength(RoleFieldNames.NAME, roleName, Role.NAME_MAX_LENGTH)));
 	}
 
 	
 	public static class RoleValidationException extends ValidationException {
-		
-		public RoleValidationException(String logMessage) {
-			super(logMessage);
-		}
 		
 		public RoleValidationException(String logMessage, MessageLocalized errorMessage) {
 			super(logMessage, errorMessage);

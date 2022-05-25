@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 
 public interface IUserQueryService {

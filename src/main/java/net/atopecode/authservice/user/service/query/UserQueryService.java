@@ -29,7 +29,7 @@ import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.repository.IUserRepository;
 import net.atopecode.authservice.util.NormalizeString;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 @Service
 public class UserQueryService extends AbstractQueryService<User, UserFilter> implements IUserQueryService{

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import net.atopecode.authservice.localization.MessageLocalized;
+import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
@@ -17,8 +17,10 @@ import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
-import net.atopecode.authservice.validators.base.Validator;
-import net.atopecode.authservice.validators.exception.ValidationException;
+import net.atopecode.authservice.validation.ValidationMessageLocalized;
+import net.atopecode.authservice.validation.Validator;
+import net.atopecode.authservice.validation.exceptions.ValidationException;
+
 
 @Component
 public class UserValidatorComponent extends Validator {
@@ -54,12 +56,12 @@ public class UserValidatorComponent extends Validator {
 	 */
 	public void validateInsertDto(UserDto user) throws ValidationException {
 		notNull(user, 
-				new UserValidationException("No se puede insertar el 'User' porque vale 'null'")
-					.forNotNullValue(UserFieldNames.ENTITY));
+				new UserValidationException("No se puede insertar el 'User' porque vale 'null'",
+						ValidationMessageLocalized.forNotNull(UserFieldNames.ENTITY)));
 		
 		mustToBeNull(user.getId(),
-				new UserValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.")
-					.forMustToBeNull(UserFieldNames.ID));
+				new UserValidationException("No se puede insertar el 'User' porque su 'id' no vale 'null'.",
+						ValidationMessageLocalized.forMustToBeNull(UserFieldNames.ID)));
 		
 		validateFieldsDto(user);
 		
@@ -78,12 +80,12 @@ public class UserValidatorComponent extends Validator {
 	
 	public User validateUpdateDto(UserDto user) throws ValidationException {
 		notNull(user,
-				new UserValidationException("No se puede modificar el 'User' porque vale 'null'")
-						.forNotNullValue(UserFieldNames.ENTITY));
+				new UserValidationException("No se puede modificar el 'User' porque vale 'null'",
+						ValidationMessageLocalized.forNotNullValue(UserFieldNames.ENTITY)));
 
 		notNull(user.getId(),
-				new UserValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.")
-					.forNotNull(UserFieldNames.ID));
+				new UserValidationException("No se puede modificar el 'User' porque su 'id' vale 'null'.",
+						ValidationMessageLocalized.forNotNull(UserFieldNames.ID)));
 		
 		validateFieldsDto(user);
 		
@@ -147,55 +149,52 @@ public class UserValidatorComponent extends Validator {
 		//Name:
 		String userName = user.getName();
 		notEmpty(userName,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' no tiene valor")
-					.forNotEmpty(UserFieldNames.NAME));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' no tiene valor",
+						ValidationMessageLocalized.forNotEmpty(UserFieldNames.NAME)));
 		
 		maxLength(userName, User.NAME_MAX_LENGHT,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' es muy largo")
-					.forMaxLength(UserFieldNames.NAME, userName, User.NAME_MAX_LENGHT));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'name' es muy largo",
+						ValidationMessageLocalized.forMaxLength(UserFieldNames.NAME, userName, User.NAME_MAX_LENGHT)));
 		
 		//Password:
 		String userPassword = user.getPassword();
 		notEmpty(userPassword,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' vale 'null'")
-					.forNotEmpty(UserFieldNames.PASSWORD));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' vale 'null'",
+						ValidationMessageLocalized.forNotEmpty(UserFieldNames.PASSWORD)));
 		
 		maxLength(userPassword, User.PASSWORD_MAX_LENGHT,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' es muy largo")
-					.forMaxLength(UserFieldNames.PASSWORD, userPassword, User.PASSWORD_MAX_LENGHT));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'password' es muy largo",
+						ValidationMessageLocalized.forMaxLength(UserFieldNames.PASSWORD, userPassword, User.PASSWORD_MAX_LENGHT)));
 
 		//Email:
 		String userEmail = user.getEmail();
 		notEmpty(userEmail,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' vale 'null'")
-					.forNotEmpty(UserFieldNames.EMAIL));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' vale 'null'",
+						ValidationMessageLocalized.forNotEmpty(UserFieldNames.EMAIL)));
 		
 		maxLength(userEmail, User.EMAIL_MAX_LENGHT,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' es muy largo")
-					.forMaxLength(UserFieldNames.EMAIL, userEmail, User.EMAIL_MAX_LENGHT));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' es muy largo",
+						ValidationMessageLocalized.forMaxLength(UserFieldNames.EMAIL, userEmail, User.EMAIL_MAX_LENGHT)));
 		
 		hasFormat(userEmail, EMAIL_REGEX,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto")
-					.forHasFormat(UserFieldNames.EMAIL, userEmail));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'email' tiene un formato incorrecto",
+						ValidationMessageLocalized.forHasFormat(UserFieldNames.EMAIL, userEmail)));
 		
 		//RealName:
 		String userRealName = user.getRealName();
 		maxLength(userRealName, User.REAL_NAME_MAX_LENGHT,
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo")
-					.forMaxLength(UserFieldNames.REAL_NAME, userRealName, User.REAL_NAME_MAX_LENGHT));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'realName' es muy largo",
+						ValidationMessageLocalized.forMaxLength(UserFieldNames.REAL_NAME, userRealName, User.REAL_NAME_MAX_LENGHT)));
 		
 		//Roles:
 		notEmptyCollection(user.getRoles(), 
-				new UserValidationException("No se puede guardar el 'User' porque el campo 'roles' es una lista vacía")
-					.forNotEmptyCollection(UserFieldNames.Dto.ROLES));
+				new UserValidationException("No se puede guardar el 'User' porque el campo 'roles' es una lista vacía",
+						ValidationMessageLocalized.forNotEmptyCollection(UserFieldNames.Dto.ROLES)));
 	}
 	
 	
 	public static class UserValidationException extends ValidationException {
 
-		public UserValidationException(String logMessage) {
-			super(logMessage);
-		}
 		
 		public UserValidationException(String logMessage, MessageLocalized errorMessage) {
 			super(logMessage, errorMessage);
