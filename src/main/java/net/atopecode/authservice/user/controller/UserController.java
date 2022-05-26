@@ -67,10 +67,12 @@ public class UserController {
 		User user = userService.findById(id).orElse(null);
 		if(user != null) {
 			UserDto userDto = userToUserDtoConverter.convertWithoutPassword(user);
-			return new ResultMessage<UserDto>(userDto, "").toResponseEntity(HttpStatus.OK);
+			return new ResultMessage<UserDto>(userDto).toResponseEntity(HttpStatus.OK);
 		}
 		else {
-			return new ResultMessage<UserDto>(null, false).toResponseEntity(HttpStatus.NOT_FOUND);
+			//TODO... Hacer que el método 'findById()' del servicio lance una 'Exception' con 'LocalizedMessage' para devolver el mensaje de 'No encontrado' traducido al cliente web.
+			//TODO... En el Repository se devuelve un Optinal o 'null', pero desde la capa de servicio se lanzan Exceptions para no registros no encontrados.
+			return new ResultMessage<UserDto>(null, false, "").toResponseEntity(HttpStatus.NOT_FOUND);
 		}		
 	}
 	
@@ -89,7 +91,7 @@ public class UserController {
 		Page<User> users = userService.findAll(pageRequest);
 		Page<UserDto> result = users.map(user -> userToUserDtoConverter.convertWithoutPassword(user));
 		
-		return new ResultMessage<Page<UserDto>>(result, "").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<Page<UserDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
 	
 	@PostMapping("/query")
@@ -97,6 +99,6 @@ public class UserController {
 		Page<User> result = userService.query(filter);
 		Page<UserDto> resultDto = result.map(userToUserDtoConverter::convertWithoutPassword);
 		
-		return new ResultMessage<Page<UserDto>>(resultDto, "").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
 }

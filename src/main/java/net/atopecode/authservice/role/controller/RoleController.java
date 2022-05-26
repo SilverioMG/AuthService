@@ -76,10 +76,12 @@ public class RoleController {
 		Role role = roleService.findById(id).orElse(null);
 		if(role != null) {
 			RoleDto roleDto = roleToRoleDtoConverter.convert(role);
-			return new ResultMessage<RoleDto>(roleDto, "").toResponseEntity(HttpStatus.OK);
+			return new ResultMessage<RoleDto>(roleDto).toResponseEntity(HttpStatus.OK);
 		}
 		else {
-			return new ResultMessage<RoleDto>(null, false).toResponseEntity(HttpStatus.NOT_FOUND);
+			//TODO... Hacer que el método 'findById()' del servicio lance una 'Exception' con 'LocalizedMessage' para devolver el mensaje de 'No encontrado' traducido al cliente web.
+			//TODO... En el Repository se devuelve un Optinal o 'null', pero desde la capa de servicio se lanzan Exceptions para no registros no encontrados.
+			return new ResultMessage<RoleDto>(null, false, "").toResponseEntity(HttpStatus.NOT_FOUND);
 		}		
 	}
 	
@@ -97,7 +99,7 @@ public class RoleController {
 		Page<Role> roles = roleService.findAll(pageRequest);
 		Page<RoleDto> result = roles.map(role -> roleToRoleDtoConverter.convert(role));
 		
-		return new ResultMessage<Page<RoleDto>>(result, "").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<Page<RoleDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
 	
 	@PostMapping("/query")
@@ -107,6 +109,6 @@ public class RoleController {
 				.map(role -> roleToRoleDtoConverter.convert(role))
 				.collect(Collectors.toList());
 		
-		return new ResultMessage<List<RoleDto>>(resultDto, "").toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<List<RoleDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
 }

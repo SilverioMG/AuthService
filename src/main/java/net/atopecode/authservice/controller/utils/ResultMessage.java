@@ -1,4 +1,6 @@
 package net.atopecode.authservice.controller.utils;
+import java.util.Arrays;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -11,55 +13,77 @@ import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
  * un objeto poder añadir un mensaje en el body Json de la respuesta.
  * @param <T>
  */
-public class ResultMessage<T> {
+public class ResultMessage<TResult> {
 
-    public final T result;
-    public final String message;
-    public final boolean success;
+    private TResult result;
+    private String message;
+    private boolean ok;
+    private String[] errors;
+    
 
     public ResultMessage(){
     	this.result = null;
         this.message = "";
-        this.success = true;
+        this.ok = true;
+        this.errors = new String[0];
     }
     
-    public ResultMessage(T result, String message){
+    public ResultMessage(TResult result){
+    	this();
         this.result = result;
-        this.message = message;
-        this.success = true;
     }
 
-    public ResultMessage(T result, String message, boolean success){
+    public ResultMessage(TResult result, boolean ok, String message){
+        this();
         this.result = result;
+        this.ok = ok;
         this.message = message;
-        this.success = success;
     }
 
-    public ResultMessage(String message, boolean success){
-        this.result = null;
+    public ResultMessage(boolean ok, String message){
+        this();
+        this.ok = ok;
         this.message = message;
-        this.success = success;
+    }
+    
+    public ResultMessage(String message, String[] errors) {
+    	this();
+    	this.message = message;
+    	this.ok = false;
+    	this.errors = errors;
     }
 
-    public ResultMessage(T result, Exception ex){
-        this.result = result;
-        this.message = ex.getMessage();
-        this.success = false;
-    }
-
-    public ResultMessage(Exception ex){
-        this.result = null;
-        this.message = ex.getMessage();
-        this.success = false;
-    }
-
-    public ResultMessage(T result, ILocaleService localeService, MessageLocalized messageLocalized, boolean success) {
+    public ResultMessage(TResult result, ILocaleService localeService, MessageLocalized messageLocalized, boolean success) {
     	this.result = result;
     	this.message = localeService.getMessage(messageLocalized);
-    	this.success = success;
+    	this.ok = success;
     }
     
-    public ResponseEntity<ResultMessage<T>> toResponseEntity(HttpStatus httpStatus){
-        return new ResponseEntity<ResultMessage<T>>(this, httpStatus);
+    
+    public TResult getResult() {
+		return result;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public boolean isOk() {
+		return ok;
+	}
+
+	public String[] getErrors() {
+		return errors;
+	}
+
+	public ResponseEntity<ResultMessage<TResult>> toResponseEntity(HttpStatus httpStatus){
+        return new ResponseEntity<ResultMessage<TResult>>(this, httpStatus);
     }
+
+	@Override
+	public String toString() {
+		return "ResultMessage [result=" + result + ", message=" + message + ", ok=" + ok + ", errors="
+				+ Arrays.toString(errors) + "]";
+	}
+	
 }
