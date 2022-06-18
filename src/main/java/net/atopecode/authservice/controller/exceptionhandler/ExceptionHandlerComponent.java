@@ -56,7 +56,7 @@ public class ExceptionHandlerComponent {
 		String localizedMessage = translate(errorMessage);
 		String[] errorMessages = translateBundle(ex.getErrors());
 		return new ResultMessage<Void>(localizedMessage, errorMessages)
-				.toResponseEntity(HttpStatus.BAD_REQUEST);
+				.toResponseEntity(ex.getHttpStatus());
 	}
 	
 	@ExceptionHandler(RuntimeExceptionWithLocalizedMessage.class)
@@ -66,7 +66,7 @@ public class ExceptionHandlerComponent {
 		LOGGER.info(logMessage);
 		String localizedMessage = translate(errorMessage);
 		return new ResultMessage<Void>(false, localizedMessage)
-				.toResponseEntity(HttpStatus.BAD_REQUEST);
+				.toResponseEntity(ex.getHttpStatus());
 	}
 	
 	@ExceptionHandler(ExceptionWithLocalizedMessage.class)
@@ -76,7 +76,7 @@ public class ExceptionHandlerComponent {
 		LOGGER.info(logMessage);
 		String localizedMessage = translate(errorMessage);
 		return new ResultMessage<Void>(false, localizedMessage)
-				.toResponseEntity(HttpStatus.BAD_REQUEST);
+				.toResponseEntity(ex.getHttpStatus());
 	}
 	
 	/**

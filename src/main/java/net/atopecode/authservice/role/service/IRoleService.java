@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
+import net.atopecode.authservice.role.service.exceptions.RoleNotFoundException;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 
@@ -23,13 +24,9 @@ public interface IRoleService {
 	public void delete(Long idRole);
 	
 	//UserQueryService Methods:
-	public Optional<Role> findById(Long id);
+	public Role findById(Long id) throws RoleNotFoundException;
 	
-	//public Optional<Role> findByIdWithPermissions(Long id); //TODO...
-	
-	public Optional<Role> findByName(String name);
-	
-	//public Optional<Role> findByNameWithPermissions(String name); //TODO...
+	public Role findByName(String name) throws RoleNotFoundException;
 	
 	public Page<Role> findAll(PageRequest pageRequest);
 	

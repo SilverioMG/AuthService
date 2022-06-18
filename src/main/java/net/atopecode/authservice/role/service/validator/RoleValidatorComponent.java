@@ -86,10 +86,4 @@ public class RoleValidatorComponent extends Validator {
 	}
 
 	
-	public static class RoleValidationException extends ValidationException {
-		
-		public RoleValidationException(String logMessage, MessageLocalized errorMessage) {
-			super(logMessage, errorMessage);
-		}
-	}
 }

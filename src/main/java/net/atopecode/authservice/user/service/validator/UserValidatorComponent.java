@@ -191,14 +191,5 @@ public class UserValidatorComponent extends Validator {
 				new UserValidationException("No se puede guardar el 'User' porque el campo 'roles' es una lista vacía",
 						ValidationMessageLocalized.forNotEmptyCollection(UserFieldNames.Dto.ROLES)));
 	}
-	
-	
-	public static class UserValidationException extends ValidationException {
-
-		
-		public UserValidationException(String logMessage, MessageLocalized errorMessage) {
-			super(logMessage, errorMessage);
-		}
-	}
 		
 }

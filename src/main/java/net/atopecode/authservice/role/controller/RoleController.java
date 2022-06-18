@@ -26,6 +26,7 @@ import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.service.IRoleService;
+import net.atopecode.authservice.role.service.exceptions.RoleNotFoundException;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 
@@ -70,19 +71,14 @@ public class RoleController {
 	 * Se recupera un 'Role' por su 'id'.
 	 * @param id
 	 * @return
+	 * @throws RoleNotFoundException 
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id){
-		Role role = roleService.findById(id).orElse(null);
-		if(role != null) {
-			RoleDto roleDto = roleToRoleDtoConverter.convert(role);
-			return new ResultMessage<RoleDto>(roleDto).toResponseEntity(HttpStatus.OK);
-		}
-		else {
-			//TODO... Hacer que el método 'findById()' del servicio lance una 'Exception' con 'LocalizedMessage' para devolver el mensaje de 'No encontrado' traducido al cliente web.
-			//TODO... En el Repository se devuelve un Optinal o 'null', pero desde la capa de servicio se lanzan Exceptions para no registros no encontrados.
-			return new ResultMessage<RoleDto>(null, false, "").toResponseEntity(HttpStatus.NOT_FOUND);
-		}		
+	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id) throws RoleNotFoundException{
+		Role role = roleService.findById(id);
+		RoleDto roleDto = roleToRoleDtoConverter.convert(role);
+		return new ResultMessage<RoleDto>(roleDto).toResponseEntity(HttpStatus.OK);
+	
 	}
 	
 	// /api/findAll?page=0&pageSize=10
@@ -93,7 +89,8 @@ public class RoleController {
 	 * @return
 	 */
 	@GetMapping("/findAll")
-	public ResponseEntity<ResultMessage<Page<RoleDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+	public ResponseEntity<ResultMessage<Page<RoleDto>>> findAll(
+			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
 		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(RoleFieldNames.ID)));
 		Page<Role> roles = roleService.findAll(pageRequest);

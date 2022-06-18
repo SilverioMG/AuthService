@@ -1,7 +1,6 @@
 package net.atopecode.authservice.role.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import net.atopecode.authservice.role.dto.RoleDto;
 import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.repository.IRoleRepository;
+import net.atopecode.authservice.role.service.exceptions.RoleNotFoundException;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
 import net.atopecode.authservice.role.service.validator.RoleValidatorComponent;
 import net.atopecode.authservice.user.model.User;
@@ -93,13 +93,13 @@ public class RoleService implements IRoleService {
 	}
 
 	@Override
-	public Optional<Role> findById(Long id) {
-		return roleQueryService.findById(id);
+	public Role findById(Long id) throws RoleNotFoundException {
+		return roleQueryService.findById(id).orElseThrow(RoleNotFoundException::new);
 	}
 
 	@Override
-	public Optional<Role> findByName(String name) {
-		return roleQueryService.findByName(name);
+	public Role findByName(String name) throws RoleNotFoundException {
+		return roleQueryService.findByName(name).orElseThrow(RoleNotFoundException::new);
 	}
 
 	@Override

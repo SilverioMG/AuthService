@@ -1,4 +1,6 @@
 	//TODO...
+	-Los métodos de 'UserQueryService' y 'RoleQueryService' que lancen Exceptions con mensajes localizados cuando no se encuentra la entidad en la B.D. Igual es mejor añadir un campo a las 'ExceptionWithMessageLocalized' y
+	 'RuntimeExceptionWithMessageLocalized' que indique el código Http de la respuesta (HttpStatus) y utilizarlo directamente en el 'ExceptionHandlerComponent'.
 	-Probar el método 'AbstractQueryService.validatePageRequest()'.
 	-Probar el método 'AbstractQueryService.composeNullablePredicates()' que modifiqué el switch para utilizar una expresión lambda.
 	-Que en la clase 'ValidatorEntity' se pueda lanzar una 'ValidationException' personalizada, es decir, para cada entidad (User, Role...) se debe declarar una Exception que herede de 'ValidationException'
