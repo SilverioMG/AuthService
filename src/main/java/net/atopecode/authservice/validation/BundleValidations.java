@@ -11,6 +11,7 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
+@Deprecated
 public class BundleValidations {
     private Logger logger;
 

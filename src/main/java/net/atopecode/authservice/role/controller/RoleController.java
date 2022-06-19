@@ -103,7 +103,7 @@ public class RoleController {
 	public ResponseEntity<ResultMessage<List<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
 		List<Role> result = roleService.query(roleFilter);
 		List<RoleDto> resultDto = result.stream()
-				.map(role -> roleToRoleDtoConverter.convert(role))
+				.map(roleToRoleDtoConverter::convert)
 				.collect(Collectors.toList());
 		
 		return new ResultMessage<List<RoleDto>>(resultDto).toResponseEntity(HttpStatus.OK);

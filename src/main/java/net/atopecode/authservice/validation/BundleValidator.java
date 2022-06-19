@@ -1,6 +1,5 @@
 package net.atopecode.authservice.validation;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;

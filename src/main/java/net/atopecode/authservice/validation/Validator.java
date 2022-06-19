@@ -463,5 +463,21 @@ public class Validator {
 			throw ex;
 		}
 	}
+	
+	@Deprecated //Usar 'BundleValidator' en lugar de este método.
+	public BundleValidations bundle(BundleValidations bundleValidations, Consumer<Validator> consumerValidation){
+		requireNonNull(bundleValidations);
+		requireNonNull(consumerValidation);
+
+		try{
+			consumerValidation.accept(this);
+		}
+		catch (ValidationException ex){
+			bundleValidations.log(ex);
+			bundleValidations.addError(ex.getMessageLocalized());
+		}
+
+		return bundleValidations;
+	}
 
 }
