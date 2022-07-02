@@ -1,8 +1,5 @@
 package net.atopecode.authservice.role.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -100,12 +97,10 @@ public class RoleController {
 	}
 	
 	@PostMapping("/query")
-	public ResponseEntity<ResultMessage<List<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
-		List<Role> result = roleService.query(roleFilter);
-		List<RoleDto> resultDto = result.stream()
-				.map(roleToRoleDtoConverter::convert)
-				.collect(Collectors.toList());
+	public ResponseEntity<ResultMessage<Page<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
+		Page<Role> result = roleService.query(roleFilter);
+		Page<RoleDto> resultDto = result.map(roleToRoleDtoConverter::convert);
 		
-		return new ResultMessage<List<RoleDto>>(resultDto).toResponseEntity(HttpStatus.OK);
+		return new ResultMessage<Page<RoleDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
 }

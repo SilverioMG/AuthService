@@ -25,7 +25,9 @@ import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.repository.IUserRepository;
+import net.atopecode.authservice.user.service.exceptions.UserNotFoundException;
 import net.atopecode.authservice.user.service.query.IUserQueryService;
+import net.atopecode.authservice.user.service.validator.UserValidationException;
 import net.atopecode.authservice.user.service.validator.UserValidatorComponent;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 
@@ -78,7 +80,7 @@ public class UserService implements IUserService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public User insert(UserDto userDto) throws ValidationException {
+	public User insert(UserDto userDto) throws UserValidationException {
 		userValidator.validateInsertDto(userDto);
 		
 		User user = userDtoToUserConverter.convert(userDto);
@@ -92,7 +94,7 @@ public class UserService implements IUserService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public User update(UserDto userDto) throws ValidationException {
+	public User update(UserDto userDto) throws UserValidationException {
 		User user = userValidator.validateUpdateDto(userDto);
 		
 		userDtoToUserConverter.map(userDto, user);
@@ -106,7 +108,7 @@ public class UserService implements IUserService {
 
 	@Override
     @Transactional(rollbackFor = Exception.class)
-	public User setRolesToUser(Long idUser, Set<RoleDto> rolesDto) throws ValidationException {
+	public User setRolesToUser(Long idUser, Set<RoleDto> rolesDto) throws UserValidationException {
 		if(idUser == null) {
 			throw new UserServiceRuntimeException("No se pueden asignar 'Roles' al 'User' porque no se ha recibido valor para el parámetro 'idUser'");
 		}
@@ -176,7 +178,7 @@ public class UserService implements IUserService {
 			return;
 		}
 		
-		User userToDelete = findById(idUser).orElse(null);
+		User userToDelete = userQueryService.findById(idUser).orElse(null);
 		if(userToDelete != null) {
 			userRepository.delete(userToDelete);
 		}		
@@ -184,38 +186,38 @@ public class UserService implements IUserService {
 
 
 	@Override
-	public Optional<User> findById(Long id) {
-		return userQueryService.findById(id);
+	public User findById(Long id) throws UserNotFoundException {
+		return userQueryService.findById(id).orElseThrow(UserNotFoundException::new);
 	}
 
 
 	@Override
-	public Optional<User> findByIdWithRoles(Long id) {
-		return userQueryService.findByIdWithRoles(id);
+	public User findByIdWithRoles(Long id) throws UserNotFoundException {
+		return userQueryService.findByIdWithRoles(id).orElseThrow(UserNotFoundException::new);
 	}
 
 
 	@Override
-	public Optional<User> findByName(String name) {
-		return userQueryService.findByName(name);
+	public User findByName(String name) throws UserNotFoundException {
+		return userQueryService.findByName(name).orElseThrow(UserNotFoundException::new);
 	}
 
 
 	@Override
-	public Optional<User> findByNameWithRoles(String name) {
-		return userQueryService.findByNameWithRoles(name);
+	public User findByNameWithRoles(String name) throws UserNotFoundException {
+		return userQueryService.findByNameWithRoles(name).orElseThrow(UserNotFoundException::new);
 	}
 
 
 	@Override
-	public Optional<User> findByEmail(String email) {
-		return userQueryService.findByEmail(email);
+	public User findByEmail(String email) throws UserNotFoundException {
+		return userQueryService.findByEmail(email).orElseThrow(UserNotFoundException::new);
 	}
 
 
 	@Override
-	public Optional<User> findByEmailWithRoles(String email) {
-		return userQueryService.findByEmailWithRoles(email);
+	public User findByEmailWithRoles(String email) throws UserNotFoundException {
+		return userQueryService.findByEmailWithRoles(email).orElseThrow(UserNotFoundException::new);
 	}
 	
 	@Override

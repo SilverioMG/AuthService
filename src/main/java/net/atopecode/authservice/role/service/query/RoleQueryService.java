@@ -1,6 +1,5 @@
 package net.atopecode.authservice.role.service.query;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,28 +12,28 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import net.atopecode.authservice.dto.PageRequestDto;
 import net.atopecode.authservice.rel_user_role.model.RelUserRole;
 import net.atopecode.authservice.rel_user_role.repository.IRelUserRoleRepository;
 import net.atopecode.authservice.role.dto.RoleFilter;
 import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.model.RoleFieldNames;
 import net.atopecode.authservice.role.repository.IRoleRepository;
+import net.atopecode.authservice.service.query.AbstractQueryService;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.util.NormalizeString;
 
 @Service
-public class RoleQueryService implements IRoleQueryService {
+public class RoleQueryService extends AbstractQueryService<Role, RoleFilter> implements IRoleQueryService {
 
 	private IRoleRepository roleRepository;
 	private IRelUserRoleRepository relUserRoleRepository;
 	
 	public RoleQueryService(IRoleRepository roleRepository,
 			IRelUserRoleRepository relUserRoleRepository) {
+		super(roleRepository);
 		this.roleRepository = roleRepository;
 		this.relUserRoleRepository = relUserRoleRepository;
 	}
@@ -72,24 +71,11 @@ public class RoleQueryService implements IRoleQueryService {
 	}
 	
 	@Override
-	public List<Role> query(RoleFilter filter) {
-		List<Role> result = new ArrayList<>();
-		Specification<Role> specification = getFilterSpecification(filter);
-		PageRequest pageRequest = getFilterPageRequest(filter);
-		
-		if(pageRequest == null) {
-			//Nota.- Si 'specification' vale 'null' SpringData hará la query sin cláusula 'where'.
-			result = roleRepository.findAll(specification);
-		}
-		else {
-			//Nota.- Si 'specification' vale 'null' SpringData hará la query sin cláusula 'where'.
-			Page<Role> pageResult = roleRepository.findAll(specification, pageRequest);
-			result = pageResult.getContent();
-		}
-		
-		return result;
+	public Page<Role> query(RoleFilter filter) {
+		return super.query(filter);
 	}
 	
+	@Override
 	protected Specification<Role>  getFilterSpecification(RoleFilter filter) {
 		return (Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
 			Predicate predicate = null;
@@ -119,19 +105,6 @@ public class RoleQueryService implements IRoleQueryService {
 			
 			return predicate;
 		};
-	}
-	
-	protected PageRequest getFilterPageRequest(RoleFilter filter) {
-		PageRequest pageRequest = null;
-		PageRequestDto pageRequestDto = filter.getPageRequest();
-		
-		if(pageRequestDto != null) {	
-			pageRequest = PageRequest.of(pageRequestDto.getPageNumber(), pageRequestDto.getPageSize(), 
-					Sort.Direction.fromOptionalString(pageRequestDto.getOrderSort().toString()).orElse(Sort.Direction.ASC), 
-					pageRequestDto.getSortFieldName());
-		}
-		
-		return pageRequest;
 	}
 	
 	@Override

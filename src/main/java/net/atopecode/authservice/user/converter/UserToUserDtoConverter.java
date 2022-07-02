@@ -2,8 +2,6 @@ package net.atopecode.authservice.user.converter;
 
 import java.util.List;
 
-import javax.persistence.Persistence;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +15,7 @@ import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.service.IUserService;
 
 @Component
-public class UserToUserDtoConverter extends AbstractConverterMappeableNormalizable<User, UserDto>{
+public class UserToUserDtoConverter extends AbstractConverterMappeableNormalizable<User, UserDto> {
 
 	private IUserService userService;
 	private RoleToRoleDtoConverter roleToRoleDtoConverter;

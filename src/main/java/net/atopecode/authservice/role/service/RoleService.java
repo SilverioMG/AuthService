@@ -17,9 +17,9 @@ import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.role.repository.IRoleRepository;
 import net.atopecode.authservice.role.service.exceptions.RoleNotFoundException;
 import net.atopecode.authservice.role.service.query.IRoleQueryService;
+import net.atopecode.authservice.role.service.validator.RoleValidationException;
 import net.atopecode.authservice.role.service.validator.RoleValidatorComponent;
 import net.atopecode.authservice.user.model.User;
-import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 
 @Service
@@ -44,7 +44,7 @@ public class RoleService implements IRoleService {
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Role save(RoleDto role) throws ValidationException {
+	public Role save(RoleDto role) throws RoleValidationException {
 		Role result = null;
 		if(role == null) {
 			return result;
@@ -60,7 +60,7 @@ public class RoleService implements IRoleService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Role insert(RoleDto roleDto) throws ValidationException {
+	public Role insert(RoleDto roleDto) throws RoleValidationException {
 		roleValidator.validateInsertDto(roleDto);
 		
 		Role role = roleDtoToRoleConverter.convert(roleDto);
@@ -71,7 +71,7 @@ public class RoleService implements IRoleService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Role update(RoleDto roleDto) throws ValidationException {
+	public Role update(RoleDto roleDto) throws RoleValidationException {
 		Role role = roleValidator.validateUpdateDto(roleDto);
 		
 		roleDtoToRoleConverter.map(roleDto, role);
@@ -108,7 +108,7 @@ public class RoleService implements IRoleService {
 	}
 	
 	@Override
-	public List<Role> query(RoleFilter filter) {
+	public Page<Role> query(RoleFilter filter) {
 		return roleQueryService.query(filter);
 	}
 

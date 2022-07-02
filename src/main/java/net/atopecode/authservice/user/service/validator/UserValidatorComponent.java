@@ -54,7 +54,7 @@ public class UserValidatorComponent extends Validator {
 	 * @param user
 	 * @throws ValidationException
 	 */
-	public void validateInsertDto(UserDto user) throws ValidationException {
+	public void validateInsertDto(UserDto user) throws UserValidationException {
 		notNull(user, 
 				new UserValidationException("No se puede insertar el 'User' porque vale 'null'",
 						ValidationMessageLocalized.forNotNull(UserFieldNames.ENTITY)));
@@ -78,7 +78,7 @@ public class UserValidatorComponent extends Validator {
 						new MessageLocalized(USER_VALIDATION_INSERT_EMAIL_ALREADY_EXISTS, user.getEmail())));		
 	}
 	
-	public User validateUpdateDto(UserDto user) throws ValidationException {
+	public User validateUpdateDto(UserDto user) throws UserValidationException {
 		notNull(user,
 				new UserValidationException("No se puede modificar el 'User' porque vale 'null'",
 						ValidationMessageLocalized.forNotNullValue(UserFieldNames.ENTITY)));
@@ -109,7 +109,7 @@ public class UserValidatorComponent extends Validator {
 		return userBd;
 	}
 	
-	public User checkExistsUser(Long idUser) throws ValidationException {
+	public User checkExistsUser(Long idUser) throws UserValidationException {
 		if(idUser == null) {
 			return null;
 		}
@@ -122,7 +122,7 @@ public class UserValidatorComponent extends Validator {
 		return userBd;
 	}
 	
-	public List<Role> checkExistsRoles(Set<RoleDto> roles) throws ValidationException {
+	public List<Role> checkExistsRoles(Set<RoleDto> roles) throws UserValidationException {
 		List<Role> result = new ArrayList<>();
 		if(roles == null) {
 			return result;
@@ -145,7 +145,7 @@ public class UserValidatorComponent extends Validator {
 	 * @param user
 	 * @throws ValidationException
 	 */
-	public void validateFieldsDto(UserDto user) throws ValidationException {		
+	public void validateFieldsDto(UserDto user) throws UserValidationException {		
 		//Name:
 		String userName = user.getName();
 		notEmpty(userName,

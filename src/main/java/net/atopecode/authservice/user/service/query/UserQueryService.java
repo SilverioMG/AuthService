@@ -126,7 +126,7 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 	}
 	
 	@Override
-	public Page<User> query(UserFilter filter) throws ValidationException{
+	public Page<User> query(UserFilter filter) {
 		return super.query(filter);
 	}
 

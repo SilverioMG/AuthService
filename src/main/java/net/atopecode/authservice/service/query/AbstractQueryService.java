@@ -42,7 +42,7 @@ public abstract class AbstractQueryService<TEntity, TFilter extends FilterPageab
 	}
 	
 	
-	public Page<TEntity> query(TFilter filter) throws ValidationException {
+	public Page<TEntity> query(TFilter filter) {
 		Page<TEntity> result = Page.empty();
 		Specification<TEntity> specification = getFilterSpecification(filter);
 		PageRequest pageRequest = getFilterPageRequest(filter);

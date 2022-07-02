@@ -12,6 +12,7 @@ import net.atopecode.authservice.role.model.Role;
 import net.atopecode.authservice.user.dto.UserDto;
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
+import net.atopecode.authservice.user.service.exceptions.UserNotFoundException;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 
@@ -46,17 +47,17 @@ public interface IUserService {
 	public void delete(Long idUser);
 	
 	//UserQueryService Methods:
-	public Optional<User> findById(Long id);
+	public User findById(Long id) throws UserNotFoundException;
 	
-	public Optional<User> findByIdWithRoles(Long id);
+	public User findByIdWithRoles(Long id) throws UserNotFoundException;
 	
-	public Optional<User> findByName(String name);
+	public User findByName(String name) throws UserNotFoundException;
 	
-	public Optional<User> findByNameWithRoles(String name);
+	public User findByNameWithRoles(String name) throws UserNotFoundException;
 	
-	public Optional<User> findByEmail(String email);
+	public User findByEmail(String email) throws UserNotFoundException;
 	
-	public Optional<User> findByEmailWithRoles(String email);
+	public User findByEmailWithRoles(String email) throws UserNotFoundException;
 	
 	public Page<User> findAll(PageRequest pageRequest);
 	

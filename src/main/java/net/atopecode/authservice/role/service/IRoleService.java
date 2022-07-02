@@ -1,7 +1,6 @@
 package net.atopecode.authservice.role.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +29,7 @@ public interface IRoleService {
 	
 	public Page<Role> findAll(PageRequest pageRequest);
 	
-	public List<Role> query(RoleFilter filter);
+	public Page<Role> query(RoleFilter filter);
 	
 	public List<Role> findRolesByUser(User user);
 }

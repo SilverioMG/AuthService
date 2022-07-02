@@ -23,6 +23,7 @@ import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
 import net.atopecode.authservice.user.service.IUserService;
+import net.atopecode.authservice.user.service.exceptions.UserNotFoundException;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 
 @RestController
@@ -63,17 +64,10 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id){
-		User user = userService.findById(id).orElse(null);
-		if(user != null) {
-			UserDto userDto = userToUserDtoConverter.convertWithoutPassword(user);
-			return new ResultMessage<UserDto>(userDto).toResponseEntity(HttpStatus.OK);
-		}
-		else {
-			//TODO... Hacer que el método 'findById()' del servicio lance una 'Exception' con 'LocalizedMessage' para devolver el mensaje de 'No encontrado' traducido al cliente web.
-			//TODO... En el Repository se devuelve un Optinal o 'null', pero desde la capa de servicio se lanzan Exceptions para no registros no encontrados.
-			return new ResultMessage<UserDto>(null, false, "").toResponseEntity(HttpStatus.NOT_FOUND);
-		}		
+	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id) throws UserNotFoundException{
+		User user = userService.findById(id);
+		UserDto userDto = userToUserDtoConverter.convertWithoutPassword(user);
+		return new ResultMessage<UserDto>(userDto).toResponseEntity(HttpStatus.OK);		
 	}
 	
 	// /api/findAll?page=0&pageSize=10

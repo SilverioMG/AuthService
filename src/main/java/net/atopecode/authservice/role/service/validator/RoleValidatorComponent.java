@@ -28,7 +28,7 @@ public class RoleValidatorComponent extends Validator {
 		this.roleQueryService = roleQueryService;
 	}
 
-	public void validateInsertDto(RoleDto role) throws ValidationException {
+	public void validateInsertDto(RoleDto role) throws RoleValidationException {
 		notNull(role,
 				new RoleValidationException("No se puede insertar el 'Role' porque vale 'null'", 
 						ValidationMessageLocalized.forNotNull(RoleFieldNames.ENTITY)));
@@ -48,13 +48,13 @@ public class RoleValidatorComponent extends Validator {
 						new MessageLocalized(ROLE_VALIDATION_INSERT_NAME_ALREADY_EXISTS, role.getName())));
 	}
 
-	public Role validateUpdateDto(RoleDto role) throws ValidationException {
+	public Role validateUpdateDto(RoleDto role) throws RoleValidationException {
 		notNull(role,
-				new ValidationException("No se puede modificar el 'Role' porque vale 'null'",
+				new RoleValidationException("No se puede modificar el 'Role' porque vale 'null'",
 						ValidationMessageLocalized.forNotNullValue(RoleFieldNames.ENTITY)));
 
 		notNull(role.getId(),
-				new ValidationException("No se puede modificar el 'Role' porque su '" + RoleFieldNames.ID + "' vale 'null'.",
+				new RoleValidationException("No se puede modificar el 'Role' porque su '" + RoleFieldNames.ID + "' vale 'null'.",
 						ValidationMessageLocalized.forNotNull(RoleFieldNames.ID)));
 		
 		validateFieldsDto(role);
@@ -73,7 +73,7 @@ public class RoleValidatorComponent extends Validator {
 		return roleBd;
 	}
 
-	public void validateFieldsDto(RoleDto role) throws ValidationException {
+	public void validateFieldsDto(RoleDto role) throws RoleValidationException {
 		//Name:
 		notEmpty(role.getName(),
 				new RoleValidationException("No se puede guardar el 'Role' porque el campo '" + RoleFieldNames.NAME + "' no tiene valor.",
