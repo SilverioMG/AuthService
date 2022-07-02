@@ -30,18 +30,22 @@ public class UserToUserDtoConverter extends AbstractConverterMappeableNormalizab
 	}
 	
 	@Override
-	public UserDto convert(User source) {
-		UserDto dto = super.convert(source);
-		mapRoles(source, dto);
+	public UserDto convert(User user) {
+		UserDto dto = super.convert(user);
+		mapRoles(user, dto);
+		
+		//Se elimina el 'password' cuando se envía la info hacia la web.
+		dto.setPassword(null);
+		
 		
 		return dto;
 	}
 	
-	public UserDto convertWithoutPassword(User user) {
+	public UserDto convertWithPassword(User user) {
+		String password = user.getPassword();
+		
 		UserDto userDto = this.convert(user);
-		if(userDto != null) {
-			userDto.setPassword(null);
-		}
+		userDto.setPassword(password);
 		
 		return userDto;
 	}

@@ -66,7 +66,7 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id) throws UserNotFoundException{
 		User user = userService.findById(id);
-		UserDto userDto = userToUserDtoConverter.convertWithoutPassword(user);
+		UserDto userDto = userToUserDtoConverter.convert(user);
 		return new ResultMessage<UserDto>(userDto).toResponseEntity(HttpStatus.OK);		
 	}
 	
@@ -83,7 +83,7 @@ public class UserController {
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
 		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Order.asc(UserFieldNames.ID)));
 		Page<User> users = userService.findAll(pageRequest);
-		Page<UserDto> result = users.map(user -> userToUserDtoConverter.convertWithoutPassword(user));
+		Page<UserDto> result = users.map(user -> userToUserDtoConverter.convert(user));
 		
 		return new ResultMessage<Page<UserDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
@@ -91,7 +91,7 @@ public class UserController {
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter) throws ValidationException{
 		Page<User> result = userService.query(filter);
-		Page<UserDto> resultDto = result.map(userToUserDtoConverter::convertWithoutPassword);
+		Page<UserDto> resultDto = result.map(userToUserDtoConverter::convert);
 		
 		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
