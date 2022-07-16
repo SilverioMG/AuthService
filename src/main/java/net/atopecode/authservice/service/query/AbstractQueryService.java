@@ -1,6 +1,5 @@
 package net.atopecode.authservice.service.query;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -1,8 +1,13 @@
 	
 	V-Los métodos de 'UserQueryService' y 'RoleQueryService' que lancen Exceptions con mensajes localizados cuando no se encuentra la entidad en la B.D. Igual es mejor añadir un campo a las 'ExceptionWithMessageLocalized' y
 	 'RuntimeExceptionWithMessageLocalized' que indique el código Http de la respuesta (HttpStatus) y utilizarlo directamente en el 'ExceptionHandlerComponent'.
+	V-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
 	 
 //TODO...
+	-Añadir un Controller y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
+	-Añadir seguridad en Controllers.
+	-Quitar CORS.
+	-Añadir JPA Auditing en las entidades. Ver por el proyecto 'SharingCodersServer' de Gitlab.
 	-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
 	-Probar el método 'AbstractQueryService.validatePageRequest()'.
 	-Probar el método 'AbstractQueryService.composeNullablePredicates()' que modifiqué el switch para utilizar una expresión lambda.
@@ -12,7 +17,6 @@
 	-Actualizar versión de SpringBoot para utilizar la última versión de 'LogBack'.
 	-Añadir configuración para CORS.
 	-Probar Query paginada de 'User'. Usar Lógica AND y OR para los nombres de 'Roles'.
-	-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
 	 Ver donde se están utilizando estos métodos e intercambiarlos para que por defecto no se mapee el password (más seguridad).
 	-Añadir Swagger y Actuator.
 	-Añadir funcionalidad para enviar email al usuario una vez que se registra y active su cuenta (usar una tabla de tokens para los enlaces de activación que se envían en el email).
@@ -25,6 +29,7 @@
 	-Hacer una libreria .jar con los paquetes que son reutilizables para otros Servicios Web. Sino quiero utilizar un nexus puedo compilarlos en local y que se guarden en la carpeta .m2 con mvn install.
 	 O se puede utilizar el servicio que ofrece GitHub como repositorio de artefactos (paquetes).
 	-Añadir entornos de ejecutación (dev y prod).
+	-Modfiicar query 'IUserRepository.findAllWithRoles()' para que no haga la paginación en memoria. Hacer una query paginada solo de Usuarios y luego con otra consulta recuperar sus roles.
 	
 	De este proyecto hacer 2 librerías. La primera que sea 'net.atopecode.backend-utils' con todo el código que se puede reutilizar en cualquier proyecto SpringBoot como las validaciones,
 	la normalización, AbstractQueryService... Y otra librería que a su vez utilice 'net.atopecode.backend-utils' con todo el código de gestión de Usuarios, tanto la parte de B.D. como la Autenticación y

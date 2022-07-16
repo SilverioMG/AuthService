@@ -59,6 +59,10 @@ public class Role implements INormalizable, Serializable {
 		normalize();
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 		this.nm_name = NormalizeString.normalize(name);
