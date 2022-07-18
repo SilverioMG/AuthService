@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,17 +48,30 @@ public class UserController {
 	}
 	
 	/**
-	 * Se crea un nuevo 'Usuario' en la B.D. y se devuelve su info (con el password incluído) como respuesta.
-	 * Si el valor del campo 'id' vale 'null' se intetará insertar un nuevo 'Usuario'.
-	 * Si el campo 'id' tiene valor, se intentará modificar a dicho 'Usuario'.
+	 * Se crea un nuevo 'Usuario' en la B.D. y se devuelve su info (sin el password) como respuesta.
 	 * @param userDto
 	 * @return
 	 * @throws ValidationException
 	 */
-	@PostMapping("/save")
-	public ResponseEntity<ResultMessage<UserDto>> save(@RequestBody UserDto userDto) throws ValidationException{
-		MessageLocalized messageLocalized = (userDto.getId() == null) ? new MessageLocalized(USER_INSERT_OK) : new MessageLocalized(USER_UPDATE_OK);
-		User user = userService.save(userDto);
+	@PostMapping("/new")
+	public ResponseEntity<ResultMessage<UserDto>> newUser(@RequestBody UserDto userDto) throws ValidationException{
+		MessageLocalized messageLocalized = new MessageLocalized(USER_INSERT_OK);
+		User user = userService.insert(userDto);
+		userDto = userToUserDtoConverter.convert(user);
+		return new ResultMessage<UserDto>(userDto, localeService, messageLocalized, true)
+				.toResponseEntity(HttpStatus.OK);
+	}
+	
+	/**
+	 * Se actualiza un 'Usuario' existente en la B.D. y se devuelve su info (sin el password) como respuesta.
+	 * @param userDto
+	 * @return
+	 * @throws ValidationException
+	 */
+	@PutMapping("/update")
+	public ResponseEntity<ResultMessage<UserDto>> updateUser(@RequestBody UserDto userDto) throws ValidationException{
+		MessageLocalized messageLocalized = new MessageLocalized(USER_UPDATE_OK);
+		User user = userService.update(userDto);
 		userDto = userToUserDtoConverter.convert(user);
 		return new ResultMessage<UserDto>(userDto, localeService, messageLocalized, true)
 				.toResponseEntity(HttpStatus.OK);
@@ -95,4 +109,8 @@ public class UserController {
 		
 		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
+	
+	//TODO...
+	/*@PostMapping("/login")
+	public ResponseEntity<ResultMessage>*/
 }

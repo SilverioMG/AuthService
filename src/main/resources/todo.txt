@@ -4,7 +4,8 @@
 	V-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
 	 
 //TODO...
-	-Añadir un Controller y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
+	-Añadir un Controller (UserController.login()) y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
+	 Ver por el proyecto 'SharingCodersServer' de GitLab.
 	-Añadir seguridad en Controllers.
 	-Quitar CORS.
 	-Añadir JPA Auditing en las entidades. Ver por el proyecto 'SharingCodersServer' de Gitlab.

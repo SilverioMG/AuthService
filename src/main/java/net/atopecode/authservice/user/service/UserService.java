@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,7 @@ public class UserService implements IUserService {
 	private UserDtoToUserConverter userDtoToUserConverter;
 	private IRoleService roleService;
 	private IRelUserRoleRepository relUserRoleRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
 	public UserService(IUserRepository userRepository,
@@ -49,13 +51,15 @@ public class UserService implements IUserService {
 			UserValidatorComponent userValidation,
 			UserDtoToUserConverter userDtoToUserConverter,
 			IRoleService roleService,
-			IRelUserRoleRepository relUserRoleRepository) {
+			IRelUserRoleRepository relUserRoleRepository,
+			BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userRepository = userRepository;
 		this.userQueryService = userQueryService;
 		this.userValidator = userValidation;
 		this.userDtoToUserConverter = userDtoToUserConverter;
 		this.roleService = roleService;
 		this.relUserRoleRepository = relUserRoleRepository;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder; 
 	}
 
 
@@ -83,6 +87,7 @@ public class UserService implements IUserService {
 		userValidator.validateInsertDto(userDto);
 		
 		User user = userDtoToUserConverter.convert(userDto);
+		user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 		user.normalize();	
 		user = userRepository.save(user);
 		
@@ -97,6 +102,7 @@ public class UserService implements IUserService {
 		User user = userValidator.validateUpdateDto(userDto);
 		
 		userDtoToUserConverter.map(userDto, user);
+		user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 		user.normalize();
 		user = userRepository.save(user);
 		

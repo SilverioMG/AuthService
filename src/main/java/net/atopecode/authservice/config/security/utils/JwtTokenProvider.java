@@ -41,6 +41,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
+        		.setSubject(userPrincipal.getId().toString())
                 .setPayload(generatePayloadJWT(userPrincipal, userPrincipal.getId().toString(), now, expiryDate))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
@@ -71,10 +72,14 @@ public class JwtTokenProvider {
     }
 
     public JwtPayload getPayloadFromJWT(String token) throws JsonProcessingException {
-        Object body = Jwts.parser()
+        /*Object body = Jwts.parser()
                 .setSigningKey(jwtSecret)
-                .parse(token)
+                //.parse(token)
                 .getBody();
+        */
+    	
+    	Claims body = getClaimsFromJWT(token);
+        
         ObjectMapper mapperJson = new ObjectMapper();
         //String bodyString = body.toString();
         String bodyJsonString = mapperJson.writeValueAsString(body);

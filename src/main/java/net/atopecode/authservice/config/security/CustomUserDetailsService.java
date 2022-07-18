@@ -35,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Let people login with either username or email
     	User user = null;
     	try {
-    		user = userService.findByNameWithRoles(usernameOrEmail); //TODO... Hacer métodoq que busque al user por 'name' o 'mail'.
+    		user = userService.findByNameWithRoles(usernameOrEmail); //TODO... Hacer método que busque al user por 'name' o 'mail'.
     	}
     	catch(UserNotFoundException ex) {
     		throw new UsernameNotFoundException("No existe ningún 'Usuario' con 'name' o 'email': " + usernameOrEmail);

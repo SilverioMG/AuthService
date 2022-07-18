@@ -80,19 +80,6 @@
     		<version>2.3.5</version>
 		</dependency>
 
-		<!-- Necesarias estas librería para la clase 'EncryptUtil': -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
-            <version>1.8.10.2</version>
-        </dependency>
-
-
 	</dependencies>
 
 	<build>
