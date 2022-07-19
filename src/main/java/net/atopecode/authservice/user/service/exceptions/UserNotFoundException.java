@@ -1,5 +1,7 @@
 package net.atopecode.authservice.user.service.exceptions;
 
+import java.text.MessageFormat;
+
 import org.springframework.http.HttpStatus;
 
 import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
@@ -7,12 +9,19 @@ import net.atopecode.authservice.localization.messagelocalized.exceptions.Except
 	
 public class UserNotFoundException extends ExceptionWithLocalizedMessage {
 
-	public static final String LOG_MESSAGE = "No se ha encontrado el registro de 'Rol'.";
-	public static final String MESSAGE_CODE_ROLE_NOT_FOUND = "role.not.found";
-	private static final MessageLocalized messageLocalized = new MessageLocalized(MESSAGE_CODE_ROLE_NOT_FOUND);
+	public static final String LOG_MESSAGE = "No se ha encontrado el 'Usuario': {0}";
+	public static final String MESSAGE_CODE_USER_NOT_FOUND = "user.not.found";
 
-	public UserNotFoundException() {
-			super(LOG_MESSAGE, messageLocalized, HttpStatus.BAD_REQUEST);
-		}
+	public UserNotFoundException(String userSearchValue) {
+			super(generateLogMessage(userSearchValue), generateMessageLocalized(userSearchValue), HttpStatus.BAD_REQUEST);
+	}
+	
+	private static String generateLogMessage(String userSearchValue) {
+		return MessageFormat.format(LOG_MESSAGE, userSearchValue);
+	}
+	
+	private static MessageLocalized generateMessageLocalized(String userSearchValue) {
+		return new MessageLocalized(MESSAGE_CODE_USER_NOT_FOUND, userSearchValue);
+	}
 
 }

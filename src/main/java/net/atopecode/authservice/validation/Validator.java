@@ -85,7 +85,7 @@ public class Validator {
 	 * @param value
 	 * @return
 	 */
-	public boolean notEmpty(String value) {
+	public boolean isNotEmpty(String value) {
 		return !StringUtils.isBlank(value);
 	}
 	
@@ -109,7 +109,7 @@ public class Validator {
 	 * @throws ValidationException
 	 */
 	public void mustToBeEmpty(String value, ValidationException ex) throws ValidationException {
-		if(notEmpty(value)) {
+		if(isNotEmpty(value)) {
 			throw ex;
 		}
 	}

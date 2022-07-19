@@ -1,5 +1,7 @@
 package net.atopecode.authservice.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import net.atopecode.authservice.user.service.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,8 @@ import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.user.dto.UserDto;
+import net.atopecode.authservice.user.dto.authentication.JwtAuthenticationResponse;
+import net.atopecode.authservice.user.dto.authentication.LoginRequest;
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
@@ -37,14 +41,17 @@ public class UserController {
 	private final IUserService userService;
 	private final UserToUserDtoConverter userToUserDtoConverter;
 	private final ILocaleService localeService;
+	private final UserAuthenticationService authService;
 	
 	@Autowired
 	public UserController(IUserService userService,
-			UserToUserDtoConverter userToUserDtoConverter,
-			ILocaleService localeService) {
+						  UserToUserDtoConverter userToUserDtoConverter,
+						  ILocaleService localeService,
+						  UserAuthenticationService authService) {
 		this.userService = userService;
 		this.userToUserDtoConverter = userToUserDtoConverter;
 		this.localeService = localeService;
+		this.authService = authService;
 	}
 	
 	/**
@@ -77,6 +84,12 @@ public class UserController {
 				.toResponseEntity(HttpStatus.OK);
 	}
 	
+	/**
+	 * Se recupera a un Usuario por su 'id'.
+	 * @param id
+	 * @return
+	 * @throws UserNotFoundException
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultMessage<UserDto>> findById(@PathVariable("id") Long id) throws UserNotFoundException{
 		User user = userService.findById(id);
@@ -84,8 +97,8 @@ public class UserController {
 		return new ResultMessage<UserDto>(userDto).toResponseEntity(HttpStatus.OK);		
 	}
 	
-	// /api/findAll?page=0&pageSize=10
 	/**
+	 * Ejemplo Petición Http: /api/findAll?page=0&pageSize=10
 	 * Consulta paginada que devuelve los Usuarios ordenados por 'id'.
 	 * Se devuelven los 'Users' sin el 'password' por seguridad.
 	 * @param page
@@ -102,6 +115,12 @@ public class UserController {
 		return new ResultMessage<Page<UserDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
 	
+	/**
+	 * Query con filtro para buscar por campos específicos y con posibilidad de paginación.
+	 * @param filter
+	 * @return
+	 * @throws ValidationException
+	 */
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter) throws ValidationException{
 		Page<User> result = userService.query(filter);
@@ -109,8 +128,10 @@ public class UserController {
 		
 		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
-	
-	//TODO...
-	/*@PostMapping("/login")
-	public ResponseEntity<ResultMessage>*/
+
+	@PostMapping("/login")
+	public ResponseEntity<ResultMessage<JwtAuthenticationResponse>> login(@RequestBody LoginRequest loginRequest) throws JsonProcessingException {
+		JwtAuthenticationResponse tokenJwt = authService.generateJWT(loginRequest);
+		return new ResultMessage<JwtAuthenticationResponse>(tokenJwt).toResponseEntity(HttpStatus.OK);
+	}
 }

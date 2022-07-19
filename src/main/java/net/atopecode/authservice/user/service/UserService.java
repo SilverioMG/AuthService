@@ -192,37 +192,38 @@ public class UserService implements IUserService {
 
 	@Override
 	public User findById(Long id) throws UserNotFoundException {
-		return userQueryService.findById(id).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
 	}
 
 
 	@Override
 	public User findByIdWithRoles(Long id) throws UserNotFoundException {
-		return userQueryService.findByIdWithRoles(id).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findByIdWithRoles(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
 	}
 
 
 	@Override
 	public User findByName(String name) throws UserNotFoundException {
-		return userQueryService.findByName(name).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findByName(name).orElseThrow(() -> new UserNotFoundException(name));
 	}
 
 
 	@Override
 	public User findByNameWithRoles(String name) throws UserNotFoundException {
-		return userQueryService.findByNameWithRoles(name).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findByNameWithRoles(name).orElseThrow(() -> new UserNotFoundException(name));
 	}
 
 
 	@Override
 	public User findByEmail(String email) throws UserNotFoundException {
-		return userQueryService.findByEmail(email).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email)
+				);
 	}
 
 
 	@Override
 	public User findByEmailWithRoles(String email) throws UserNotFoundException {
-		return userQueryService.findByEmailWithRoles(email).orElseThrow(UserNotFoundException::new);
+		return userQueryService.findByEmailWithRoles(email).orElseThrow(() -> new UserNotFoundException(email));
 	}
 	
 	@Override

@@ -2,12 +2,14 @@
 	V-Los métodos de 'UserQueryService' y 'RoleQueryService' que lancen Exceptions con mensajes localizados cuando no se encuentra la entidad en la B.D. Igual es mejor añadir un campo a las 'ExceptionWithMessageLocalized' y
 	 'RuntimeExceptionWithMessageLocalized' que indique el código Http de la respuesta (HttpStatus) y utilizarlo directamente en el 'ExceptionHandlerComponent'.
 	V-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
-	 
+	V-Añadir un Controller (UserController.login()) y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
+      Ver por el proyecto 'SharingCodersServer' de GitLab.
 //TODO...
-	-Añadir un Controller (UserController.login()) y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
-	 Ver por el proyecto 'SharingCodersServer' de GitLab.
-	-Añadir seguridad en Controllers.
-	-Quitar CORS.
+	-Ver que el servicio arranca y crea todos los registros de roles y user admin en la B.D.
+	-Poner permisos en los Controllers y ver que funcione bien la authenticacion y la authorization. Hacer tests para los controllers.
+	-Modificar los servicios de User y Role para que reciban una entidad en vez de un dto. Usar el converter de dtoToEntity y entityToDto en los Controllers antes de
+	 llamar a los Servicios. Los servicios no tienen porque tener ningún dto en su código, solo los Controllers.
+	-Quitar CORS (me parece que ya está quitado en la configuración de SpringSecurity, hacer pruebas sino hay que añadir código para quitarlo).
 	-Añadir JPA Auditing en las entidades. Ver por el proyecto 'SharingCodersServer' de Gitlab.
 	-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.
 	-Probar el método 'AbstractQueryService.validatePageRequest()'.
@@ -30,7 +32,7 @@
 	-Hacer una libreria .jar con los paquetes que son reutilizables para otros Servicios Web. Sino quiero utilizar un nexus puedo compilarlos en local y que se guarden en la carpeta .m2 con mvn install.
 	 O se puede utilizar el servicio que ofrece GitHub como repositorio de artefactos (paquetes).
 	-Añadir entornos de ejecutación (dev y prod).
-	-Modfiicar query 'IUserRepository.findAllWithRoles()' para que no haga la paginación en memoria. Hacer una query paginada solo de Usuarios y luego con otra consulta recuperar sus roles.
+	-Modificar query 'IUserRepository.findAllWithRoles()' para que no haga la paginación en memoria. Hacer una query paginada solo de Usuarios y luego con otra consulta recuperar sus roles.
 	
 	De este proyecto hacer 2 librerías. La primera que sea 'net.atopecode.backend-utils' con todo el código que se puede reutilizar en cualquier proyecto SpringBoot como las validaciones,
 	la normalización, AbstractQueryService... Y otra librería que a su vez utilice 'net.atopecode.backend-utils' con todo el código de gestión de Usuarios, tanto la parte de B.D. como la Autenticación y

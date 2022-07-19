@@ -94,12 +94,12 @@ public class RoleService implements IRoleService {
 
 	@Override
 	public Role findById(Long id) throws RoleNotFoundException {
-		return roleQueryService.findById(id).orElseThrow(RoleNotFoundException::new);
+		return roleQueryService.findById(id).orElseThrow(() -> new RoleNotFoundException(id.toString()));
 	}
 
 	@Override
 	public Role findByName(String name) throws RoleNotFoundException {
-		return roleQueryService.findByName(name).orElseThrow(RoleNotFoundException::new);
+		return roleQueryService.findByName(name).orElseThrow(() -> new RoleNotFoundException(name));
 	}
 
 	@Override
