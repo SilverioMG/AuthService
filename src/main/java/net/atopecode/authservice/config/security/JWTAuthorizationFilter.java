@@ -39,17 +39,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			chain.doFilter(req,res);
 			return;
 		}
-		
-		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
+		String token = header.replace(TOKEN_PREFIX, "");
+		UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		chain.doFilter(req,res);
 	}
 	
 	//Lee el el token JWT del Header Http y se valida el Token para añadir el usuario al context de la petición Http.
-	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(AUTHORIZATION_HEADER);
-
+	private UsernamePasswordAuthenticationToken getAuthentication(String token) {
 		if ((token != null) && (jwtProvider.validateToken(token))) {
 			try {
 				JwtPayload payload = jwtProvider.getPayloadFromJWT(token);

@@ -41,7 +41,7 @@ public class User implements INormalizable, Serializable {
 	private static final long serialVersionUID = -5283345980003142562L;
 	
 	public static final int NAME_MAX_LENGHT = 30;
-	public static final int PASSWORD_MAX_LENGHT = 30;
+	public static final int PASSWORD_MAX_LENGHT = 100;
 	public static final int EMAIL_MAX_LENGHT = 50;
 	public static final int REAL_NAME_MAX_LENGHT = 100;
 

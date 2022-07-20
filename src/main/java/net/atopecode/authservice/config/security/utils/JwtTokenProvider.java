@@ -41,7 +41,6 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-        		.setSubject(userPrincipal.getId().toString())
                 .setPayload(generatePayloadJWT(userPrincipal, userPrincipal.getId().toString(), now, expiryDate))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
@@ -57,11 +56,12 @@ public class JwtTokenProvider {
 		return payloadJson;
 	}
 
+    /*
     public Long getUserIdFromJWT(String token) {
         Claims claims = getClaimsFromJWT(token);
         return Long.parseLong(claims.getSubject());
     }
-
+    */
     public Claims getClaimsFromJWT(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)

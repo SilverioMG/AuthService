@@ -23,7 +23,7 @@ public interface IUserRepository extends JpaRepository<User, Long>, JpaSpecifica
 	public Optional<User> findByNormalizedName(@Param("name") String normalizedName);
 	
 	@Query("SELECT user from User user LEFT JOIN FETCH user.relUserRole relUserRole INNER JOIN FETCH relUserRole.role role " +
-		   "WHERE nm_name = :name")
+		   "WHERE user.nm_name = :name")
 	public Optional<User> findByNormalizedNameWithRoles(@Param("name") String normalizedName);
 	
 	@Query("SELECT user from User user where user.nm_email = :email")

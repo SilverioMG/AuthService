@@ -1,5 +1,6 @@
 package net.atopecode.authservice.role.service.query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,6 +58,11 @@ public class RoleQueryService extends AbstractQueryService<Role, RoleFilter> imp
 		}
 		
 		return role;
+	}
+
+	@Override
+	public List<Role> findAll() {
+		return roleRepository.findAll();
 	}
 	
 	@Override

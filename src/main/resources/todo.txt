@@ -5,6 +5,9 @@
 	V-Añadir un Controller (UserController.login()) y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
       Ver por el proyecto 'SharingCodersServer' de GitLab.
 //TODO...
+    -Modificar 'Collection<? extends GrantedAuthority> roles' por una implementación de la interfaz 'GrantedAuthority' porque no se pueden mapear desde Json los
+     roles cuando se intenta deserializar el token JWT.
+    -Revisar TODOs... en el código.
 	-Ver que el servicio arranca y crea todos los registros de roles y user admin en la B.D.
 	-Poner permisos en los Controllers y ver que funcione bien la authenticacion y la authorization. Hacer tests para los controllers.
 	-Modificar los servicios de User y Role para que reciban una entidad en vez de un dto. Usar el converter de dtoToEntity y entityToDto en los Controllers antes de

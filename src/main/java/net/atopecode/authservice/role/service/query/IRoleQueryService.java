@@ -15,7 +15,9 @@ public interface IRoleQueryService {
 	public Optional<Role> findById(Long id);
 	
 	public Optional<Role> findByName(String name);
-	
+
+	public List<Role> findAll();
+
 	public Page<Role> findAll(PageRequest pageRequest);
 	
 	public Page<Role>  query(RoleFilter filter);
