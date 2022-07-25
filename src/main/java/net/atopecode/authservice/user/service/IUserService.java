@@ -54,6 +54,8 @@ public interface IUserService {
 	public User findByName(String name) throws UserNotFoundException;
 	
 	public User findByNameWithRoles(String name) throws UserNotFoundException;
+
+	public User findByNameOrEmailWithRoles(String nameOrEmail) throws UserNotFoundException;
 	
 	public User findByEmail(String email) throws UserNotFoundException;
 	

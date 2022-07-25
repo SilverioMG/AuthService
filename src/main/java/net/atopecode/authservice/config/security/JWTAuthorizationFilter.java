@@ -1,6 +1,7 @@
 package net.atopecode.authservice.config.security;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -53,7 +55,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			try {
 				JwtPayload payload = jwtProvider.getPayloadFromJWT(token);
 				if (payload != null) {
-					return new UsernamePasswordAuthenticationToken(payload.getUserName(), null, payload.getRoles());
+					Collection<? extends GrantedAuthority> authorities = UserPrincipal.mapToGrantedAuthorities(payload.getAuthorities());
+					return new UsernamePasswordAuthenticationToken(payload.getUserName(), null, authorities);
 				}
 			}
 			catch(JsonProcessingException ex) {

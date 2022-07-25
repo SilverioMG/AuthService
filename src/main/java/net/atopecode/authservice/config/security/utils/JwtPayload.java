@@ -3,8 +3,10 @@ package net.atopecode.authservice.config.security.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtPayload {
 
@@ -12,18 +14,18 @@ public class JwtPayload {
     private Long iat; //IssueAt Date (token date creation).
     private Long exp; //Expiration (token date expiration).
     private String userName;
-    private Collection<? extends GrantedAuthority> roles;
+    private List<String> authorities;
 
     public JwtPayload() {
-        this.roles = new ArrayList<>();
+        this.authorities = new ArrayList<>();
     }
 
-    public JwtPayload(String sub, Long iat, Long exp, String userName, Collection<? extends GrantedAuthority> roles) {
+    public JwtPayload(String sub, Long iat, Long exp, String userName, List<String> authorities) {
         this.sub = sub;
         this.iat = iat;
         this.exp = exp;
         this.userName = userName;
-        this.roles = roles;
+        this.authorities = (authorities != null) ? authorities : new ArrayList<>();
     }
 
     public String getSub() {
@@ -58,12 +60,12 @@ public class JwtPayload {
         this.userName = userName;
     }
 
-    public Collection<? extends GrantedAuthority> getRoles() {
-        return roles;
+    public List<String> getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(Collection<? extends GrantedAuthority> roles) {
-        this.roles = roles;
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class JwtPayload {
                 ", iat=" + iat +
                 ", exp=" + exp +
                 ", userName='" + userName + '\'' +
-                ", roles=" + roles +
+                ", authorities=" + authorities +
                 '}';
     }
 }

@@ -19,6 +19,8 @@ public interface IUserQueryService {
 	public Optional<User> findByName(String name);
 	
 	public Optional<User> findByNameWithRoles(String name);
+
+	public Optional<User> findByNameOrEmailWithRoles(String nameOrEmail);
 	
 	public Optional<User> findByEmail(String email);
 	

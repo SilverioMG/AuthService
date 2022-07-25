@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -42,7 +43,14 @@ public class ExceptionHandlerComponent {
 	public ExceptionHandlerComponent(ILocaleService localeService) {
 		this.localeService = localeService;
 	}
-		
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ResultMessage<Void>> userNameOrEmailGeneratingJWTNotFoundException(BadCredentialsException ex) {
+		String localizedMessage = ex.getLocalizedMessage();
+		return new ResultMessage<Void>(false, localizedMessage)
+				.toResponseEntity(HttpStatus.FORBIDDEN);
+	}
+
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<ResultMessage<Void>> validationException(ValidationException ex){
 		return runtimeExceptionWithLocalizedMessage(ex);

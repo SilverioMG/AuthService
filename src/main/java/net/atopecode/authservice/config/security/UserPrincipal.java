@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -32,26 +33,26 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<String> authorities;
 
-    public UserPrincipal(Long id, String name, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String name, String username, String email, String password, List<String> authorities) {
         this.id = id;
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.authorities = (authorities != null) ? authorities : new ArrayList<>();
     }
 
     public static UserPrincipal create(User user, List<Role> userRoles) {
-        List<GrantedAuthority> authorities = userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+        List<String> authorities = userRoles.stream()
+                .map(role -> role.getName())
                 .collect(Collectors.toList());
 
         return new UserPrincipal(
                 user.getId(),
-                user.getRealName(),
                 user.getName(),
+                user.getRealName(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities
@@ -82,7 +83,13 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return mapToGrantedAuthorities(authorities);
+    }
+
+    public static Collection<? extends GrantedAuthority> mapToGrantedAuthorities(List<String> authorities) {
+        return authorities.stream()
+                .map(a -> new SimpleGrantedAuthority(a))
+                .collect(Collectors.toList());
     }
 
     @Override

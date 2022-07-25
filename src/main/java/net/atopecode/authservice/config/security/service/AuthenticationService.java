@@ -1,4 +1,4 @@
-package net.atopecode.authservice.user.service;
+package net.atopecode.authservice.config.security.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import net.atopecode.authservice.user.dto.authentication.LoginRequest;
 
 @Service
-public class UserAuthenticationService implements IUserAuthenticationService {
+public class AuthenticationService implements IAuthenticationService {
 
 	private AuthenticationManager authenticationManager;
 	private JwtTokenProvider jwtTokenProvider;
 	private Validator validator;
 
-	public UserAuthenticationService(
+	public AuthenticationService (
 			AuthenticationManager authenticationManager,
 			JwtTokenProvider jwtTokenProvider) {
 		this.authenticationManager = authenticationManager;

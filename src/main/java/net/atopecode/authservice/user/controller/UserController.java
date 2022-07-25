@@ -1,7 +1,7 @@
 package net.atopecode.authservice.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.atopecode.authservice.user.service.UserAuthenticationService;
+import net.atopecode.authservice.config.security.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,13 +41,13 @@ public class UserController {
 	private final IUserService userService;
 	private final UserToUserDtoConverter userToUserDtoConverter;
 	private final ILocaleService localeService;
-	private final UserAuthenticationService authService;
+	private final AuthenticationService authService;
 	
 	@Autowired
 	public UserController(IUserService userService,
 						  UserToUserDtoConverter userToUserDtoConverter,
 						  ILocaleService localeService,
-						  UserAuthenticationService authService) {
+						  AuthenticationService authService) {
 		this.userService = userService;
 		this.userToUserDtoConverter = userToUserDtoConverter;
 		this.localeService = localeService;

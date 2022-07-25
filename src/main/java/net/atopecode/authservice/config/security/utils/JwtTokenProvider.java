@@ -13,6 +13,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Esta clase crea, parsea y comprueba si es válido un token JWT.
@@ -49,8 +51,13 @@ public class JwtTokenProvider {
 	private String generatePayloadJWT(UserPrincipal userPrincipal, String subject, Date issuedAt, Date expiration)
 			throws JsonProcessingException {
 		ObjectMapper mapperJson = new ObjectMapper();
+        List<String> authorities = userPrincipal.getAuthorities().stream()
+                .map(a -> a.getAuthority())
+                .collect(Collectors.toList());
+
 		JwtPayload payload = new JwtPayload(subject, issuedAt.getTime(), expiration.getTime(), userPrincipal.getName(),
-				userPrincipal.getAuthorities());
+                authorities);
+
 		String payloadJson = mapperJson.writeValueAsString(payload);
 
 		return payloadJson;
@@ -81,7 +88,6 @@ public class JwtTokenProvider {
     	Claims body = getClaimsFromJWT(token);
         
         ObjectMapper mapperJson = new ObjectMapper();
-        //String bodyString = body.toString();
         String bodyJsonString = mapperJson.writeValueAsString(body);
         JwtPayload payload = mapperJson.readValue(bodyJsonString, JwtPayload.class);
         return payload;

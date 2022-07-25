@@ -83,6 +83,17 @@ public class UserQueryService extends AbstractQueryService<User, UserFilter> imp
 	}
 
 	@Override
+	public Optional<User> findByNameOrEmailWithRoles(String nameOrEmail) {
+		Optional<User> user = Optional.empty();
+		if(StringUtils.isNotBlank(nameOrEmail)){
+			nameOrEmail = NormalizeString.normalize(nameOrEmail);
+			user = userRepository.findByNormalizeNameOrEmailWithRoles(nameOrEmail);
+		}
+
+		return user;
+	}
+
+	@Override
 	public Optional<User> findByEmail(String email) {
 		Optional<User> user = Optional.empty();
 		if(StringUtils.isNotBlank(email)) {

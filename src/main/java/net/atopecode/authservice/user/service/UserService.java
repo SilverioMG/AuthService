@@ -213,13 +213,15 @@ public class UserService implements IUserService {
 		return userQueryService.findByNameWithRoles(name).orElseThrow(() -> new UserNotFoundException(name));
 	}
 
+	@Override
+	public User findByNameOrEmailWithRoles(String nameOrEmail) throws UserNotFoundException {
+		return userQueryService.findByNameOrEmailWithRoles(nameOrEmail).orElseThrow(() -> new UserNotFoundException(nameOrEmail));
+	}
 
 	@Override
 	public User findByEmail(String email) throws UserNotFoundException {
-		return userQueryService.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email)
-				);
+		return userQueryService.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
 	}
-
 
 	@Override
 	public User findByEmailWithRoles(String email) throws UserNotFoundException {

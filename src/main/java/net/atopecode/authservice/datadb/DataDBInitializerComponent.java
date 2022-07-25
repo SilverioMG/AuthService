@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,8 +24,8 @@ import java.util.stream.Collectors;
  * Este componente se encarga de insertar en la B.D. toda la info necesaria por defecto cuanda arranca el servicio web.
  */
 @Component
-public class DataDBInitiliazerComponent {
-    public static final Logger LOGGER = LoggerFactory.getLogger(DataDBInitiliazerComponent.class);
+public class DataDBInitializerComponent {
+    public static final Logger LOGGER = LoggerFactory.getLogger(DataDBInitializerComponent.class);
 
     @Value("${user.admin.name}")
     private String userAdminName;
@@ -46,7 +45,7 @@ public class DataDBInitiliazerComponent {
     private IRoleQueryService roleQueryService;
     private RoleToRoleDtoConverter roleToRoleDtoConverter;
 
-    public DataDBInitiliazerComponent(
+    public DataDBInitializerComponent(
             IUserService userService,
             IUserQueryService userQueryService,
             IRoleService roleService,
@@ -59,10 +58,9 @@ public class DataDBInitiliazerComponent {
         this.roleToRoleDtoConverter = roleToRoleDtoConverter;
     }
 
-    //TODO... Cambiar este método para que se ejecute como CommandLineRunner en la clase 'Application'.
-    @PostConstruct
+
     @Transactional(rollbackFor = Exception.class)
-    public void init() {
+    public void config() {
         insertDefaultRoles();
         insertDefaultUsers();
     }
