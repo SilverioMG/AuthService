@@ -6,10 +6,11 @@
       Ver por el proyecto 'SharingCodersServer' de GitLab.
 //TODO...
     -Revisar TODOs... en el código.
+    -Modificar los servicios de User y Role para que además de recibir un dto, también lo devuelvan. Los dtos son para Request/Response, si en algún momento
+     el dto de la petición es distinto del de la respuesta se puede crear un RequestDto y un ResponseDto, si el mismo dto se usa tanto para la petición como
+     para la respuesta entonces puedo llamarle solo Dto.
 	-Ver que el servicio arranca y crea todos los registros de roles y user admin en la B.D.
 	-Poner permisos en los Controllers y ver que funcione bien la authenticacion y la authorization. Hacer tests para los controllers.
-	-Modificar los servicios de User y Role para que reciban una entidad en vez de un dto. Usar el converter de dtoToEntity y entityToDto en los Controllers antes de
-	 llamar a los Servicios. Los servicios no tienen porque tener ningún dto en su código, solo los Controllers.
 	-Quitar CORS (me parece que ya está quitado en la configuración de SpringSecurity, hacer pruebas sino hay que añadir código para quitarlo).
 	-Añadir JPA Auditing en las entidades. Ver por el proyecto 'SharingCodersServer' de Gitlab.
 	-Hacer tests utilizando otra B.D. de prueba. Un test de carga sobre las consultas paginadas de Usuarios que hace otra consulta para los Roles ver si tarda mucho con muchos Usuarios.

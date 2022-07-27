@@ -36,7 +36,6 @@ public abstract class AbstractConverterMappeableNormalizable<S, T> implements Co
 	 * de tipo '<S>'.
 	 * Si el objeto de tipo '<T>' implementa la interfaz 'INormalizable' se normalizan sus campos automáticamente.
 	 * @param source
-	 * @param result
 	 */
 	public void map(S source, T target) {
 		if((source == null) || (target == null)) {

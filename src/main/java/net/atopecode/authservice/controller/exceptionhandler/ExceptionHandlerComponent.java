@@ -3,6 +3,7 @@ package net.atopecode.authservice.controller.exceptionhandler;
 import java.util.List;
 import java.util.Locale;
 
+import org.aspectj.bridge.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ExceptionHandlerComponent {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerComponent.class);
 	
 	public static final String SPANISH_LANG = "es-ES";
-	public static final String SERVER_ERROR_MESSAGE = "Error no controlado en el servidor. Consulte los logs de servidor o contacte con el administrador.";
+	public static final String SERVER_ERROR_MESSAGE_KEY = "atopecode.backend-utils.server.error.message";
 	
 	private ILocaleService localeService;
 	
@@ -96,7 +97,9 @@ public class ExceptionHandlerComponent {
 	public ResponseEntity<ResultMessage<Void>> runtimeException(RuntimeException ex){
 		LOGGER.error("RUNTIMEEXCEPTION NO CONTROLADA por el ServicioWeb: {}", ex.getMessage());
 		LOGGER.error("{0}", ex);
-		return new ResultMessage<Void>(false, SERVER_ERROR_MESSAGE)
+		MessageLocalized messageLocalized = new MessageLocalized(SERVER_ERROR_MESSAGE_KEY);
+		String message = translate(messageLocalized);
+		return new ResultMessage<Void>(false, message)
 				.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -109,7 +112,9 @@ public class ExceptionHandlerComponent {
 	public ResponseEntity<ResultMessage<Void>> exception(Exception ex){
 		LOGGER.error("EXCEPTION NO CONTROLADA por el ServicioWeb: {}", ex.getMessage());
 		LOGGER.error("{0}", ex);
-		return new ResultMessage<Void>(false, SERVER_ERROR_MESSAGE)
+		MessageLocalized messageLocalized = new MessageLocalized(SERVER_ERROR_MESSAGE_KEY);
+		String message = translate(messageLocalized);
+		return new ResultMessage<Void>(false, message)
 				.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
