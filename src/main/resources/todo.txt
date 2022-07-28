@@ -9,8 +9,12 @@
       para la respuesta entonces puedo llamarle solo Dto.
 
 //TODO...
+    -Mapear la exception 'org.springframework.security.access.AccessDeniedException' en el '@RestControllerAdvice' cuando se intenta acceder a un action con @PreAuthorize y no se tienen permisos.
+     Si se intenta acceder a un método que no tienen el @PreAuthorize pero está bloqueado por defecto desde la clase 'SecurityConfig' no se llega a ejecutar el ''@RestControllerAdvice' porque está
+     configurado que se use el componente que creé 'JwtAuthenticationEntryPoint'. Hay que hacer que también se utilice el 'JwtAuthenticationEntryPoint' para los casos con @PreAuthorize.
     -Revisar TODOs... en el código.
-    -Meter Swagger y hacer pruebas. Usar la última versión de Swagger 3.0.0 (que no tiene vulnerabilidades) y de Swagger UI.
+    -Meter Swagger y hacer pruebas. Usar la última versión de Swagger 3.0.0 (que no tiene vulnerabilidades) y de Swagger UI. Modificar la configuración de OpenApi para mostrar la info de la API (autor, licencia...)
+    -Probar a encriptar un password de usuario con la mayor longitud permitida y ver si el tamaño de la columan en la B.D. es suficiente.
 	-Ver que el servicio arranca y crea todos los registros de roles y user admin en la B.D.
 	-Poner permisos en los Controllers y ver que funcione bien la authenticacion y la authorization. Hacer tests para los controllers.
 	-Quitar CORS (me parece que ya está quitado en la configuración de SpringSecurity, hacer pruebas sino hay que añadir código para quitarlo).

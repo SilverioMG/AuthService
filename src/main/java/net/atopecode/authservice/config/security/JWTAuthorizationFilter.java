@@ -16,8 +16,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import net.atopecode.authservice.config.security.utils.JwtPayload;
-import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
+import net.atopecode.authservice.config.security.token.JwtPayload;
+import net.atopecode.authservice.config.security.token.JwtTokenProvider;
 
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {

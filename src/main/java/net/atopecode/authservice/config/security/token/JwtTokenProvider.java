@@ -1,4 +1,4 @@
-package net.atopecode.authservice.config.security.utils;
+package net.atopecode.authservice.config.security.token;
 import io.jsonwebtoken.*;
 import net.atopecode.authservice.config.security.UserPrincipal;
 

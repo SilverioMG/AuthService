@@ -1,12 +1,7 @@
-package net.atopecode.authservice.config.security.utils;
+package net.atopecode.authservice.config.security.token;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class JwtPayload {
 

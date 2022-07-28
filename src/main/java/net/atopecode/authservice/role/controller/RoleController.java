@@ -57,7 +57,7 @@ public class RoleController {
 	 * @return
 	 * @throws ValidationException
 	 */
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@PostMapping("/save")
 	public ResponseEntity<ResultMessage<RoleDto>> save(@RequestBody RoleDto roleDto) throws ValidationException{
 		MessageLocalized messageLocalized = (roleDto.getId() == null) ? new MessageLocalized(ROLE_INSERT_OK) : new MessageLocalized(ROLE_UPDATE_OK);
@@ -73,7 +73,7 @@ public class RoleController {
 	 * @return
 	 * @throws RoleNotFoundException 
 	 */
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id) throws RoleNotFoundException{
 		Role role = roleService.findById(id);
@@ -89,7 +89,7 @@ public class RoleController {
 	 * @param pageSize
 	 * @return
 	 */
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> findAll(
 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -101,7 +101,7 @@ public class RoleController {
 		return new ResultMessage<Page<RoleDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
 		Page<Role> result = roleService.query(roleFilter);

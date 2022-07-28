@@ -1,4 +1,4 @@
-package net.atopecode.authservice.config.security.utils;
+package net.atopecode.authservice.config.security.annotations;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.lang.annotation.*;
 

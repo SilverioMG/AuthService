@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
+import net.atopecode.authservice.config.security.token.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -84,9 +84,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "/**/*.js"
                         ) //Recursos estáticos web.
                         .permitAll()
-                        //.antMatchers("/user/new", "/user/login")
                         .antMatchers(
-                                "/v2/api-docs",
+                                "/user/new",
+                                "/user/login"
+                        ) //Authenticacion JWT.
+                        .permitAll()
+                        .antMatchers(
+                                "/v3/api-docs/**",
                                 "/webjars/**",
                                 "/swagger-resources/**"
                         ) //Swagger Doc endpoint.

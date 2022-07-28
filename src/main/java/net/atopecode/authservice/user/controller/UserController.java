@@ -55,14 +55,14 @@ public class UserController {
 		this.localeService = localeService;
 		this.authService = authService;
 	}
-	
+
 	/**
 	 * Se crea un nuevo 'Usuario' en la B.D. y se devuelve su info (sin el password) como respuesta.
 	 * @param userDto
 	 * @return
 	 * @throws ValidationException
 	 */
-	@PreAuthorize("permitAll()")
+	//Desde la clase 'SecurityConfig' se permite el acceso a este action para cualquier usuario (aunque no esté autenticado).
 	@PostMapping("/new")
 	public ResponseEntity<ResultMessage<UserDto>> newUser(@RequestBody UserDto userDto) throws ValidationException{
 		MessageLocalized messageLocalized = new MessageLocalized(USER_INSERT_OK);
@@ -116,7 +116,7 @@ public class UserController {
 	 * @param pageSize
 	 * @return
 	 */
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
@@ -133,7 +133,7 @@ public class UserController {
 	 * @return
 	 * @throws ValidationException
 	 */
-	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
+	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter) throws ValidationException{
 		Page<User> result = userService.query(filter);
@@ -142,7 +142,7 @@ public class UserController {
 		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
 
-	@PreAuthorize("permitAll()")
+	//Desde la clase 'SecurityConfig' se permite el acceso a este action para cualquier usuario (aunque no esté autenticado).
 	@PostMapping("/login")
 	public ResponseEntity<ResultMessage<LoginResponseDto>> login(@RequestBody LoginRequestDto loginRequest) throws JsonProcessingException {
 		LoginResponseDto tokenJwt = authService.generateJWT(loginRequest);

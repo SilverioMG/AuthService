@@ -1,7 +1,7 @@
 package net.atopecode.authservice.config.security.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
+import net.atopecode.authservice.config.security.token.JwtTokenProvider;
 import net.atopecode.authservice.user.dto.authentication.LoginRequestDto;
 import net.atopecode.authservice.user.dto.authentication.LoginResponseDto;
 import net.atopecode.authservice.user.service.exceptions.UserAuthenticacionFailedException;

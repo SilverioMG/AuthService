@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import net.atopecode.authservice.controller.utils.ResultMessage;
@@ -20,6 +19,7 @@ import net.atopecode.authservice.localization.messagelocalized.exceptions.Except
 import net.atopecode.authservice.localization.messagelocalized.exceptions.RuntimeExceptionWithLocalizedMessage;
 import net.atopecode.authservice.validation.exceptions.ValidationBundleException;
 import net.atopecode.authservice.validation.exceptions.ValidationException;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 /**
@@ -31,7 +31,8 @@ import net.atopecode.authservice.validation.exceptions.ValidationException;
  * @author Silverio
  *
  */
-@ControllerAdvice()
+//@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionHandlerComponent {
 	public static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerComponent.class);
 	
