@@ -1,5 +1,6 @@
 package net.atopecode.authservice.role.controller;
 
+import net.atopecode.authservice.role.value.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +57,7 @@ public class RoleController {
 	 * @return
 	 * @throws ValidationException
 	 */
+	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
 	@PostMapping("/save")
 	public ResponseEntity<ResultMessage<RoleDto>> save(@RequestBody RoleDto roleDto) throws ValidationException{
 		MessageLocalized messageLocalized = (roleDto.getId() == null) ? new MessageLocalized(ROLE_INSERT_OK) : new MessageLocalized(ROLE_UPDATE_OK);
@@ -70,6 +73,7 @@ public class RoleController {
 	 * @return
 	 * @throws RoleNotFoundException 
 	 */
+	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id) throws RoleNotFoundException{
 		Role role = roleService.findById(id);
@@ -85,6 +89,7 @@ public class RoleController {
 	 * @param pageSize
 	 * @return
 	 */
+	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> findAll(
 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -95,7 +100,8 @@ public class RoleController {
 		
 		return new ResultMessage<Page<RoleDto>>(result).toResponseEntity(HttpStatus.OK);
 	}
-	
+
+	@PreAuthorize("hasAnyAuthority(" + RoleName.ROLE_ADMIN + ")")
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
 		Page<Role> result = roleService.query(roleFilter);

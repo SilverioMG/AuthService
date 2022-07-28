@@ -1,17 +1,17 @@
 package net.atopecode.authservice.user.dto.authentication;
 
 
-public class LoginRequest {
+public class LoginRequestDto {
 
     private String usernameOrEmail;
 
     private String password;
 
-    public LoginRequest(){
+    public LoginRequestDto(){
 
     }
 
-    public LoginRequest(String usernameOrEmail, String password) {
+    public LoginRequestDto(String usernameOrEmail, String password) {
         this.usernameOrEmail = usernameOrEmail;
         this.password = password;
     }

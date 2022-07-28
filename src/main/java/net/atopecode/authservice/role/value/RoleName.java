@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
  */
 public class RoleName {
 
-    public static final String ROLE_ADMINISTRADOR = "ROLE_ADMIN";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_USER = "ROLE_USER";
 
     public static List<String> getAllRolesName(){
-        String[] roleNames = new String[]{ ROLE_ADMINISTRADOR, ROLE_USER };
+        String[] roleNames = new String[]{ ROLE_ADMIN, ROLE_USER };
         return Arrays.asList(roleNames);
     }
 

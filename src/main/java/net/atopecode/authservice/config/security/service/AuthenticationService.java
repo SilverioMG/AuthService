@@ -2,7 +2,8 @@ package net.atopecode.authservice.config.security.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
-import net.atopecode.authservice.user.dto.authentication.JwtAuthenticationResponse;
+import net.atopecode.authservice.user.dto.authentication.LoginRequestDto;
+import net.atopecode.authservice.user.dto.authentication.LoginResponseDto;
 import net.atopecode.authservice.user.service.exceptions.UserAuthenticacionFailedException;
 import net.atopecode.authservice.validation.Validator;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import net.atopecode.authservice.user.dto.authentication.LoginRequest;
 
 @Service
 public class AuthenticationService implements IAuthenticationService {
@@ -29,7 +29,7 @@ public class AuthenticationService implements IAuthenticationService {
 	}
 
 	@Override
-	public JwtAuthenticationResponse generateJWT(LoginRequest request) throws JsonProcessingException {
+	public LoginResponseDto generateJWT(LoginRequestDto request) throws JsonProcessingException {
 		validate(request);
 
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken;
@@ -39,10 +39,10 @@ public class AuthenticationService implements IAuthenticationService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtTokenProvider.generateToken(authentication);
 
-		return new JwtAuthenticationResponse(token);
+		return new LoginResponseDto(token);
 	}
 
-	private void validate(LoginRequest request) {
+	private void validate(LoginRequestDto request) {
 		validator.notNull(request, new UserAuthenticacionFailedException());
 		validator.notEmpty(request.getUsernameOrEmail(), new UserAuthenticacionFailedException());
 		validator.notEmpty(request.getPassword(), new UserAuthenticacionFailedException());

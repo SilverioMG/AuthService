@@ -4,11 +4,13 @@
 	V-Modificar el 'ConverterUserToUserDto' para que por defecto el método 'convert()' no mapee el campo 'password' y modificar el método 'convertWithoutPassword()' para que sea 'convertWithPassword()'.
 	V-Añadir un Controller (UserController.login()) y Servicio para que los usuario se puedan autenticar (recuperar Token JWT). Hacer en la authorizacion (filter) que los datos se recuperen del User se recuperen del JWT en vez de la B.D.
       Ver por el proyecto 'SharingCodersServer' de GitLab.
+    V-Modificar los servicios de User y Role para que además de recibir un dto, también lo devuelvan. Los dtos son para Request/Response, si en algún momento
+      el dto de la petición es distinto del de la respuesta se puede crear un RequestDto y un ResponseDto, si el mismo dto se usa tanto para la petición como
+      para la respuesta entonces puedo llamarle solo Dto.
+
 //TODO...
     -Revisar TODOs... en el código.
-    -Modificar los servicios de User y Role para que además de recibir un dto, también lo devuelvan. Los dtos son para Request/Response, si en algún momento
-     el dto de la petición es distinto del de la respuesta se puede crear un RequestDto y un ResponseDto, si el mismo dto se usa tanto para la petición como
-     para la respuesta entonces puedo llamarle solo Dto.
+    -Meter Swagger y hacer pruebas. Usar la última versión de Swagger 3.0.0 (que no tiene vulnerabilidades) y de Swagger UI.
 	-Ver que el servicio arranca y crea todos los registros de roles y user admin en la B.D.
 	-Poner permisos en los Controllers y ver que funcione bien la authenticacion y la authorization. Hacer tests para los controllers.
 	-Quitar CORS (me parece que ya está quitado en la configuración de SpringSecurity, hacer pruebas sino hay que añadir código para quitarlo).

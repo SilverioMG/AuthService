@@ -18,8 +18,8 @@ import net.atopecode.authservice.config.security.utils.JwtTokenProvider;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-        securedEnabled = true, //para poder utilizar @Secured("ROLE_ROLE") en los Actions de los Controllers/Services.
-        jsr250Enabled = true, //para poder utilizar @RolesAllowed("ROLE") en los Actions de los Controllers/Services.
+        /*securedEnabled = true, //para poder utilizar @Secured("ROLE_ROLE") en los Actions de los Controllers/Services.*/
+        /*jsr250Enabled = true, //para poder utilizar @RolesAllowed("ROLE") en los Actions de los Controllers/Services.*/
         prePostEnabled = true //para poder utilizar @PreAuthorize("isAnonymous()") ó @PreAuthorize("hasRole('ROLE')") en los Actions de los Controllers/Services.
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -64,35 +64,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .csrf()
-                .disable()
+                    .disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
+                    .authenticationEntryPoint(unauthorizedHandler)
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/",
-                        "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-                .antMatchers("/user/new", "/user/login")
-                .permitAll()
+                    .authorizeRequests()
+                        .antMatchers(
+                                "/",
+                                "/favicon.ico",
+                                "/**/*.png",
+                                "/**/*.gif",
+                                "/**/*.svg",
+                                "/**/*.jpg",
+                                "/**/*.html",
+                                "/**/*.css",
+                                "/**/*.js"
+                        ) //Recursos estáticos web.
+                        .permitAll()
+                        //.antMatchers("/user/new", "/user/login")
+                        .antMatchers(
+                                "/v2/api-docs",
+                                "/webjars/**",
+                                "/swagger-resources/**"
+                        ) //Swagger Doc endpoint.
+                        .permitAll()
                 .anyRequest()
-                .authenticated(); //Hay que estar authenticado para todas las peticiones REST excepto para la declaradas como '.permitAll()'.           
+                    .authenticated();   //Hay que estar authenticado para todas las peticiones REST excepto para la declaradas con '.permitAll()'.
+                                        // Después se puede modificar este comportamiento en cada Controller o Action con la correspondiente anotación de Seguridad (@PreAuthorize(), @Secured() o @RolesAllowed()).
                 //.requiresChannel().requiresSecure(); //Para forzar que todas las llamadas al Servicio Web deban ser por 'https'.
 
         //Add our custom JWT security filter. Este filtro se ejecuta antes de procesar cada petición REST desde el cliente para obtener el Token de Authenticacion (JWT).
         //Si se recibe Token se verifica y se asigna como 'UserPrincipal' en el 'Context' de SpringSecurity para esta petición Rest (hilo) para poder realizar la 'Autorización'
         //en los métodos 'Action' de los 'Controller' y permitir denegar el acceso según corresponda (decoradores o atributos de SpringSecurity).
         //Según la configuración superior del objeto 'HttpSecurity', solo se permiten conexiones anónimas (sin Token o aquellas en las que Token no se pudo autenticar)
-        //para las urls de 'Crear un Nuevo Usuario' y 'Loguear un usuario existente (crea el token para esa sesión del usuario)).
+        //para las urls de 'Crear un Nuevo Usuario' y 'Loguear un usuario existente (crea el token para esa sesión del usuario).
         http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtTokenProvider)); 
     }
 

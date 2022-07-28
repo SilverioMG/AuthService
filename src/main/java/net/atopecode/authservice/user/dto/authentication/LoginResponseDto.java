@@ -1,9 +1,9 @@
 package net.atopecode.authservice.user.dto.authentication;
-public class JwtAuthenticationResponse {
+public class LoginResponseDto {
     private String accessToken;
     private String tokenType = "Bearer";
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public LoginResponseDto(String accessToken) {
         this.accessToken = accessToken;
     }
 
