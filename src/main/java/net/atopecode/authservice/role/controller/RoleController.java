@@ -1,5 +1,7 @@
 package net.atopecode.authservice.role.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import net.atopecode.authservice.config.swagger.SwaggerConfig;
 import net.atopecode.authservice.role.value.RoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,6 +60,7 @@ public class RoleController {
 	 * @throws ValidationException
 	 */
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@PostMapping("/save")
 	public ResponseEntity<ResultMessage<RoleDto>> save(@RequestBody RoleDto roleDto) throws ValidationException{
 		MessageLocalized messageLocalized = (roleDto.getId() == null) ? new MessageLocalized(ROLE_INSERT_OK) : new MessageLocalized(ROLE_UPDATE_OK);
@@ -74,6 +77,7 @@ public class RoleController {
 	 * @throws RoleNotFoundException 
 	 */
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@GetMapping("/{id}")
 	public ResponseEntity<ResultMessage<RoleDto>> findById(@PathVariable("id") Long id) throws RoleNotFoundException{
 		Role role = roleService.findById(id);
@@ -90,6 +94,7 @@ public class RoleController {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> findAll(
 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
@@ -102,6 +107,7 @@ public class RoleController {
 	}
 
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<RoleDto>>> query(@RequestBody RoleFilter roleFilter){
 		Page<Role> result = roleService.query(roleFilter);

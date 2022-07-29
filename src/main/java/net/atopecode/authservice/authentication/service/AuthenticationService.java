@@ -1,4 +1,4 @@
-package net.atopecode.authservice.config.security.service;
+package net.atopecode.authservice.authentication.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.atopecode.authservice.config.security.token.JwtTokenProvider;

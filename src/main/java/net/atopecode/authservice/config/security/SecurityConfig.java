@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                         .antMatchers(
                                 "/user/new",
-                                "/user/login"
+                                "/auth/login"
                         ) //Authenticacion JWT.
                         .permitAll()
                         .antMatchers(

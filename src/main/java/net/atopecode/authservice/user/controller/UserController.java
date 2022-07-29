@@ -1,9 +1,9 @@
 package net.atopecode.authservice.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import net.atopecode.authservice.config.security.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import net.atopecode.authservice.authentication.service.AuthenticationService;
+import net.atopecode.authservice.config.swagger.SwaggerConfig;
 import net.atopecode.authservice.role.value.RoleName;
-import net.atopecode.authservice.user.dto.authentication.LoginResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +25,6 @@ import net.atopecode.authservice.localization.ILocaleService;
 import net.atopecode.authservice.localization.messagelocalized.MessageLocalized;
 import net.atopecode.authservice.user.converter.UserToUserDtoConverter;
 import net.atopecode.authservice.user.dto.UserDto;
-import net.atopecode.authservice.user.dto.authentication.LoginRequestDto;
 import net.atopecode.authservice.user.dto.filter.UserFilter;
 import net.atopecode.authservice.user.model.User;
 import net.atopecode.authservice.user.model.UserFieldNames;
@@ -117,6 +116,7 @@ public class UserController {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@GetMapping("/findAll")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> findAll(@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
 			@RequestParam(name = "pageSize", required = false, defaultValue = "10") Integer pageSize){
@@ -134,6 +134,7 @@ public class UserController {
 	 * @throws ValidationException
 	 */
 	@PreAuthorize("hasAnyAuthority('" + RoleName.ROLE_ADMIN + "')")
+	@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEMA_NAME)
 	@PostMapping("/query")
 	public ResponseEntity<ResultMessage<Page<UserDto>>> query(@RequestBody UserFilter filter) throws ValidationException{
 		Page<User> result = userService.query(filter);
@@ -142,10 +143,4 @@ public class UserController {
 		return new ResultMessage<Page<UserDto>>(resultDto).toResponseEntity(HttpStatus.OK);
 	}
 
-	//Desde la clase 'SecurityConfig' se permite el acceso a este action para cualquier usuario (aunque no esté autenticado).
-	@PostMapping("/login")
-	public ResponseEntity<ResultMessage<LoginResponseDto>> login(@RequestBody LoginRequestDto loginRequest) throws JsonProcessingException {
-		LoginResponseDto tokenJwt = authService.generateJWT(loginRequest);
-		return new ResultMessage<LoginResponseDto>(tokenJwt).toResponseEntity(HttpStatus.OK);
-	}
 }
