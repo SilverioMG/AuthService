@@ -1,5 +1,6 @@
 package net.atopecode.authservice.controller.exceptionhandler;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,9 +23,11 @@ import net.atopecode.authservice.validation.exceptions.ValidationBundleException
 import net.atopecode.authservice.validation.exceptions.ValidationException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 /**
- * En este Component se envía una respuesta  personalizada para todas las Exceptions no controladas que se lanzan más halla de un 'Controller' de Spring.
+ * En este Component se envía una respuesta personalizada para todas las Exceptions no controladas que se lanzan más halla de un 'Controller' de Spring.
  * 
  * Nota.- Para los '@ExceptionHandler' de excepciones no controladas en el servidor, hay que hacer un log a mano de la Excepción para que se muestre su traza.
  * Por defecto cuando se produce una Exception y sale fuera del Controller sin que exista ningún 'ExceptionHandler' para procesarla, Spring hace un log de la traza de la Exception, pero si hay un
@@ -46,6 +50,14 @@ public class ExceptionHandlerComponent {
 		this.localeService = localeService;
 	}
 
+	//Cuando un User está autenticado (token JWT) pero no tiene permisos suficientes para acceder a un endpoint.
+	@ExceptionHandler(AccessDeniedException.class)
+	public void handleAccessDeniedException(HttpServletResponse response, AccessDeniedException ex) throws IOException {
+		response.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getLocalizedMessage());
+	}
+
+
+	//Cuando el User intenta hacer login (recuperar token JWT) pero las credenciales (username, password) no son correctas.
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<ResultMessage<Void>> userNameOrEmailGeneratingJWTNotFoundException(BadCredentialsException ex) {
 		String localizedMessage = ex.getLocalizedMessage();
